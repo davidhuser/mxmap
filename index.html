@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MXmap — Email Sovereignty of Swiss Municipalities</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+  #header {
+    background: #1a1a2e; color: #fff; height: 44px; padding: 0 16px;
+    display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+  }
+  .header-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .brand { font-size: 17px; font-weight: 700; white-space: nowrap; }
+  .separator { color: #555; font-size: 15px; }
+  .tagline { color: #a0a0b0; font-size: 13px; white-space: nowrap; }
+  .header-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+  .updated { color: #a4a4a4; font-size: 11px; white-space: nowrap; }
+  .toggle-info {
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+    color: #ccc; font-size: 12px; padding: 4px 10px; border-radius: 4px; cursor: pointer;
+    white-space: nowrap;
+  }
+  .toggle-info:hover { background: rgba(255,255,255,0.18); color: #fff; }
+  #info-bar {
+    background: #f8f9fb; border-bottom: 1px solid #e2e4e8; overflow: hidden; flex-shrink: 0;
+    max-height: 300px; transition: max-height 350ms ease, padding 350ms ease;
+    padding: 16px 20px;
+  }
+  #info-bar.collapsed { max-height: 0; padding-top: 0; padding-bottom: 0; }
+  .info-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+  }
+  .info-card h3 { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: #1a1a2e; }
+  .info-card p { font-size: 13px; color: #444; line-height: 1.5; margin: 0; }
+  .info-card a { color: #2563eb; text-decoration: none; }
+  .info-card a:hover { text-decoration: underline; }
+  @media (max-width: 600px) {
+    .separator, .tagline { display: none; }
+    .info-grid { grid-template-columns: 1fr; }
+  }
+  #map { flex: 1; width: 100%; }
+  .legend {
+    background: white; padding: 10px 14px; border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2); font-size: 13px; line-height: 1.8;
+  }
+  .legend i {
+    width: 14px; height: 14px; display: inline-block; margin-right: 6px;
+    border-radius: 3px; vertical-align: middle;
+  }
+  .hatched { fill: url(#hatch-pattern) !important; }
+  .info-popup { font-size: 13px; line-height: 1.6; }
+  .info-popup strong { font-size: 14px; }
+  .info-popup .provider-badge {
+    display: inline-block; padding: 1px 8px; border-radius: 3px;
+    color: #fff; font-size: 12px; font-weight: 600;
+  }
+  .popup-section { margin-top: 10px; }
+  .popup-section-title {
+    font-size: 11px; color: #999; text-transform: uppercase;
+    letter-spacing: 0.5px; margin-bottom: 2px; font-weight: 600;
+  }
+  .dns-table { border-collapse: collapse; }
+  .dns-table td { padding: 1px 8px 1px 0; vertical-align: baseline; font-size: 12px; white-space: nowrap; }
+  .dns-table .dn { font-weight: 600; }
+  .dns-table .host { color: #999; font-size: 11px; font-family: ui-monospace, monospace; max-width: 200px; overflow: hidden; text-overflow: ellipsis; }
+  .cat-badge {
+    display: inline-block; padding: 0 5px; border-radius: 3px;
+    font-size: 10px; font-weight: 600; line-height: 1.6;
+  }
+  .cat-badge.hyperscaler { background: #fee2e2; color: #dc2626; }
+  .cat-badge.domestic { background: #dcfce7; color: #16a34a; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <pattern id="hatch-pattern" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="8" height="8" fill="#ababab"/>
+      <line x1="0" y1="0" x2="0" y2="8" stroke="#000" stroke-width="2"/>
+    </pattern>
+  </defs>
+</svg>
+<div id="header">
+  <div class="header-left">
+    <span class="brand">MXmap</span>
+    <span class="separator">|</span>
+    <span class="tagline">Email Sovereignty of Swiss Municipalities</span>
+  </div>
+  <div class="header-right">
+    <span id="generated" class="updated"></span>
+    <button class="toggle-info" id="toggle-info" onclick="toggleInfo()">About &#9652;</button>
+  </div>
+</div>
+<div id="info-bar">
+  <div class="info-grid">
+    <div class="info-card">
+      <h3>What is this?</h3>
+      <p>Interactive map of where Swiss municipalities host official email. Based on automated DNS analysis (MX + SPF) of all ~2,100 municipalities. Color-coded by provider.</p>
+    </div>
+    <div class="info-card">
+      <h3>Why does it matter?</h3>
+      <p>The US CLOUD Act (2018) lets US authorities compel American cloud providers to hand over data worldwide. Nearly half of Swiss municipalities route email through US infrastructure, raising digital sovereignty questions.</p>
+    </div>
+    <div class="info-card">
+      <h3>Who has access?</h3>
+      <p>US-hosted email: US law enforcement/intelligence can access without Swiss judicial oversight. Swiss-hosted: remains under Swiss jurisdiction and nDSG data protection law.</p>
+    </div>
+    <div class="info-card">
+      <h3>Who made this?</h3>
+      <p>Created by David Huser. Fully open source — <a href="https://github.com/davidhuser/mxmap" target="_blank">view on GitHub</a>.</p>
+    </div>
+  </div>
+</div>
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/topojson-client@3/dist/topojson-client.min.js"></script>
+<script>
+const COLORS = {
+  microsoft:  '#e63946',  // vivid red — US cloud
+  google:     '#a855f7',  // vivid purple — US cloud
+  aws:        '#f59e0b',  // warm amber — US cloud
+  infomaniak: '#2563eb',  // strong blue — Swiss provider
+  sovereign:  '#16a34a',  // vivid green — self-hosted (best)
+  merged:     '#BBBBBB',  // gray
+  unknown:    '#8b8b8b'   // gray with hatching
+};
+
+const LABELS = {
+  microsoft:  'Microsoft 365',
+  google:     'Google Workspace',
+  infomaniak: 'Infomaniak',
+  aws:        'AWS',
+  sovereign:  'Sovereign / Self-hosted',
+  merged:     'Merged municipality',
+  unknown:    'Unknown'
+};
+
+function classifyHost(host) {
+  const h = host.toLowerCase();
+  if (['mail.protection.outlook.com','outlook.com','microsoft','office365','onmicrosoft','spf.protection.outlook.com','sharepointonline'].some(k => h.includes(k)))
+    return { name: 'Microsoft', category: 'hyperscaler' };
+  if (['google','googlemail','gmail','aspmx.l.google.com','_spf.google.com'].some(k => h.includes(k)))
+    return { name: 'Google', category: 'hyperscaler' };
+  if (['amazonaws','amazonses','awsdns'].some(k => h.includes(k)))
+    return { name: 'AWS', category: 'hyperscaler' };
+  if (['infomaniak','ik2.com','mxpool.infomaniak'].some(k => h.includes(k)))
+    return { name: 'Infomaniak', category: 'domestic' };
+  const parts = host.replace(/^_/, '').split('.');
+  const name = parts.length >= 2 ? parts.slice(-2).join('.') : host;
+  return { name, category: 'domestic' };
+}
+
+function parseSpfDelegations(spf) {
+  if (!spf) return [];
+  const results = [];
+  const includeRe = /include:([^\s]+)/g;
+  let m;
+  while ((m = includeRe.exec(spf)) !== null) results.push(m[1]);
+  const redirectRe = /redirect=([^\s]+)/g;
+  while ((m = redirectRe.exec(spf)) !== null) results.push(m[1]);
+  return results;
+}
+
+function renderTable(hosts) {
+  const rows = hosts.map(host => {
+    const cls = classifyHost(host);
+    const badge = cls.category === 'hyperscaler' ? 'hyperscaler' : 'domestic';
+    return `<tr><td class="dn">${cls.name}</td><td><span class="cat-badge ${badge}">${cls.category}</span></td><td class="host" title="${host}">${host}</td></tr>`;
+  }).join('');
+  return `<table class="dns-table">${rows}</table>`;
+}
+
+const map = L.map('map', {
+  center: [46.8, 8.2],
+  zoom: 8,
+  minZoom: 7,
+  maxZoom: 14
+});
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
+  subdomains: 'abcd',
+  maxZoom: 19
+}).addTo(map);
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
+  subdomains: 'abcd',
+  maxZoom: 19,
+  pane: 'shadowPane'
+}).addTo(map);
+
+function toggleInfo() {
+  const bar = document.getElementById('info-bar');
+  const btn = document.getElementById('toggle-info');
+  bar.classList.toggle('collapsed');
+  btn.innerHTML = bar.classList.contains('collapsed') ? 'About \u25be' : 'About \u25b4';
+}
+
+document.getElementById('info-bar').addEventListener('transitionend', function (e) {
+  if (e.propertyName === 'max-height') map.invalidateSize();
+});
+
+async function loadData() {
+  const [topoRes, dataRes] = await Promise.all([
+    fetch('https://cdn.jsdelivr.net/npm/swiss-maps@4.7.0/2026/ch-combined.json'),
+    fetch('data.json')
+  ]);
+
+  const topo = await topoRes.json();
+  const dnsData = await dataRes.json();
+
+  // Build lookup by BFS number
+  const muni = dnsData.municipalities;
+
+  // Show generation timestamp
+  if (dnsData.generated) {
+    const date = new Date(dnsData.generated);
+    document.getElementById('generated').textContent =
+      'Last updated: ' + date.toLocaleString('de-CH', { dateStyle: 'medium', timeStyle: 'short' });
+  }
+
+  // Legend with counts
+  const legend = L.control({ position: 'bottomright' });
+  legend.onAdd = function () {
+    const div = L.DomUtil.create('div', 'legend');
+    div.innerHTML = '<strong>Email Provider</strong><br>' +
+      Object.entries(LABELS).map(([k, v]) => {
+        const bg = k === 'unknown'
+          ? "background-image:url('" + 'data:image/svg+xml,' +
+            encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect width="8" height="8" fill="#ababab"/><path d="M-1,1 l2,-2 M0,8 l8,-8 M7,9 l2,-2" stroke="#000" stroke-width="1"/></svg>') +
+            "')"
+          : `background:${COLORS[k]}`;
+        return `<i style="${bg}"></i>${v} (${dnsData.counts[k] || 0})`;
+      }).join('<br>') +
+      '<br><br><small>Found an error? <a href="https://github.com/davidhuser/mxmap/issues" target="_blank">Report it on GitHub</a></small>';
+    return div;
+  };
+  legend.addTo(map);
+
+  // Render lakes as a distinct blue layer
+  if (topo.objects.lakes) {
+    const lakes = topojson.feature(topo, topo.objects.lakes);
+    L.geoJSON(lakes, {
+      interactive: false,
+      style: { fillColor: '#a3cde3', fillOpacity: 1, weight: 0, color: 'transparent' }
+    }).addTo(map);
+  }
+
+  // Extract municipalities from the topology
+  const geojson = topojson.feature(topo, topo.objects.municipalities);
+
+  L.geoJSON(geojson, {
+    style: function (feature) {
+      const bfs = String(feature.id);
+      const m = muni[bfs];
+      const provider = m ? m.provider : 'unknown';
+      const isUnknown = provider === 'unknown';
+      return {
+        fillColor: COLORS[provider] || COLORS.unknown,
+        weight: 0.5,
+        color: '#666',
+        fillOpacity: 0.75,
+        className: isUnknown ? 'hatched' : ''
+      };
+    },
+    onEachFeature: function (feature, layer) {
+      const bfs = String(feature.id);
+      const m = muni[bfs];
+      if (!m) {
+        layer.bindPopup(`<div class="info-popup"><strong>BFS ${bfs}</strong><br>No data</div>`);
+        return;
+      }
+      const color = COLORS[m.provider] || COLORS.unknown;
+      const textColor = ['aws', 'merged', 'unknown'].includes(m.provider) ? '#333' : '#fff';
+      const label = LABELS[m.provider] || m.provider;
+
+      let mxSection = '';
+      if (m.mx && m.mx.length > 0) {
+        mxSection = `<div class="popup-section"><div class="popup-section-title">Inbound mail (MX)</div>${renderTable(m.mx)}</div>`;
+      }
+
+      const spfDelegations = parseSpfDelegations(m.spf);
+      let spfSection = '';
+      if (spfDelegations.length > 0) {
+        spfSection = `<div class="popup-section"><div class="popup-section-title">Authorized senders (SPF)</div>${renderTable(spfDelegations)}</div>`;
+      }
+
+      layer.bindPopup(
+        `<div class="info-popup">` +
+        `<strong>${m.name}</strong> (${m.canton})<br>` +
+        `${m.domain || 'unknown'} · <span class="provider-badge" style="background:${color};color:${textColor}">${label}</span>` +
+        mxSection + spfSection +
+        `</div>`,
+        { maxWidth: 450 }
+      );
+      layer.on('mouseover', function () { this.setStyle({ weight: 2, color: '#333' }); });
+      layer.on('mouseout', function () { this.setStyle({ weight: 0.5, color: '#666' }); });
+    }
+  }).addTo(map);
+}
+
+loadData().catch(err => console.error('Failed to load data:', err));
+</script>
+</body>
+</html>

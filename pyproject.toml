@@ -1,0 +1,44 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mxmap"
+version = "0.1.0"
+description = "Interactive map showing where Swiss municipalities host their email"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "dnspython>=2.8.0",
+    "httpx>=0.28.1",
+]
+
+[project.scripts]
+preprocess = "mail_sovereignty.cli:preprocess"
+postprocess = "mail_sovereignty.cli:postprocess"
+validate = "mail_sovereignty.cli:validate"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mail_sovereignty"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=6.0",
+    "pytest-asyncio>=0.25",
+    "respx>=0.22",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+
+[tool.coverage.run]
+source = ["mail_sovereignty"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 90
+exclude_lines = [
+    "pragma: no cover",
+]

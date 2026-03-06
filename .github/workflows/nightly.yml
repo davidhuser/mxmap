@@ -1,0 +1,29 @@
+name: Nightly data update
+
+on:
+  schedule:
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v7
+      - run: uv python install 3.13
+      - run: uv sync
+      - run: uv run preprocess
+      - run: uv run postprocess
+      - run: uv run validate
+      - name: Commit and push if changed
+        run: |
+          git diff --quiet data.json && exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data.json validation_report.json validation_report.csv
+          git commit -m "chore: nightly data update"
+          git push
