@@ -10,7 +10,7 @@ GOOGLE_KEYWORDS = [
     "_spf.google.com", "aspmx.l.google.com",
 ]
 AWS_KEYWORDS = ["amazonaws", "amazonses", "awsdns"]
-INFOMANIAK_KEYWORDS = ["infomaniak", "ik2.com", "mxpool.infomaniak"]
+INFOMANIAK_KEYWORDS = ["infomaniak", "ikmail.com", "mxpool.infomaniak"]
 
 PROVIDER_KEYWORDS = {
     "microsoft": MICROSOFT_KEYWORDS,

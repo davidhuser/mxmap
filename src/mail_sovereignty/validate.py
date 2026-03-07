@@ -222,7 +222,7 @@ def run(data_path: Path, output_dir: Path) -> None:
         },
     }
 
-    # Bug fix: actually write validation_report.json
+    # Write JSON report
     json_path = output_dir / "validation_report.json"
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(report, f, ensure_ascii=False, indent=2)

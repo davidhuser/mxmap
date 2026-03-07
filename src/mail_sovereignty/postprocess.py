@@ -236,7 +236,7 @@ async def run(data_path: Path) -> None:
     if unknowns:
         semaphore = asyncio.Semaphore(CONCURRENCY_POSTPROCESS)
         async with httpx.AsyncClient(
-            headers={"User-Agent": "SwissEmailSovereigntyMap/1.0 (https://github.com/davidhuser)"},
+            headers={"User-Agent": "mxmap.ch/1.0 (https://github.com/davidhuser/mxmap)"},
             follow_redirects=True,
         ) as client:
             tasks = [process_unknown(client, semaphore, m) for m in unknowns]
