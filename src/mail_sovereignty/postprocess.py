@@ -1,6 +1,7 @@
 import asyncio
 import json
 from pathlib import Path
+from typing import Any
 from urllib.parse import urlparse
 
 import httpx
@@ -16,7 +17,7 @@ from mail_sovereignty.constants import (
 from mail_sovereignty.dns import lookup_mx, lookup_spf
 
 
-def decrypt_typo3(encoded, offset=2):
+def decrypt_typo3(encoded: str, offset: int = 2) -> str:
     """Decrypt TYPO3 linkTo_UnCryptMailto Caesar cipher.
 
     TYPO3 encrypts mailto: links with a Caesar shift on three ASCII ranges:
@@ -43,7 +44,7 @@ def decrypt_typo3(encoded, offset=2):
     return ''.join(result)
 
 
-def extract_email_domains(html):
+def extract_email_domains(html: str) -> set[str]:
     """Extract email domains from HTML, including TYPO3-obfuscated emails."""
     domains = set()
 
@@ -69,7 +70,7 @@ def extract_email_domains(html):
     return domains
 
 
-def build_urls(domain):
+def build_urls(domain: str) -> list[str]:
     """Build candidate URLs to scrape, trying www. prefix first."""
     domain = domain.strip()
     if domain.startswith(('http://', 'https://')):
@@ -89,7 +90,7 @@ def build_urls(domain):
     return urls
 
 
-async def scrape_email_domains(client, domain):
+async def scrape_email_domains(client: httpx.AsyncClient, domain: str) -> set[str]:
     """Scrape a municipality website for email domains."""
     if not domain:
         return set()
@@ -112,7 +113,7 @@ async def scrape_email_domains(client, domain):
     return all_domains
 
 
-async def process_unknown(client, semaphore, m):
+async def process_unknown(client: httpx.AsyncClient, semaphore: asyncio.Semaphore, m: dict[str, Any]) -> dict[str, Any]:
     """Try to resolve an unknown municipality by scraping its website."""
     async with semaphore:
         bfs = m["bfs"]
@@ -172,7 +173,7 @@ MANUAL_OVERRIDES = {
 }
 
 
-async def run(data_path: Path):
+async def run(data_path: Path) -> None:
     with open(data_path, encoding="utf-8") as f:
         data = json.load(f)
 

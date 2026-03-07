@@ -2,6 +2,7 @@ import csv
 import json
 import sys
 from pathlib import Path
+from typing import Any
 
 from mail_sovereignty.classify import classify_from_mx, classify_from_spf, spf_mentions_providers
 
@@ -13,7 +14,7 @@ MANUAL_OVERRIDE_BFS = {
 }
 
 
-def score_entry(entry):
+def score_entry(entry: dict[str, Any]) -> dict[str, Any]:
     """Score a municipality entry 0-100 with explanatory flags."""
     provider = entry.get("provider", "unknown")
     domain = entry.get("domain", "")
@@ -107,7 +108,7 @@ def score_entry(entry):
     return {"score": score, "flags": flags}
 
 
-def print_report(scored_entries):
+def print_report(scored_entries: list[dict[str, Any]]) -> None:
     """Print a summary report to console."""
     scores = [e["score"] for e in scored_entries]
     total = len(scores)
@@ -180,7 +181,7 @@ def print_report(scored_entries):
     print(f"\n{'=' * 60}\n")
 
 
-def run(data_path: Path, output_dir: Path):
+def run(data_path: Path, output_dir: Path) -> None:
     try:
         with open(data_path, encoding="utf-8") as f:
             data = json.load(f)

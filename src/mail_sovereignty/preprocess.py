@@ -3,6 +3,7 @@ import json
 import re
 import time
 from pathlib import Path
+from typing import Any
 from urllib.parse import urlparse
 
 import httpx
@@ -12,7 +13,7 @@ from mail_sovereignty.constants import CONCURRENCY, SPARQL_QUERY, SPARQL_URL
 from mail_sovereignty.dns import lookup_mx, lookup_spf
 
 
-def url_to_domain(url):
+def url_to_domain(url: str | None) -> str | None:
     """Extract the base domain from a URL."""
     if not url:
         return None
@@ -23,7 +24,7 @@ def url_to_domain(url):
     return host if host else None
 
 
-def guess_domains(name):
+def guess_domains(name: str) -> list[str]:
     """Generate a small set of plausible domain guesses for a municipality."""
     raw = name.lower().strip()
     raw = re.sub(r'\s*\(.*?\)\s*', '', raw)
@@ -51,7 +52,7 @@ def guess_domains(name):
     return sorted(candidates)
 
 
-async def fetch_wikidata():
+async def fetch_wikidata() -> dict[str, dict[str, str]]:
     """Query Wikidata for all Swiss municipalities."""
     print("Querying Wikidata for Swiss municipalities...")
     headers = {
@@ -89,7 +90,7 @@ async def fetch_wikidata():
     return municipalities
 
 
-async def scan_municipality(m, semaphore):
+async def scan_municipality(m: dict[str, str], semaphore: asyncio.Semaphore) -> dict[str, Any]:
     """Scan a single municipality for email provider info."""
     async with semaphore:
         domain = url_to_domain(m.get("website", ""))
@@ -123,7 +124,7 @@ async def scan_municipality(m, semaphore):
         }
 
 
-async def run(output_path: Path):
+async def run(output_path: Path) -> None:
     municipalities = await fetch_wikidata()
     total = len(municipalities)
 

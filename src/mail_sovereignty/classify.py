@@ -7,7 +7,7 @@ from mail_sovereignty.constants import (
 )
 
 
-def classify(mx_records, spf_record):
+def classify(mx_records: list[str], spf_record: str | None) -> str:
     """Classify email provider based on MX and SPF.
 
     MX records are checked first (they show where mail is actually delivered).
@@ -40,7 +40,7 @@ def classify(mx_records, spf_record):
     return 'unknown'
 
 
-def classify_from_mx(mx_records):
+def classify_from_mx(mx_records: list[str]) -> str | None:
     """Classify provider from MX records alone."""
     if not mx_records:
         return None
@@ -51,7 +51,7 @@ def classify_from_mx(mx_records):
     return "sovereign"
 
 
-def classify_from_spf(spf_record):
+def classify_from_spf(spf_record: str | None) -> str | None:
     """Classify provider from SPF record alone."""
     if not spf_record:
         return None
@@ -62,7 +62,7 @@ def classify_from_spf(spf_record):
     return None
 
 
-def spf_mentions_providers(spf_record):
+def spf_mentions_providers(spf_record: str | None) -> set[str]:
     """Return set of hyperscaler providers mentioned in SPF."""
     if not spf_record:
         return set()

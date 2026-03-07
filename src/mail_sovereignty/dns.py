@@ -12,7 +12,7 @@ _resolvers = None
 _RETRYABLE = (dns.exception.Timeout, dns.resolver.NoAnswer, dns.resolver.NoNameservers)
 
 
-def make_resolvers():
+def make_resolvers() -> list[dns.asyncresolver.Resolver]:
     """Create a list of async resolvers pointing to different DNS servers."""
     resolvers = []
     for nameservers in [None, ["8.8.8.8", "8.8.4.4"], ["1.1.1.1", "1.0.0.1"]]:
@@ -25,14 +25,14 @@ def make_resolvers():
     return resolvers
 
 
-def get_resolvers():
+def get_resolvers() -> list[dns.asyncresolver.Resolver]:
     global _resolvers
     if _resolvers is None:
         _resolvers = make_resolvers()
     return _resolvers
 
 
-async def lookup_mx(domain):
+async def lookup_mx(domain: str) -> list[str]:
     """Return list of MX exchange hostnames."""
     resolvers = get_resolvers()
     for i, resolver in enumerate(resolvers):
@@ -51,7 +51,7 @@ async def lookup_mx(domain):
     return []
 
 
-async def lookup_spf(domain):
+async def lookup_spf(domain: str) -> str:
     """Return the SPF TXT record if found."""
     resolvers = get_resolvers()
     for i, resolver in enumerate(resolvers):
