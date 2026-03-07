@@ -97,7 +97,7 @@
   .info-popup { font-size: 13px; line-height: 1.6; }
   .info-popup strong { font-size: 14px; }
   .info-popup .provider-badge {
-    display: inline-block; padding: 1px 8px; border-radius: 3px;
+    display: inline-block; padding: 1px 8px; margin-left: 5px; border-radius: 3px;
     color: #fff; font-size: 12px; font-weight: 600;
   }
   .popup-section { margin-top: 10px; }
@@ -154,7 +154,7 @@
     </div>
     <div class="info-card">
       <h3>How is it done?</h3>
-      <p>Based on automated DNS analysis of MX and SPF records for every municipality. Created by David Huser. Open source — <a href="https://github.com/davidhuser/mxmap" target="_blank">view on GitHub</a>. Found an error? <a href="https://github.com/davidhuser/mxmap/issues" target="_blank">Submit an issue</a>.<br><span id="generated" class="updated"></span></p>
+      <p>Built from publicly available data — municipality domains and their DNS records (MX and SPF). All data and source code are open, created by David Huser and <a href="https://github.com/davidhuser/mxmap" target="_blank">available on GitHub</a>. Found an error? <a href="https://github.com/davidhuser/mxmap/issues" target="_blank">Submit an issue</a>.<br><span id="generated" class="updated"></span></p>
     </div>
   </div>
 </div>
@@ -424,7 +424,7 @@ async function loadData() {
       layer.bindPopup(
         `<div class="info-popup">` +
         `<strong>${m.name}</strong><br>` +
-        `${m.domain || 'unknown'} · <span class="provider-badge" style="background:${color};color:${textColor}">${label}</span>` +
+        `${m.domain || 'unknown'} <span class="provider-badge" style="background:${color};color:${textColor}">${label}</span>` +
         mxSection + spfSection +
         `</div>`,
         { maxWidth: 450 }
