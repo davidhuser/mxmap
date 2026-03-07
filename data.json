@@ -1,5 +1,5 @@
 {
-  "generated":"2026-03-07T12:41:57Z",
+  "generated":"2026-03-07T13:01:03Z",
   "total":2171,
   "counts":{
     "aws":27,
@@ -9864,7 +9864,7 @@
         "mx1.rufcloud.ch",
         "mx2.rufcloud.ch"
       ],
-      "spf":"v=SPF1 mx include:spf.customer.swiss-egov.cloud a:webcms.ruf.ch include:spf.cloudrexx.com -all",
+      "spf":"v=spf1 mx a:mail.asp.ruf.ch a:mx1.rufcloud.ch a:mx2.rufcloud.ch a:webcms.ruf.ch include:spf.cloudrexx.com  -all",
       "provider":"sovereign"
     },
     "2534":{
