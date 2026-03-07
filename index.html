@@ -69,7 +69,7 @@
     .legend-error-link { display: none; }
   }
   #map { flex: 1; width: 100%; }
-  .leaflet-bottom.leaflet-right { bottom: env(safe-area-inset-bottom, 0px); }
+  .leaflet-bottom.leaflet-right { }
   .legend {
     background: white; padding: 10px 14px; border-radius: 6px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.2); font-size: 13px; line-height: 1.8;
@@ -263,10 +263,10 @@ async function loadData() {
   }
 
   // Legend with counts
-  const legend = L.control({ position: 'bottomright' });
+  const isMobile = window.innerWidth <= 600;
+  const legend = L.control({ position: isMobile ? 'topright' : 'bottomright' });
   legend.onAdd = function () {
     const div = L.DomUtil.create('div', 'legend');
-    const isMobile = window.innerWidth <= 600;
     if (isMobile) div.classList.add('legend-collapsed');
     div.innerHTML =
       '<button class="legend-toggle" onclick="toggleLegend()">' + (isMobile ? 'Legend \u25B8' : '') + '</button>' +
@@ -292,7 +292,7 @@ async function loadData() {
     const lakes = topojson.feature(topo, topo.objects.lakes);
     L.geoJSON(lakes, {
       interactive: false,
-      style: { fillColor: '#a3cde3', fillOpacity: 1, weight: 0, color: 'transparent' }
+      style: { fillColor: '#a4d6ea', fillOpacity: 1, weight: 0, color: 'transparent' }
     }).addTo(map);
   }
 
