@@ -161,7 +161,7 @@ MANUAL_OVERRIDES = {
     "6456": {"domain": "ne.ch", "provider": "sovereign", "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"], "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all"},  # Lignieres
     "6504": {"domain": "ne.ch", "provider": "sovereign", "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"], "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all"},  # La Cote-aux-Fees
     # Other manual resolutions
-    "261":  {"domain": "zuerich.ch"},                                   # Zürich (not gemeinde-zuerich.ch)
+    "261":  {"domain": "zuerich.ch", "provider": "sovereign"},          # Zürich (not gemeinde-zuerich.ch)
     "422":  {"domain": "ruetibeilyssach.ch", "provider": "infomaniak"},  # Rueti bei Lyssach
     "5258": {"domain": "comunebreggia.ch", "provider": "sovereign"},    # Morbio Superiore
     # Merged municipalities (no longer independent)
