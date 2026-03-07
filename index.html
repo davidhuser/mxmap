@@ -81,7 +81,7 @@
     .legend-toggle { display: block; }
     .legend.legend-collapsed .legend-content { display: none; }
     .legend.legend-collapsed { padding: 8px 12px; }
-    .legend-error-link { display: none; }
+
   }
   #map { flex: 1; width: 100%; }
   .leaflet-bottom.leaflet-right { }
@@ -145,15 +145,15 @@
   <div class="info-grid">
     <div class="info-card">
       <h3>What is this?</h3>
-      <p>This map shows how each of Switzerland's ~2,100 municipalities hosts its official email, based on automated DNS analysis (MX + SPF records). Municipalities are color-coded by email provider — green/blue tones indicate domestic or self-hosted infrastructure, while red/purple/amber indicate US hyperscalers subject to the CLOUD Act.</p>
+      <p>This map shows how each of Switzerland's ~2,100 municipalities hosts its official email. Municipalities are color-coded by email provider — green/blue tones indicate domestic or self-hosted infrastructure, while red/purple/amber indicate US hyperscalers subject to the CLOUD Act.</p>
     </div>
     <div class="info-card">
       <h3>Why does it matter?</h3>
       <p>The US CLOUD Act (2018) lets US authorities force American cloud providers to hand over data — regardless of where it's stored. A substantial amount of Swiss municipalities route official email through US infrastructure, raising concerns about data sovereignty.</p>
     </div>
     <div class="info-card">
-      <h3>Who made this?</h3>
-      <p>Created by David Huser. Open source — <a href="https://github.com/davidhuser/mxmap" target="_blank">view on GitHub</a>.<br><span id="generated" class="updated"></span></p>
+      <h3>How is it done?</h3>
+      <p>Based on automated DNS analysis of MX and SPF records for every municipality. Created by David Huser. Open source — <a href="https://github.com/davidhuser/mxmap" target="_blank">view on GitHub</a>. Found an error? <a href="https://github.com/davidhuser/mxmap/issues" target="_blank">Submit an issue</a>.<br><span id="generated" class="updated"></span></p>
     </div>
   </div>
 </div>
@@ -321,7 +321,6 @@ async function loadData() {
       legendGroupHtml('US Hyperscaler', ['microsoft', 'google', 'aws'], dnsData.counts) +
       legendGroupHtml('Domestic / Sovereign', ['sovereign', 'infomaniak', 'swiss-isp'], dnsData.counts) +
       legendGroupHtml(null, ['merged', 'unknown'], dnsData.counts) +
-      '<br><small class="legend-error-link">Found an error? <a href="https://github.com/davidhuser/mxmap/issues" target="_blank">Report it on GitHub</a></small>' +
       '</div>';
     L.DomEvent.disableClickPropagation(div);
     return div;
