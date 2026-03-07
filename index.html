@@ -34,14 +34,14 @@
   .header-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
   .updated { color: #a4a4a4; font-size: 11px; white-space: nowrap; }
   .toggle-info {
-    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
-    color: #ccc; font-size: 12px; padding: 4px 10px; border-radius: 4px; cursor: pointer;
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+    color: #ccc; font-size: 13px; font-weight: 500; padding: 5px 14px; border-radius: 4px; cursor: pointer;
     white-space: nowrap;
   }
-  .toggle-info:hover { background: rgba(255,255,255,0.18); color: #fff; }
+  .toggle-info:hover { background: rgba(255,255,255,0.25); color: #fff; }
   #info-bar {
     background: #f8f9fb; border-bottom: 1px solid #e2e4e8; overflow: hidden; flex-shrink: 0;
-    max-height: 300px; transition: max-height 350ms ease, padding 350ms ease;
+    max-height: 600px; transition: max-height 350ms ease, padding 350ms ease;
     padding: 16px 20px;
   }
   #info-bar.collapsed { max-height: 0; padding-top: 0; padding-bottom: 0; }
@@ -53,9 +53,18 @@
   .info-card p { font-size: 13px; color: #444; line-height: 1.5; margin: 0; }
   .info-card a { color: #2563eb; text-decoration: none; }
   .info-card a:hover { text-decoration: underline; }
+  .legend-toggle {
+    display: none; background: none; border: none; font-size: 13px;
+    font-weight: 600; cursor: pointer; padding: 0; color: #333;
+  }
+  .legend-content { }
   @media (max-width: 600px) {
     .separator, .tagline { display: none; }
     .info-grid { grid-template-columns: 1fr; }
+    .legend-toggle { display: block; }
+    .legend.legend-collapsed .legend-content { display: none; }
+    .legend.legend-collapsed { padding: 8px 12px; }
+    .legend-error-link { display: none; }
   }
   #map { flex: 1; width: 100%; }
   .legend {
@@ -216,6 +225,19 @@ function toggleInfo() {
   btn.innerHTML = bar.classList.contains('collapsed') ? 'About \u25be' : 'About \u25b4';
 }
 
+// Collapse info bar by default on mobile
+if (window.innerWidth <= 600) {
+  document.getElementById('info-bar').classList.add('collapsed');
+  document.getElementById('toggle-info').innerHTML = 'About \u25be';
+}
+
+function toggleLegend() {
+  const legend = document.querySelector('.legend');
+  const btn = legend.querySelector('.legend-toggle');
+  legend.classList.toggle('legend-collapsed');
+  btn.textContent = legend.classList.contains('legend-collapsed') ? 'Legend \u25B8' : '\u2715';
+}
+
 document.getElementById('info-bar').addEventListener('transitionend', function (e) {
   if (e.propertyName === 'max-height') map.invalidateSize();
 });
@@ -243,7 +265,12 @@ async function loadData() {
   const legend = L.control({ position: 'bottomright' });
   legend.onAdd = function () {
     const div = L.DomUtil.create('div', 'legend');
-    div.innerHTML = '<strong>Email Provider</strong><br>' +
+    const isMobile = window.innerWidth <= 600;
+    if (isMobile) div.classList.add('legend-collapsed');
+    div.innerHTML =
+      '<button class="legend-toggle" onclick="toggleLegend()">' + (isMobile ? 'Legend \u25B8' : '') + '</button>' +
+      '<div class="legend-content">' +
+      '<strong>Email Provider</strong><br>' +
       Object.entries(LABELS).map(([k, v]) => {
         const bg = k === 'unknown'
           ? "background-image:url('" + 'data:image/svg+xml,' +
@@ -252,7 +279,9 @@ async function loadData() {
           : `background:${COLORS[k]}`;
         return `<i style="${bg}"></i>${v} (${dnsData.counts[k] || 0})`;
       }).join('<br>') +
-      '<br><br><small>Found an error? <a href="https://github.com/davidhuser/mxmap/issues" target="_blank">Report it on GitHub</a></small>';
+      '<br><br><small class="legend-error-link">Found an error? <a href="https://github.com/davidhuser/mxmap/issues" target="_blank">Report it on GitHub</a></small>' +
+      '</div>';
+    L.DomEvent.disableClickPropagation(div);
     return div;
   };
   legend.addTo(map);
