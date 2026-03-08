@@ -83,6 +83,14 @@ SUBPAGES = [
     "/comune",
 ]
 
+GATEWAY_KEYWORDS = {
+    "seppmail": ["seppmail.cloud", "seppmail.com"],
+    "cleanmail": ["cleanmail.ch", "cleanmail.safecenter.ch"],
+    "barracuda": ["barracudanetworks.com", "barracuda.com"],
+    "trendmicro": ["tmes.trendmicro.eu", "tmes.trendmicro.com"],
+    "hornetsecurity": ["hornetsecurity.com", "hornetsecurity.ch"],
+}
+
 SWISS_ISP_ASNS: dict[int, str] = {
     3303: "Swisscom",
     6830: "Liberty Global (UPC/Sunrise)",

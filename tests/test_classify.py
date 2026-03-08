@@ -2,6 +2,7 @@ from mail_sovereignty.classify import (
     classify,
     classify_from_mx,
     classify_from_spf,
+    detect_gateway,
     spf_mentions_providers,
 )
 
@@ -105,6 +106,118 @@ class TestClassify:
             mx_asns=set(),
         )
         assert result == "sovereign"
+
+    # ── Gateway detection in classify() ──
+
+    def test_seppmail_gateway_with_microsoft_spf(self):
+        result = classify(
+            ["customer.seppmail.cloud"],
+            "v=spf1 include:spf.protection.outlook.com -all",
+        )
+        assert result == "microsoft"
+
+    def test_cleanmail_gateway_with_google_spf(self):
+        result = classify(
+            ["mx.cleanmail.ch"],
+            "v=spf1 include:_spf.google.com -all",
+        )
+        assert result == "google"
+
+    def test_gateway_no_hyperscaler_spf_stays_sovereign(self):
+        result = classify(
+            ["filter.seppmail.cloud"],
+            "v=spf1 ip4:1.2.3.4 -all",
+        )
+        assert result == "sovereign"
+
+    def test_gateway_empty_spf_stays_sovereign(self):
+        result = classify(
+            ["filter.seppmail.cloud"],
+            "",
+        )
+        assert result == "sovereign"
+
+    def test_gateway_microsoft_in_resolved_spf(self):
+        result = classify(
+            ["mx.cleanmail.ch"],
+            "v=spf1 include:custom.ch -all",
+            resolved_spf="v=spf1 include:custom.ch -all v=spf1 include:spf.protection.outlook.com -all",
+        )
+        assert result == "microsoft"
+
+    def test_gateway_resolved_spf_not_checked_if_raw_matches(self):
+        result = classify(
+            ["mx.cleanmail.ch"],
+            "v=spf1 include:_spf.google.com -all",
+            resolved_spf="v=spf1 include:spf.protection.outlook.com -all",
+        )
+        assert result == "google"
+
+    def test_non_gateway_sovereign_mx_ignores_spf(self):
+        """Sovereign MX (not a gateway) should NOT be reclassified by SPF."""
+        result = classify(
+            ["nemx9a.ne.ch"],
+            "v=spf1 include:spf.protection.outlook.com -all",
+        )
+        assert result == "sovereign"
+
+    def test_barracuda_gateway_with_microsoft_spf(self):
+        result = classify(
+            ["mail.barracudanetworks.com"],
+            "v=spf1 include:spf.protection.outlook.com -all",
+        )
+        assert result == "microsoft"
+
+    def test_trendmicro_gateway_with_aws_spf(self):
+        result = classify(
+            ["filter.tmes.trendmicro.eu"],
+            "v=spf1 include:amazonses.com -all",
+        )
+        assert result == "aws"
+
+    def test_hornetsecurity_gateway_with_microsoft_spf(self):
+        result = classify(
+            ["mx01.hornetsecurity.com"],
+            "v=spf1 include:spf.protection.outlook.com -all",
+        )
+        assert result == "microsoft"
+
+    def test_gateway_does_not_override_direct_mx_match(self):
+        """If MX directly matches a provider, gateway check is skipped."""
+        result = classify(
+            ["mail.protection.outlook.com"],
+            "v=spf1 include:_spf.google.com -all",
+        )
+        assert result == "microsoft"
+
+
+# ── detect_gateway() ────────────────────────────────────────────────
+
+
+class TestDetectGateway:
+    def test_seppmail(self):
+        assert detect_gateway(["customer.seppmail.cloud"]) == "seppmail"
+
+    def test_cleanmail(self):
+        assert detect_gateway(["mx.cleanmail.ch"]) == "cleanmail"
+
+    def test_barracuda(self):
+        assert detect_gateway(["mail.barracudanetworks.com"]) == "barracuda"
+
+    def test_trendmicro(self):
+        assert detect_gateway(["filter.tmes.trendmicro.eu"]) == "trendmicro"
+
+    def test_hornetsecurity(self):
+        assert detect_gateway(["mx01.hornetsecurity.com"]) == "hornetsecurity"
+
+    def test_no_gateway(self):
+        assert detect_gateway(["mail.example.ch"]) is None
+
+    def test_empty_list(self):
+        assert detect_gateway([]) is None
+
+    def test_case_insensitive(self):
+        assert detect_gateway(["CUSTOMER.SEPPMAIL.CLOUD"]) == "seppmail"
 
 
 # ── classify_from_mx() ──────────────────────────────────────────────

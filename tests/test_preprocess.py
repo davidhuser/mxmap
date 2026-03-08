@@ -152,6 +152,11 @@ class TestScanMunicipality:
                 new_callable=AsyncMock,
                 return_value="v=spf1 include:spf.protection.outlook.com -all",
             ),
+            patch(
+                "mail_sovereignty.preprocess.resolve_spf_includes",
+                new_callable=AsyncMock,
+                return_value="v=spf1 include:spf.protection.outlook.com -all",
+            ),
         ):
             result = await scan_municipality(m, sem)
 
@@ -171,6 +176,11 @@ class TestScanMunicipality:
             patch("mail_sovereignty.preprocess.lookup_mx", side_effect=fake_lookup_mx),
             patch(
                 "mail_sovereignty.preprocess.lookup_spf",
+                new_callable=AsyncMock,
+                return_value="",
+            ),
+            patch(
+                "mail_sovereignty.preprocess.resolve_spf_includes",
                 new_callable=AsyncMock,
                 return_value="",
             ),
@@ -199,6 +209,72 @@ class TestScanMunicipality:
             result = await scan_municipality(m, sem)
 
         assert result["provider"] == "unknown"
+
+    async def test_gateway_detected_and_stored(self):
+        m = {
+            "bfs": "228",
+            "name": "Turbenthal",
+            "canton": "Zürich",
+            "website": "https://www.turbenthal.ch",
+        }
+        sem = __import__("asyncio").Semaphore(10)
+
+        with (
+            patch(
+                "mail_sovereignty.preprocess.lookup_mx",
+                new_callable=AsyncMock,
+                return_value=["customer.seppmail.cloud"],
+            ),
+            patch(
+                "mail_sovereignty.preprocess.lookup_spf",
+                new_callable=AsyncMock,
+                return_value="v=spf1 include:spf.protection.outlook.com -all",
+            ),
+            patch(
+                "mail_sovereignty.preprocess.resolve_spf_includes",
+                new_callable=AsyncMock,
+                return_value="v=spf1 include:spf.protection.outlook.com -all",
+            ),
+        ):
+            result = await scan_municipality(m, sem)
+
+        assert result["provider"] == "microsoft"
+        assert result["gateway"] == "seppmail"
+
+    async def test_spf_resolved_stored_when_different(self):
+        m = {
+            "bfs": "100",
+            "name": "Test",
+            "canton": "Test",
+            "website": "https://www.test.ch",
+        }
+        sem = __import__("asyncio").Semaphore(10)
+
+        raw_spf = "v=spf1 include:custom.ch -all"
+        resolved_spf = "v=spf1 include:custom.ch -all v=spf1 include:spf.protection.outlook.com -all"
+
+        with (
+            patch(
+                "mail_sovereignty.preprocess.lookup_mx",
+                new_callable=AsyncMock,
+                return_value=["mx.cleanmail.ch"],
+            ),
+            patch(
+                "mail_sovereignty.preprocess.lookup_spf",
+                new_callable=AsyncMock,
+                return_value=raw_spf,
+            ),
+            patch(
+                "mail_sovereignty.preprocess.resolve_spf_includes",
+                new_callable=AsyncMock,
+                return_value=resolved_spf,
+            ),
+        ):
+            result = await scan_municipality(m, sem)
+
+        assert result["provider"] == "microsoft"
+        assert result["gateway"] == "cleanmail"
+        assert result["spf_resolved"] == resolved_spf
 
 
 # ── run() ────────────────────────────────────────────────────────────
@@ -233,6 +309,11 @@ class TestPreprocessRun:
             ),
             patch(
                 "mail_sovereignty.preprocess.lookup_spf",
+                new_callable=AsyncMock,
+                return_value="",
+            ),
+            patch(
+                "mail_sovereignty.preprocess.resolve_spf_includes",
                 new_callable=AsyncMock,
                 return_value="",
             ),

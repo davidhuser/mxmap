@@ -14,6 +14,7 @@ from mail_sovereignty.dns import (
     make_resolvers,
     resolve_mx_asns,
     resolve_mx_cnames,
+    resolve_spf_includes,
 )
 
 
@@ -260,6 +261,68 @@ class TestLookupSpf:
         with patch("mail_sovereignty.dns.get_resolvers", return_value=[mock_resolver]):
             result = await lookup_spf("example.ch")
         assert result == ""
+
+
+class TestResolveSpfIncludes:
+    async def test_basic_include(self):
+        with patch(
+            "mail_sovereignty.dns.lookup_spf",
+            new_callable=AsyncMock,
+            return_value="v=spf1 include:spf.protection.outlook.com -all",
+        ) as mock_spf:
+            result = await resolve_spf_includes("v=spf1 include:custom.ch -all")
+        mock_spf.assert_called_once_with("custom.ch")
+        assert "spf.protection.outlook.com" in result
+        assert "include:custom.ch" in result
+
+    async def test_redirect(self):
+        with patch(
+            "mail_sovereignty.dns.lookup_spf",
+            new_callable=AsyncMock,
+            return_value="v=spf1 include:spf.protection.outlook.com -all",
+        ) as mock_spf:
+            result = await resolve_spf_includes("v=spf1 redirect=hostpoint.ch")
+        mock_spf.assert_called_once_with("hostpoint.ch")
+        assert "spf.protection.outlook.com" in result
+
+    async def test_loop_detection(self):
+        with patch(
+            "mail_sovereignty.dns.lookup_spf",
+            new_callable=AsyncMock,
+            return_value="v=spf1 -all",
+        ) as mock_spf:
+            await resolve_spf_includes("v=spf1 include:a.ch include:a.ch -all")
+        # Should only look up a.ch once
+        mock_spf.assert_called_once_with("a.ch")
+
+    async def test_max_lookups(self):
+        with patch(
+            "mail_sovereignty.dns.lookup_spf",
+            new_callable=AsyncMock,
+            return_value="v=spf1 -all",
+        ) as mock_spf:
+            # 12 unique includes but max_lookups=3
+            spf = "v=spf1 " + " ".join(f"include:d{i}.ch" for i in range(12)) + " -all"
+            await resolve_spf_includes(spf, max_lookups=3)
+        assert mock_spf.call_count == 3
+
+    async def test_empty_record(self):
+        result = await resolve_spf_includes("")
+        assert result == ""
+
+    async def test_no_includes_returns_original(self):
+        result = await resolve_spf_includes("v=spf1 ip4:1.2.3.4 -all")
+        assert result == "v=spf1 ip4:1.2.3.4 -all"
+
+    async def test_resolved_empty_skipped(self):
+        with patch(
+            "mail_sovereignty.dns.lookup_spf",
+            new_callable=AsyncMock,
+            return_value="",
+        ):
+            result = await resolve_spf_includes("v=spf1 include:nonexistent.ch -all")
+        # Only original, no empty part appended
+        assert result == "v=spf1 include:nonexistent.ch -all"
 
 
 class TestLookupCnameChain:

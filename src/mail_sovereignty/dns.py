@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import re
 
 import dns.asyncresolver
 import dns.exception
@@ -79,6 +80,40 @@ async def lookup_spf(domain: str) -> str:
             continue
     logger.info("SPF %s: all resolvers failed", domain)
     return ""
+
+
+_SPF_INCLUDE_RE = re.compile(r"\binclude:(\S+)", re.IGNORECASE)
+_SPF_REDIRECT_RE = re.compile(r"\bredirect=(\S+)", re.IGNORECASE)
+
+
+async def resolve_spf_includes(spf_record: str, max_lookups: int = 10) -> str:
+    """Resolve include: and redirect= directives in an SPF record (depth 1).
+
+    Returns the original SPF text concatenated with all resolved SPF texts.
+    Tracks visited domains for loop detection and enforces a lookup limit.
+    """
+    if not spf_record:
+        return ""
+
+    domains = _SPF_INCLUDE_RE.findall(spf_record) + _SPF_REDIRECT_RE.findall(spf_record)
+    if not domains:
+        return spf_record
+
+    visited: set[str] = set()
+    parts = [spf_record]
+    lookups = 0
+
+    for domain in domains:
+        domain = domain.lower().rstrip(".")
+        if domain in visited or lookups >= max_lookups:
+            continue
+        visited.add(domain)
+        lookups += 1
+        resolved = await lookup_spf(domain)
+        if resolved:
+            parts.append(resolved)
+
+    return " ".join(parts)
 
 
 async def lookup_cname_chain(hostname: str, max_hops: int = 10) -> list[str]:

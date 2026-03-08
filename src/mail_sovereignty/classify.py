@@ -1,6 +1,7 @@
 from mail_sovereignty.constants import (
     AWS_KEYWORDS,
     FOREIGN_SENDER_KEYWORDS,
+    GATEWAY_KEYWORDS,
     GOOGLE_KEYWORDS,
     INFOMANIAK_KEYWORDS,
     MICROSOFT_KEYWORDS,
@@ -9,16 +10,36 @@ from mail_sovereignty.constants import (
 )
 
 
+def detect_gateway(mx_records: list[str]) -> str | None:
+    """Return gateway provider name if MX matches a known gateway, else None."""
+    mx_blob = " ".join(mx_records).lower()
+    for gateway, keywords in GATEWAY_KEYWORDS.items():
+        if any(k in mx_blob for k in keywords):
+            return gateway
+    return None
+
+
+def _check_spf_for_provider(spf_blob: str) -> str | None:
+    """Check an SPF blob for hyperscaler keywords, return provider or None."""
+    for provider, keywords in PROVIDER_KEYWORDS.items():
+        if any(k in spf_blob for k in keywords):
+            return provider
+    return None
+
+
 def classify(
     mx_records: list[str],
     spf_record: str | None,
     mx_cnames: dict[str, str] | None = None,
     mx_asns: set[int] | None = None,
+    resolved_spf: str | None = None,
 ) -> str:
     """Classify email provider based on MX, CNAME targets, and SPF.
 
     MX records are checked first (they show where mail is actually delivered).
     CNAME targets of MX hosts are checked next (to detect hidden hyperscaler usage).
+    If MX points to a known gateway, SPF (including resolved includes) is checked
+    to identify the actual mailbox provider behind the gateway.
     SPF is only used as fallback when MX alone is inconclusive.
     """
     mx_blob = " ".join(mx_records).lower()
@@ -42,6 +63,15 @@ def classify(
             return "infomaniak"
         if any(k in cname_blob for k in AWS_KEYWORDS):
             return "aws"
+
+    if mx_records and detect_gateway(mx_records):
+        spf_blob = (spf_record or "").lower()
+        provider = _check_spf_for_provider(spf_blob)
+        if not provider and resolved_spf:
+            provider = _check_spf_for_provider(resolved_spf.lower())
+        if provider:
+            return provider
+        # No hyperscaler in SPF — gateway relays to self-hosted, fall through
 
     if mx_records:
         if mx_asns and mx_asns & SWISS_ISP_ASNS.keys():

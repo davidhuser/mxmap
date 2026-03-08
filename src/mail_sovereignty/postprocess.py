@@ -6,7 +6,7 @@ from urllib.parse import urlparse
 
 import httpx
 
-from mail_sovereignty.classify import classify
+from mail_sovereignty.classify import classify, detect_gateway
 from mail_sovereignty.constants import (
     CONCURRENCY_POSTPROCESS,
     EMAIL_RE,
@@ -19,6 +19,7 @@ from mail_sovereignty.dns import (
     lookup_spf,
     resolve_mx_asns,
     resolve_mx_cnames,
+    resolve_spf_includes,
 )
 
 
@@ -137,11 +138,17 @@ async def process_unknown(
             mx = await lookup_mx(email_domain)
             if mx:
                 spf = await lookup_spf(email_domain)
+                spf_resolved = await resolve_spf_includes(spf) if spf else ""
                 mx_cnames = await resolve_mx_cnames(mx)
                 mx_asns = await resolve_mx_asns(mx)
                 provider = classify(
-                    mx, spf, mx_cnames=mx_cnames, mx_asns=mx_asns or None
+                    mx,
+                    spf,
+                    mx_cnames=mx_cnames,
+                    mx_asns=mx_asns or None,
+                    resolved_spf=spf_resolved or None,
                 )
+                gateway = detect_gateway(mx)
                 print(
                     f"  RESOLVED {bfs:>5} {name:<30} "
                     f"email_domain={email_domain} -> {provider}"
@@ -150,6 +157,10 @@ async def process_unknown(
                 m["spf"] = spf
                 m["provider"] = provider
                 m["domain"] = email_domain
+                if spf_resolved and spf_resolved != spf:
+                    m["spf_resolved"] = spf_resolved
+                if gateway:
+                    m["gateway"] = gateway
                 if mx_cnames:
                     m["mx_cnames"] = mx_cnames
                 if mx_asns:
@@ -308,16 +319,37 @@ async def run(data_path: Path) -> None:
         async def _relookup(bfs, domain):
             mx = await lookup_mx(domain)
             spf = await lookup_spf(domain)
+            spf_resolved = await resolve_spf_includes(spf) if spf else ""
             mx_cnames = await resolve_mx_cnames(mx) if mx else {}
             mx_asns = await resolve_mx_asns(mx) if mx else set()
-            provider = classify(mx, spf, mx_cnames=mx_cnames, mx_asns=mx_asns or None)
-            return bfs, mx, spf, mx_cnames, mx_asns, provider
+            provider = classify(
+                mx,
+                spf,
+                mx_cnames=mx_cnames,
+                mx_asns=mx_asns or None,
+                resolved_spf=spf_resolved or None,
+            )
+            gateway = detect_gateway(mx) if mx else None
+            return bfs, mx, spf, spf_resolved, mx_cnames, mx_asns, provider, gateway
 
         results = await asyncio.gather(*[_relookup(b, d) for b, d in dns_relookup])
-        for bfs, mx, spf, mx_cnames, mx_asns, provider in results:
+        for (
+            bfs,
+            mx,
+            spf,
+            spf_resolved,
+            mx_cnames,
+            mx_asns,
+            provider,
+            gateway,
+        ) in results:
             muni[bfs]["mx"] = mx
             muni[bfs]["spf"] = spf
             muni[bfs]["provider"] = provider
+            if spf_resolved and spf_resolved != spf:
+                muni[bfs]["spf_resolved"] = spf_resolved
+            if gateway:
+                muni[bfs]["gateway"] = gateway
             if mx_cnames:
                 muni[bfs]["mx_cnames"] = mx_cnames
             if mx_asns:
@@ -334,14 +366,24 @@ async def run(data_path: Path) -> None:
             mx = await lookup_mx(m["domain"])
             if mx:
                 spf = await lookup_spf(m["domain"])
+                spf_resolved = await resolve_spf_includes(spf) if spf else ""
                 mx_cnames = await resolve_mx_cnames(mx)
                 mx_asns = await resolve_mx_asns(mx)
                 provider = classify(
-                    mx, spf, mx_cnames=mx_cnames, mx_asns=mx_asns or None
+                    mx,
+                    spf,
+                    mx_cnames=mx_cnames,
+                    mx_asns=mx_asns or None,
+                    resolved_spf=spf_resolved or None,
                 )
+                gateway = detect_gateway(mx)
                 m["mx"] = mx
                 m["spf"] = spf
                 m["provider"] = provider
+                if spf_resolved and spf_resolved != spf:
+                    m["spf_resolved"] = spf_resolved
+                if gateway:
+                    m["gateway"] = gateway
                 if mx_cnames:
                     m["mx_cnames"] = mx_cnames
                 if mx_asns:

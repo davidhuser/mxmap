@@ -137,6 +137,10 @@ def score_entry(entry: dict[str, Any]) -> dict[str, Any]:
         if not mx_matches_provider and cname_matches_provider:
             flags.append("provider_via_cname")
 
+    # Provider detected via gateway + SPF resolution
+    if entry.get("gateway"):
+        flags.append("provider_via_gateway_spf")
+
     # Manual override (+5)
     if bfs in MANUAL_OVERRIDE_BFS:
         score += 5

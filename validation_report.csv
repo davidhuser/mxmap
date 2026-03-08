@@ -17,19 +17,23 @@ bfs,name,provider,domain,confidence,flags
 5258,Morbio Superiore,sovereign,comunebreggia.ch,30,no_mx; no_spf; provider_classified; manual_override
 422,Rüti bei Lyssach,infomaniak,ruetibeilyssach.ch,30,no_mx; no_spf; provider_classified; manual_override
 2762,Allschwil,sovereign,allschwil.ch,50,no_spf; provider_classified
-5471,Bettens,sovereign,bettens.ch,50,no_spf; provider_classified
+1362,Arth,swiss-isp,arth.ch,50,no_spf; provider_classified
 3831,Cama,sovereign,cama.ch,50,no_spf; provider_classified
+4161,Eiken,microsoft,eiken.ch,50,no_spf; provider_classified
 735,Epsach,sovereign,epsach.ch,50,no_spf; provider_classified
 6285,Grächen,sovereign,gemeinde-graechen.ch,50,no_spf; provider_classified
 2476,Hofstetten-Flüh,sovereign,hofstettenflueh.ch,50,no_spf; provider_classified
 1404,Kerns,swiss-isp,kerns.ch,50,no_spf; provider_classified
 723,La Neuveville,sovereign,laneuveville.ch,50,no_spf; provider_classified
+2143,Morlon,microsoft,morlon.ch,50,no_spf; provider_classified
 589,Oberried am Brienzersee,sovereign,oberried.ch,50,no_spf; provider_classified
+95,Regensberg,microsoft,regensberg.ch,50,no_spf; provider_classified
 3034,Rehetobel,sovereign,rehetobel.ch,50,no_spf; provider_classified
 6289,Saas-Balen,sovereign,gemeinde-saas-balen.ch,50,no_spf; provider_classified
 3003,Schönengrund,sovereign,schoenengrund.ch,50,no_spf; provider_classified
 3024,Teufen,sovereign,teufen.ch,50,no_spf; provider_classified
 5935,Villars-Epeney,infomaniak,villars-epeney.ch,50,no_spf; provider_classified
+4264,Zuzgen,aws,zuzgen.ch,50,no_spf; provider_classified
 4252,Kaiseraugst,microsoft,kaiseraugst.ch,53,multiple_mx; spf_softfail; mx_spf_mismatch; provider_classified
 2292,Brünisried,sovereign,bruenisried.ch,55,multiple_mx; no_spf; provider_classified
 3782,Celerina/Schlarigna,sovereign,gemeinde-celerina.ch,55,multiple_mx; no_spf; provider_classified
@@ -38,9 +42,11 @@ bfs,name,provider,domain,confidence,flags
 948,Forst-Längenbühl,sovereign,forst-laengenbuehl.ch,55,multiple_mx; no_spf; provider_classified
 220,Hagenbuch,sovereign,hagenbuch.zh.ch,55,multiple_mx; no_spf; provider_classified
 4486,Hauptwil-Gottshaus,swiss-isp,hauptwil-gottshaus.ch,55,multiple_mx; no_spf; provider_classified
+581,Interlaken,sovereign,interlaken.ch,55,multiple_mx; no_spf; provider_classified
 6421,La Chaux-de-Fonds,sovereign,chaux-de-fonds.ch,55,multiple_mx; no_spf; provider_classified
 3033,Lutzenberg,sovereign,lutzenberg.ch,55,multiple_mx; no_spf; provider_classified
 5117,Mergoscia,sovereign,mergoscia.ch,55,multiple_mx; no_spf; provider_classified
+3360,Nesslau,sovereign,nesslau.ch,55,multiple_mx; no_spf; provider_classified
 6458,Neuenburg,sovereign,neuchatelville.ch,55,multiple_mx; no_spf; provider_classified
 89,Niederglatt ZH,sovereign,niederglatt.zh.ch,55,multiple_mx; no_spf; provider_classified
 2893,Reigoldswil,sovereign,reigoldswil.ch,55,multiple_mx; no_spf; provider_classified
@@ -48,8 +54,9 @@ bfs,name,provider,domain,confidence,flags
 6288,Saas-Almagell,swiss-isp,saas-almagell.org,55,multiple_mx; no_spf; provider_classified
 2041,Saint-Aubin,sovereign,st-aubin.ch,55,multiple_mx; no_spf; provider_classified
 3787,St. Moritz,sovereign,gemeinde-stmoritz.ch,55,multiple_mx; no_spf; provider_classified
+6730,Val Terbi,sovereign,val-terbi.ch,55,multiple_mx; no_spf; provider_classified
 2230,Villarsel-sur-Marly,sovereign,villarsel-sur-marly.ch,55,multiple_mx; no_spf; provider_classified
-946,Wachseldorn,sovereign,wachseldorn.ch,55,multiple_mx; no_spf; provider_classified
+946,Wachseldorn,sovereign,wachseldorn.ch,55,multiple_mx; no_spf; provider_classified; provider_via_gateway_spf
 2792,Wahlen,sovereign,wahlen.ch,55,multiple_mx; no_spf; provider_classified
 120,Wald,swiss-isp,wald.zh.ch,55,multiple_mx; no_spf; provider_classified
 990,Walliswil bei Niederbipp,sovereign,walliswil-bipp.ch,55,multiple_mx; no_spf; provider_classified
@@ -68,7 +75,7 @@ bfs,name,provider,domain,confidence,flags
 4136,Holziken,aws,holziken.ch,70,spf_strict; provider_classified
 410,Höchstetten,aws,hoechstetten.ch,70,spf_strict; provider_classified
 2851,Kilchberg,aws,kilchberg-bl.ch,70,spf_strict; provider_classified
-2234,La Brillaz,sovereign,labrillaz.ch,70,spf_strict; sovereign_mx_with_cloud_spf; multi_provider_spf:infomaniak+microsoft; provider_classified
+2234,La Brillaz,microsoft,labrillaz.ch,70,spf_strict; sovereign_mx_with_cloud_spf; multi_provider_spf:infomaniak+microsoft; provider_classified; provider_via_gateway_spf
 4105,Mandach,aws,mandach.ch,70,spf_strict; provider_classified
 617,Niederhünigen,aws,niederhuenigen.ch,70,spf_strict; provider_classified
 4257,Olsberg,aws,olsberg.ch,70,spf_strict; provider_classified
@@ -84,29 +91,28 @@ bfs,name,provider,domain,confidence,flags
 2481,Witterswil,aws,witterswil.ch,70,spf_strict; provider_classified
 2868,Zeglingen,aws,zeglingen.ch,70,spf_strict; provider_classified
 2869,Zunzgen,aws,zunzgen.ch,70,spf_strict; provider_classified
-4264,Zuzgen,aws,zuzgen.ch,70,spf_strict; provider_classified
 5495,Penthalaz,sovereign,penthalaz.ch,73,multiple_mx; spf_softfail; sovereign_mx_with_cloud_spf; multi_provider_spf:infomaniak+microsoft; provider_classified
 5423,Ballens,microsoft,ballens.ch,75,mx_spf_match; multi_provider_spf:infomaniak+microsoft; provider_classified
 6239,Icogne,sovereign,icogne.ch,75,sovereign_mx_with_cloud_spf; provider_classified
 5724,Nyon,sovereign,nyon.ch,75,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; multi_provider_spf:infomaniak+microsoft; provider_classified
-3211,Berg,sovereign,bergsg.ch,78,spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
-4716,Bettwiesen,sovereign,bettwiesen.ch,78,spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
+3211,Berg,microsoft,bergsg.ch,78,spf_softfail; sovereign_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
+4716,Bettwiesen,microsoft,bettwiesen.ch,78,spf_softfail; sovereign_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
 431,Corgémont,microsoft,corgemont.ch,78,spf_softfail; mx_spf_match; multi_provider_spf:infomaniak+microsoft; provider_classified
 5883,Corseaux,microsoft,corseaux.ch,78,spf_softfail; mx_spf_match; multi_provider_spf:infomaniak+microsoft; provider_classified
 2131,Echarlens,microsoft,echarlens.ch,78,spf_softfail; mx_spf_match; multi_provider_spf:google+infomaniak+microsoft; provider_classified
-3442,Gaiserwald,sovereign,gaiserwald.ch,78,spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
+3442,Gaiserwald,microsoft,gaiserwald.ch,78,spf_softfail; sovereign_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
 1364,Ingenbohl,sovereign,ingenbohl.ch,78,spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
 5474,La Chaux (Cossonay),microsoft,lachaux.ch,78,spf_softfail; mx_spf_match; multi_provider_spf:infomaniak+microsoft; provider_classified
 5587,Le Mont-sur-Lausanne,swiss-isp,lemontsurlausanne.ch,78,spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
 35,Marthalen,sovereign,marthalen.ch,78,spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
 615,Mirchel,sovereign,mirchel.ch,78,spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
-3407,Oberuzwil,sovereign,oberuzwil.ch,78,spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
+3407,Oberuzwil,microsoft,oberuzwil.ch,78,spf_softfail; sovereign_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
 6140,Saillon,sovereign,saillon.ch,78,spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
 227,Seuzach,sovereign,seuzach.ch,78,spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
-3203,St. Gallen,sovereign,stadt.sg.ch,78,spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
-228,Turbenthal,sovereign,turbenthal.ch,78,spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
-3408,Uzwil,sovereign,uzwil.ch,78,spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
-4045,Wettingen,sovereign,wettingen.ch,78,spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
+3203,St. Gallen,microsoft,stadt.sg.ch,78,spf_softfail; sovereign_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
+228,Turbenthal,microsoft,turbenthal.ch,78,spf_softfail; sovereign_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
+3408,Uzwil,microsoft,uzwil.ch,78,spf_softfail; sovereign_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
+4045,Wettingen,microsoft,wettingen.ch,78,spf_softfail; sovereign_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
 5048,Acquarossa,microsoft,acquarossa.ch,80,spf_strict; mx_spf_match; multi_provider_spf:infomaniak+microsoft; provider_classified
 5001,Arbedo-Castione,sovereign,arbedocastione.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 5702,Arzier-Le Muids,microsoft,arzier.ch,80,spf_strict; mx_spf_match; multi_provider_spf:infomaniak+microsoft; provider_classified
@@ -118,7 +124,7 @@ bfs,name,provider,domain,confidence,flags
 297,Bauma,sovereign,bauma.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 5002,Bellinzona,sovereign,bellinzona.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 6052,Bellwald,sovereign,bellwald.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
-4891,Berg,sovereign,berg-tg.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
+4891,Berg,microsoft,berg-tg.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
 242,Birmensdorf,sovereign,birmensdorf.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 4901,Birwinken,sovereign,birwinken.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 5425,Bière,microsoft,biere-vd.ch,80,spf_strict; mx_spf_match; multi_provider_spf:infomaniak+microsoft; provider_classified
@@ -130,7 +136,7 @@ bfs,name,provider,domain,confidence,flags
 5515,Bretigny-sur-Morrens,microsoft,bretigny.ch,80,spf_strict; mx_spf_match; multi_provider_spf:infomaniak+microsoft; provider_classified
 6002,Brig-Glis,sovereign,brig-glis.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 2124,Broc,microsoft,broc.ch,80,spf_strict; mx_spf_match; multi_provider_spf:infomaniak+microsoft; provider_classified
-4095,Brugg,sovereign,brugg.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
+4095,Brugg,microsoft,brugg.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
 5623,Buchillon,microsoft,buchillon.ch,80,spf_strict; mx_spf_match; multi_provider_spf:infomaniak+microsoft; provider_classified
 5854,Burtigny,microsoft,burtigny.ch,80,spf_strict; mx_spf_match; multi_provider_spf:infomaniak+microsoft; provider_classified
 5003,Cadenazzo,sovereign,cadenazzo.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
@@ -167,14 +173,14 @@ bfs,name,provider,domain,confidence,flags
 5720,Givrins,microsoft,givrins.ch,80,spf_strict; mx_spf_match; multi_provider_spf:infomaniak+microsoft; provider_classified
 5721,Gland,microsoft,gland.ch,80,spf_strict; mx_spf_match; multi_provider_spf:infomaniak+microsoft; provider_classified
 3341,Gommiswald,sovereign,gommiswald.ch,80,multiple_mx; sovereign_mx_with_cloud_spf; provider_classified
-4006,Gränichen,sovereign,graenichen.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
+4006,Gränichen,microsoft,graenichen.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
 4656,Güttingen,swiss-isp,guettingen.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 5656,Hautemorges,microsoft,hautemorges.ch,80,spf_strict; mx_spf_match; multi_provider_spf:infomaniak+microsoft; provider_classified
 1058,Horw,sovereign,horw.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 6134,Isérables,sovereign,iserables.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 5806,Jorat-Mézières,swiss-isp,jorat-mezieres.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
-564,Kandergrund,sovereign,kandergrund.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
-566,Krattigen,sovereign,krattigen.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
+564,Kandergrund,microsoft,kandergrund.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
+566,Krattigen,microsoft,krattigen.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
 6750,Lajoux,microsoft,lajoux.ch,80,spf_strict; mx_spf_match; multi_provider_spf:infomaniak+microsoft; provider_classified
 5731,Le Vaud,microsoft,levaud.ch,80,spf_strict; mx_spf_match; multi_provider_spf:aws+infomaniak+microsoft; provider_classified
 5407,Leysin,sovereign,leysin.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
@@ -189,7 +195,7 @@ bfs,name,provider,domain,confidence,flags
 6831,Moutier,swiss-isp,moutier.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 356,Muri bei Bern,swiss-isp,muri-guemligen.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 155,Männedorf,sovereign,maennedorf.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
-4254,Möhlin,sovereign,moehlin.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
+4254,Möhlin,microsoft,moehlin.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
 6007,Naters,sovereign,naters.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 90,Niederhasli,sovereign,niederhasli.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 1094,Nottwil,sovereign,nottwil.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
@@ -200,19 +206,19 @@ bfs,name,provider,domain,confidence,flags
 2216,Pierrafortscha,microsoft,pierrafortscha.ch,80,spf_strict; mx_spf_match; multi_provider_spf:infomaniak+microsoft; provider_classified
 5760,Rances,microsoft,rances.ch,80,spf_strict; mx_spf_match; multi_provider_spf:infomaniak+microsoft; provider_classified
 3340,Rapperswil-Jona,sovereign,rapperswil-jona.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
-2773,Reinach,sovereign,reinach-bl.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
+2773,Reinach,microsoft,reinach-bl.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
 2333,Remaufens,sovereign,remaufens.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 5591,Renens,microsoft,renens.ch,80,spf_strict; mx_spf_match; multi_provider_spf:infomaniak+microsoft; provider_classified
-4258,Rheinfelden,sovereign,rheinfelden.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
+4258,Rheinfelden,microsoft,rheinfelden.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
 5645,Romanel-sur-Morges,microsoft,romanel-sur-morges.ch,80,spf_strict; mx_spf_match; multi_provider_spf:infomaniak+microsoft; provider_classified
 2096,Romont,microsoft,romont.ch,80,spf_strict; mx_spf_match; multi_provider_spf:infomaniak+microsoft; provider_classified
-4282,Rothrist,sovereign,rothrist.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
+4282,Rothrist,microsoft,rothrist.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
 2097,Rue,microsoft,rue.ch,80,spf_strict; mx_spf_match; multi_provider_spf:infomaniak+microsoft; provider_classified
 97,Rümlang,sovereign,ruemlang.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 118,Rüti,sovereign,rueti.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 6722,Saulcy,microsoft,saulcy.ch,80,spf_strict; mx_spf_match; multi_provider_spf:infomaniak+microsoft; provider_classified
 6035,Sembrancher,sovereign,sembrancher.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
-4209,Seon,sovereign,seon.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
+4209,Seon,microsoft,seon.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
 5799,Servion,microsoft,servion.ch,80,spf_strict; mx_spf_match; multi_provider_spf:infomaniak+microsoft; provider_classified
 444,Sonceboz-Sombeval,microsoft,sonceboz.ch,80,spf_strict; mx_spf_match; multi_provider_spf:infomaniak+microsoft; provider_classified
 2153,Sorens,microsoft,sorens.ch,80,spf_strict; mx_spf_match; multi_provider_spf:infomaniak+microsoft; provider_classified
@@ -233,7 +239,7 @@ bfs,name,provider,domain,confidence,flags
 5692,Vucherens,microsoft,vucherens.ch,80,spf_strict; mx_spf_match; multi_provider_spf:infomaniak+microsoft; provider_classified
 5503,Vufflens-la-Ville,microsoft,vufflens-la-ville.ch,80,spf_strict; mx_spf_match; multi_provider_spf:infomaniak+microsoft; provider_classified
 6202,Wiler,sovereign,wilervs.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
-4082,Wohlen,sovereign,wohlen.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified
+4082,Wohlen,microsoft,wohlen.ch,80,spf_strict; sovereign_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
 5655,Yens,microsoft,yens.ch,80,spf_strict; mx_spf_match; multi_provider_spf:infomaniak+microsoft; provider_classified
 5415,Yvorne,microsoft,yvorne.ch,80,spf_strict; mx_spf_match; multi_provider_spf:infomaniak+microsoft; provider_classified
 2761,Aesch,sovereign,aesch.bl.ch,83,multiple_mx; spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
@@ -253,7 +259,6 @@ bfs,name,provider,domain,confidence,flags
 6751,Montfaucon,swiss-isp,montfaucon.ch,83,multiple_mx; spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
 5642,Morges,sovereign,morges.ch,83,multiple_mx; spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
 3214,Mörschwil,sovereign,moerschwil.ch,83,multiple_mx; spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
-3360,Nesslau,sovereign,nesslau.ch,83,multiple_mx; spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
 3422,Niederbüren,sovereign,niederbueren.ch,83,multiple_mx; spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
 4280,Oftringen,sovereign,oftringen.ch,83,multiple_mx; spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
 3295,Quarten,sovereign,quarten.ch,83,multiple_mx; spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
@@ -264,10 +269,10 @@ bfs,name,provider,domain,confidence,flags
 3296,Sargans,sovereign,sargans.ch,83,multiple_mx; spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
 3274,Sennwald,sovereign,sennwald.ch,83,multiple_mx; spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
 6266,Sitten,sovereign,sion.ch,83,multiple_mx; spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
-6293,Stalden,sovereign,stalden.ch,83,multiple_mx; spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
+6293,Stalden,microsoft,stalden.ch,83,multiple_mx; spf_softfail; sovereign_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
 3218,Tübach,sovereign,tuebach.ch,83,multiple_mx; spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
 159,Uetikon am See,sovereign,uetikonamsee.ch,83,multiple_mx; spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
-6298,Visperterminen,sovereign,visperterminen.ch,83,multiple_mx; spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
+6298,Visperterminen,microsoft,visperterminen.ch,83,multiple_mx; spf_softfail; sovereign_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
 3298,Walenstadt,sovereign,walenstadt.ch,83,multiple_mx; spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
 3276,Wartau,sovereign,wartau.ch,83,multiple_mx; spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
 3379,Wattwil,sovereign,wattwil.ch,83,multiple_mx; spf_softfail; sovereign_mx_with_cloud_spf; provider_classified
@@ -313,7 +318,7 @@ bfs,name,provider,domain,confidence,flags
 5669,Curtilles,infomaniak,curtilles.ch,85,mx_spf_match; provider_classified
 6610,Céligny,sovereign,celigny.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 6620,Dardagny,sovereign,dardagny.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
-762,Diemtigen,sovereign,diemtigen.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
+762,Diemtigen,microsoft,diemtigen.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
 243,Dietikon,sovereign,dietikon.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 2785,Duggingen,microsoft,duggingen.ch,85,mx_spf_match; provider_classified
 1054,Ebikon,microsoft,ebikon.ch,85,mx_spf_match; provider_classified
@@ -336,6 +341,7 @@ bfs,name,provider,domain,confidence,flags
 6624,Gy GE,infomaniak,mairie-gy.ch,85,mx_spf_match; provider_classified
 2901,Gächlingen,sovereign,gaechlingen.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 1208,Göschenen,sovereign,goeschenen.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
+4100,Hausen,microsoft,hausen.ch,85,mx_spf_match; provider_classified
 4,Hausen am Albis,microsoft,hausen.ch,85,mx_spf_match; provider_classified
 928,Heimberg,sovereign,heimberg.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 1507,Hergiswil,sovereign,hergiswil.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
@@ -347,7 +353,7 @@ bfs,name,provider,domain,confidence,flags
 3863,Jenaz,sovereign,jenaz.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 5804,Jorat-Menthue,infomaniak,jorat-menthue.ch,85,mx_spf_match; provider_classified
 5754,Juriens,infomaniak,juriens.ch,85,mx_spf_match; provider_classified
-611,Kiesen,sovereign,kiesen.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
+611,Kiesen,microsoft,kiesen.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
 4671,Kreuzlingen,swiss-isp,kreuzlingen.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 6810,La Baroche,infomaniak,baroche.ch,85,mx_spf_match; provider_classified
 6423,La Sagne,sovereign,ne.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
@@ -384,7 +390,7 @@ bfs,name,provider,domain,confidence,flags
 934,Oberhofen am Thunersee,sovereign,oberhofen.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 137,Oberrieden,swiss-isp,oberrieden.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 1706,Oberägeri,sovereign,oberaegeri.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
-2407,Oensingen,sovereign,oensingen.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
+2407,Oensingen,microsoft,oensingen.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
 5409,Ollon,sovereign,ollon.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 2581,Olten,sovereign,olten.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 6631,Onex,sovereign,onex.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
@@ -403,7 +409,7 @@ bfs,name,provider,domain,confidence,flags
 450,Péry-La Heutte,sovereign,pery-laheutte.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 5079,Quinto,microsoft,tiquinto.ch,85,mx_spf_match; provider_classified
 703,Reconvilier,sovereign,reconvilier.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
-1345,Reichenburg,sovereign,reichenburg.ch,85,mx_spf_match; provider_classified
+1345,Reichenburg,sovereign,reichenburg.ch,85,mx_spf_match; provider_classified; provider_via_gateway_spf
 3235,Rheineck,sovereign,rheineck.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 1707,Risch,sovereign,zg.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 6803,Rocourt,infomaniak,rocourt.ch,85,mx_spf_match; provider_classified
@@ -418,7 +424,7 @@ bfs,name,provider,domain,confidence,flags
 6217,Saint-Maurice,infomaniak,saint-maurice.ch,85,mx_spf_match; provider_classified
 5436,Saint-Oyens,infomaniak,saint-oyens.ch,85,mx_spf_match; provider_classified
 5610,Saint-Saphorin,infomaniak,saint-saphorin.ch,85,mx_spf_match; provider_classified
-3752,Samnaun,sovereign,samnaun.swiss,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
+3752,Samnaun,microsoft,samnaun.swiss,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
 3835,San Vittore,sovereign,sanvittore.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 3810,Santa Maria in Calanca,sovereign,santamariaic.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 6638,Satigny,sovereign,satigny.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
@@ -468,7 +474,7 @@ bfs,name,provider,domain,confidence,flags
 6645,Veyrier,sovereign,veyrier.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 5539,Vuarrens,infomaniak,vuarrens.ch,85,mx_spf_match; provider_classified
 1220,Wassen,sovereign,wassen.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
-886,Wattenwil,sovereign,wattenwil.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
+886,Wattenwil,infomaniak,wattenwil.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
 3427,Wil,sovereign,stadtwil.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 71,Wil ZH,sovereign,wil-zh.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
 2974,Wilchingen,sovereign,wilchingen.ch,85,multiple_mx; spf_strict; sovereign_mx_with_cloud_spf; provider_classified
@@ -490,7 +496,7 @@ bfs,name,provider,domain,confidence,flags
 5096,Brione sopra Minusio,microsoft,brione.ch,88,spf_softfail; mx_spf_match; provider_classified
 6433,Brot-Plamboz,sovereign,ne.ch,88,multiple_mx; spf_softfail; sovereign_mx_with_cloud_spf; provider_classified; manual_override
 2961,Buch,sovereign,buch-sh.ch,88,spf_softfail; mx_spf_match; provider_classified
-404,Burgdorf,sovereign,burgdorf.ch,88,spf_softfail; mx_spf_match; provider_classified
+404,Burgdorf,sovereign,burgdorf.ch,88,spf_softfail; mx_spf_match; provider_classified; provider_via_gateway_spf
 5624,Bussigny,microsoft,bussigny.ch,88,spf_softfail; mx_spf_match; provider_classified
 533,Bätterkinden,microsoft,baetterkinden.ch,88,spf_softfail; mx_spf_match; provider_classified
 2471,Bättwil,sovereign,baettwil.ch,88,spf_softfail; mx_spf_match; provider_classified
@@ -524,7 +530,7 @@ bfs,name,provider,domain,confidence,flags
 1055,Gisikon,sovereign,gisikon.ch,88,spf_softfail; mx_spf_match; provider_classified
 2250,Gurwolf,sovereign,courgevaux-gurwolf.ch,88,spf_softfail; mx_spf_match; provider_classified
 1005,Hasle,microsoft,hasle-lu.ch,88,spf_softfail; mx_spf_match; provider_classified
-409,Hindelbank,sovereign,hindelbank.ch,88,spf_softfail; mx_spf_match; provider_classified
+409,Hindelbank,sovereign,hindelbank.ch,88,spf_softfail; mx_spf_match; provider_classified; provider_via_gateway_spf
 2475,Hochwald,microsoft,hochwald.ch,88,spf_softfail; mx_spf_match; provider_classified
 1210,Hospental,sovereign,hospental.ch,88,spf_softfail; mx_spf_match; provider_classified
 954,Huttwil,swiss-isp,huttwil.ch,88,spf_softfail; mx_spf_match; provider_classified
@@ -567,7 +573,7 @@ bfs,name,provider,domain,confidence,flags
 245,Oberengstringen,microsoft,oberengstringen.ch,88,spf_softfail; mx_spf_match; provider_classified
 985,Ochlenberg,swiss-isp,ochlenberg.ch,88,spf_softfail; mx_spf_match; provider_classified
 5923,Oppens,sovereign,oppens.ch,88,spf_softfail; mx_spf_match; provider_classified
-5805,Oron,sovereign,oron.ch,88,spf_softfail; mx_spf_match; provider_classified
+5805,Oron,sovereign,oron.ch,88,spf_softfail; mx_spf_match; provider_classified; provider_via_gateway_spf
 936,Pohlern,microsoft,pohlern.ch,88,spf_softfail; mx_spf_match; provider_classified
 3561,Poschiavo,microsoft,poschiavo.ch,88,spf_softfail; mx_spf_match; provider_classified
 2831,Pratteln,sovereign,pratteln.ch,88,spf_softfail; mx_spf_match; provider_classified
@@ -599,10 +605,10 @@ bfs,name,provider,domain,confidence,flags
 958,Trachselwald,microsoft,trachselwald.ch,88,spf_softfail; mx_spf_match; provider_classified
 2226,Treyvaux,sovereign,treyvaux.ch,88,spf_softfail; mx_spf_match; provider_classified
 3669,Tschappina,sovereign,heinzenberg.ch,88,spf_softfail; mx_spf_match; provider_classified
-1347,Tuggen,sovereign,tuggen.ch,88,spf_softfail; mx_spf_match; provider_classified
-4146,Unterkulm,sovereign,unterkulm.ch,88,spf_softfail; mx_spf_match; provider_classified
-4044,Untersiggenthal,sovereign,untersiggenthal.ch,88,spf_softfail; mx_spf_match; provider_classified
-4080,Villmergen,sovereign,villmergen.ch,88,spf_softfail; mx_spf_match; provider_classified
+1347,Tuggen,sovereign,tuggen.ch,88,spf_softfail; mx_spf_match; provider_classified; provider_via_gateway_spf
+4146,Unterkulm,sovereign,unterkulm.ch,88,spf_softfail; mx_spf_match; provider_classified; provider_via_gateway_spf
+4044,Untersiggenthal,sovereign,untersiggenthal.ch,88,spf_softfail; mx_spf_match; provider_classified; provider_via_gateway_spf
+4080,Villmergen,sovereign,villmergen.ch,88,spf_softfail; mx_spf_match; provider_classified; provider_via_gateway_spf
 5863,Vinzel,sovereign,vinzel.ch,88,spf_softfail; mx_spf_match; provider_classified
 2586,Wangen bei Olten,microsoft,wangenbo.ch,88,spf_softfail; mx_spf_match; provider_classified
 1146,Wauwil,microsoft,wauwil.ch,88,spf_softfail; mx_spf_match; provider_classified
@@ -615,7 +621,7 @@ bfs,name,provider,domain,confidence,flags
 4221,Abtwil,microsoft,abtwilag.ch,90,spf_strict; mx_spf_match; provider_classified
 5621,Aclens,microsoft,aclens.ch,90,spf_strict; mx_spf_match; provider_classified
 561,Adelboden,microsoft,3715.ch,90,spf_strict; mx_spf_match; provider_classified
-1051,Adligenswil,microsoft,adligenswil.ch,90,spf_strict; mx_spf_match; provider_classified
+1051,Adligenswil,sovereign,gemeinde-adligenswil.ch,90,multiple_mx; mx_spf_match; provider_classified
 131,Adliswil,microsoft,adliswil.ch,90,spf_strict; mx_spf_match; provider_classified
 401,Aefligen,microsoft,aefligen.ch,90,spf_strict; mx_spf_match; provider_classified
 1021,Aesch,microsoft,aesch-lu.ch,90,spf_strict; mx_spf_match; provider_classified
@@ -645,7 +651,6 @@ bfs,name,provider,domain,confidence,flags
 2821,Arisdorf,microsoft,arisdorf.ch,90,spf_strict; mx_spf_match; provider_classified
 4222,Aristau,microsoft,aristau.ch,90,spf_strict; mx_spf_match; provider_classified
 4061,Arni,microsoft,arni-ag.ch,90,spf_strict; mx_spf_match; provider_classified
-1362,Arth,swiss-isp,arth.ch,90,spf_strict; mx_spf_match; provider_classified
 5511,Assens,microsoft,assens.ch,90,spf_strict; mx_spf_match; provider_classified
 2321,Attalens,microsoft,attalens.ch,90,spf_strict; mx_spf_match; provider_classified
 1203,Attinghausen,sovereign,attinghausen.ch,90,spf_strict; mx_spf_match; provider_classified
@@ -695,6 +700,7 @@ bfs,name,provider,domain,confidence,flags
 5424,Berolle,sovereign,berolle.ch,90,spf_strict; mx_spf_match; provider_classified
 1081,Beromünster,microsoft,beromuenster.ch,90,spf_strict; mx_spf_match; provider_classified
 4226,Besenbüren,microsoft,besenbueren.ch,90,spf_strict; mx_spf_match; provider_classified
+5471,Bettens,sovereign,bluewin.ch,90,multiple_mx; mx_spf_match; provider_classified
 4227,Bettwil,microsoft,bettwil.ch,90,spf_strict; mx_spf_match; provider_classified
 3781,Bever,microsoft,gemeinde-bever.ch,90,spf_strict; mx_spf_match; provider_classified
 5402,Bex,microsoft,bex.ch,90,spf_strict; mx_spf_match; provider_classified
@@ -883,7 +889,7 @@ bfs,name,provider,domain,confidence,flags
 5912,Démoret,infomaniak,demoret.ch,90,spf_strict; mx_spf_match; provider_classified
 2915,Dörflingen,sovereign,doerflingen.ch,90,multiple_mx; mx_spf_match; provider_classified
 4304,Döttingen,microsoft,doettingen.ch,90,spf_strict; mx_spf_match; provider_classified
-191,Dübendorf,sovereign,duebendorf.ch,90,spf_strict; mx_spf_match; provider_classified
+191,Dübendorf,microsoft,duebendorf.ch,90,spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
 2293,Düdingen,microsoft,duedingen.ch,90,spf_strict; mx_spf_match; provider_classified
 113,Dürnten,sovereign,duernten.ch,90,spf_strict; mx_spf_match; provider_classified
 4134,Dürrenäsch,microsoft,duerrenaesch.ch,90,spf_strict; mx_spf_match; provider_classified
@@ -895,7 +901,6 @@ bfs,name,provider,domain,confidence,flags
 4195,Egliswil,microsoft,egliswil.ch,90,spf_strict; mx_spf_match; provider_classified
 4049,Ehrendingen,microsoft,ehrendingen.ch,90,spf_strict; mx_spf_match; provider_classified
 1084,Eich,microsoft,eich.ch,90,spf_strict; mx_spf_match; provider_classified
-4161,Eiken,microsoft,eiken.ch,90,spf_strict; mx_spf_match; provider_classified
 6194,Eischoll,microsoft,eischoll.ch,90,spf_strict; mx_spf_match; provider_classified
 6282,Eisten,microsoft,eisten.ch,90,spf_strict; mx_spf_match; provider_classified
 219,Elsau,microsoft,elsau.ch,90,spf_strict; mx_spf_match; provider_classified
@@ -952,7 +957,7 @@ bfs,name,provider,domain,confidence,flags
 607,Freimettigen,microsoft,freimettigen.ch,90,spf_strict; mx_spf_match; provider_classified
 2824,Frenkendorf,microsoft,frenkendorf.ch,90,spf_strict; mx_spf_match; provider_classified
 5523,Froideville VD,sovereign,froideville.ch,90,spf_strict; mx_spf_match; provider_classified
-563,Frutigen,sovereign,frutigen.ch,90,multiple_mx; mx_spf_match; provider_classified
+563,Frutigen,sovereign,frutigen.ch,90,multiple_mx; mx_spf_match; provider_classified; provider_via_gateway_spf
 2258,Fräschels,microsoft,fraeschels.ch,90,spf_strict; mx_spf_match; provider_classified
 2575,Fulenbach,microsoft,fulenbach.ch,90,spf_strict; mx_spf_match; provider_classified
 193,Fällanden,sovereign,faellanden.ch,90,spf_strict; mx_spf_match; provider_classified
@@ -1130,7 +1135,7 @@ bfs,name,provider,domain,confidence,flags
 3575,Laax,microsoft,laax-gr.ch,90,spf_strict; mx_spf_match; provider_classified
 6286,Lalden,microsoft,lalden.ch,90,spf_strict; mx_spf_match; provider_classified
 5189,Lamone,sovereign,lamone.ch,90,spf_strict; mx_spf_match; provider_classified
-2887,Lampenberg,sovereign,lampenberg.ch,90,spf_strict; mx_spf_match; provider_classified
+2887,Lampenberg,sovereign,lampenberg.ch,90,spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
 613,Landiswil,microsoft,landiswil.ch,90,spf_strict; mx_spf_match; provider_classified
 3955,Landquart,microsoft,landquart.ch,90,spf_strict; mx_spf_match; provider_classified
 2888,Langenbruck,microsoft,langenbruck.ch,90,spf_strict; mx_spf_match; provider_classified
@@ -1260,7 +1265,6 @@ bfs,name,provider,domain,confidence,flags
 4277,Moosleerau,microsoft,moosleerau.ch,90,spf_strict; mx_spf_match; provider_classified
 5257,Morbio Inferiore,microsoft,morbioinf.ch,90,spf_strict; mx_spf_match; provider_classified
 5203,Morcote,microsoft,morcote.ch,90,spf_strict; mx_spf_match; provider_classified
-2143,Morlon,microsoft,morlon.ch,90,spf_strict; mx_spf_match; provider_classified
 3394,Mosnang,microsoft,mosnang.ch,90,spf_strict; mx_spf_match; provider_classified
 6718,Movelier,infomaniak,movelier.ch,90,spf_strict; mx_spf_match; provider_classified
 4009,Muhen,microsoft,muhen.ch,90,spf_strict; mx_spf_match; provider_classified
@@ -1284,7 +1288,7 @@ bfs,name,provider,domain,confidence,flags
 4831,Müllheim,swiss-isp,muellheim.ch,90,spf_strict; mx_spf_match; provider_classified
 4107,Mülligen,microsoft,muelligen.ch,90,spf_strict; mx_spf_match; provider_classified
 2428,Mümliswil-Ramiswil,microsoft,muemliswil-ramiswil.ch,90,spf_strict; mx_spf_match; provider_classified
-2769,Münchenstein,sovereign,muenchenstein.ch,90,spf_strict; mx_spf_match; provider_classified
+2769,Münchenstein,sovereign,muenchenstein.ch,90,spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
 4691,Münsterlingen,microsoft,muensterlingen.ch,90,spf_strict; mx_spf_match; provider_classified
 498,Müntschemier,microsoft,muentschemier.ch,90,spf_strict; mx_spf_match; provider_classified
 1137,Nebikon,microsoft,nebikon.ch,90,spf_strict; mx_spf_match; provider_classified
@@ -1388,7 +1392,6 @@ bfs,name,provider,domain,confidence,flags
 1212,Realp,microsoft,realp.ch,90,spf_strict; mx_spf_match; provider_classified
 2530,Recherswil,microsoft,recherswil.ch,90,spf_strict; mx_spf_match; provider_classified
 2301,Rechthalten,microsoft,rechthalten.ch,90,spf_strict; mx_spf_match; provider_classified
-95,Regensberg,microsoft,regensberg.ch,90,spf_strict; mx_spf_match; provider_classified
 96,Regensdorf,microsoft,regensdorf.ch,90,spf_strict; mx_spf_match; provider_classified
 4141,Reinach,microsoft,reinach.ch,90,spf_strict; mx_spf_match; provider_classified
 336,Reisiswil,microsoft,reisiswil.ch,90,spf_strict; mx_spf_match; provider_classified
@@ -1428,7 +1431,7 @@ bfs,name,provider,domain,confidence,flags
 3834,Roveredo,microsoft,roveredo.ch,90,spf_strict; mx_spf_match; provider_classified
 5928,Rovray,infomaniak,rovray.ch,90,spf_strict; mx_spf_match; provider_classified
 4075,Rudolfstetten-Friedlisberg,microsoft,rudolfstetten.ch,90,spf_strict; mx_spf_match; provider_classified
-5534,Rueyres,sovereign,rueyres.ch,90,spf_strict; mx_spf_match; provider_classified
+5534,Rueyres,sovereign,rueyres.ch,90,spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
 4206,Rupperswil,sovereign,rupperswil.ch,90,spf_strict; mx_spf_match; provider_classified
 1098,Ruswil,sovereign,ruswil.ch,90,spf_strict; mx_spf_match; provider_classified
 2791,Röschenz,microsoft,roeschenz.ch,90,spf_strict; mx_spf_match; provider_classified
@@ -1450,12 +1453,12 @@ bfs,name,provider,domain,confidence,flags
 6758,Saint-Brais,infomaniak,saint-brais.ch,90,spf_strict; mx_spf_match; provider_classified
 5727,Saint-Cergue,microsoft,st-cergue.ch,90,spf_strict; mx_spf_match; provider_classified
 5434,Saint-George,infomaniak,stgeorge.ch,90,spf_strict; mx_spf_match; provider_classified
-443,Saint-Imier,sovereign,saint-imier.ch,90,spf_strict; mx_spf_match; provider_classified
+443,Saint-Imier,sovereign,saint-imier.ch,90,spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
 5435,Saint-Livres,microsoft,st-livres.ch,90,spf_strict; mx_spf_match; provider_classified
 6246,Saint-Léonard,infomaniak,st-leonard.ch,90,spf_strict; mx_spf_match; provider_classified
 2335,Saint-Martin FR,microsoft,saint-martin-fr.ch,90,spf_strict; mx_spf_match; provider_classified
 5646,Saint-Prex,microsoft,saint-prex.ch,90,spf_strict; mx_spf_match; provider_classified
-6113,Salgesch,sovereign,salgesch.ch,90,multiple_mx; mx_spf_match; provider_classified
+6113,Salgesch,microsoft,salgesch.ch,90,multiple_mx; mx_spf_match; provider_classified; provider_via_gateway_spf
 4441,Salmsach,microsoft,salmsach.ch,90,spf_strict; mx_spf_match; provider_classified
 3786,Samedan,sovereign,samedan.ch,90,spf_strict; mx_spf_match; provider_classified
 5017,Sant’Antonino TI,sovereign,santonino.ch,90,spf_strict; mx_spf_match; provider_classified
@@ -1508,7 +1511,7 @@ bfs,name,provider,domain,confidence,flags
 4177,Sisseln,microsoft,sisseln.ch,90,spf_strict; mx_spf_match; provider_classified
 2099,Siviriez,microsoft,siviriez.ch,90,spf_strict; mx_spf_match; provider_classified
 3823,Soazza,microsoft,soazza.ch,90,spf_strict; mx_spf_match; provider_classified
-2601,Solothurn,sovereign,solothurn.ch,90,spf_strict; mx_spf_match; provider_classified
+2601,Solothurn,sovereign,solothurn.ch,90,spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
 445,Sonvilier,microsoft,sonvilier.ch,90,spf_strict; mx_spf_match; provider_classified
 5225,Sorengo,microsoft,sorengo.ch,90,spf_strict; mx_spf_match; provider_classified
 711,Sorvilier,sovereign,sorvilier.ch,90,spf_strict; mx_spf_match; provider_classified
@@ -1579,7 +1582,7 @@ bfs,name,provider,domain,confidence,flags
 2308,Ueberstorf,microsoft,ueberstorf.ch,90,spf_strict; mx_spf_match; provider_classified
 943,Uebeschi,swiss-isp,uebeschi.ch,90,spf_strict; mx_spf_match; provider_classified
 4616,Uesslingen-Buch,microsoft,uesslingen-buch.ch,90,spf_strict; mx_spf_match; provider_classified
-944,Uetendorf,sovereign,uetendorf.ch,90,spf_strict; mx_spf_match; provider_classified
+944,Uetendorf,sovereign,uetendorf.ch,90,spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
 4078,Uezwil,microsoft,uezwil.ch,90,spf_strict; mx_spf_match; provider_classified
 1145,Ufhusen,sovereign,ufhusen.ch,90,spf_strict; mx_spf_match; provider_classified
 248,Uitikon,sovereign,uitikon.ch,90,spf_strict; mx_spf_match; provider_classified
@@ -1642,7 +1645,7 @@ bfs,name,provider,domain,confidence,flags
 4240,Waltenschwil,microsoft,waltenschwil.ch,90,spf_strict; mx_spf_match; provider_classified
 959,Walterswil,microsoft,walterswil-be.ch,90,spf_strict; mx_spf_match; provider_classified
 3037,Walzenhausen,sovereign,walzenhausen.ch,90,spf_strict; mx_spf_match; provider_classified
-1349,Wangen,sovereign,wangensz.ch,90,spf_strict; mx_spf_match; provider_classified
+1349,Wangen,sovereign,wangensz.ch,90,spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
 200,Wangen-Brüttisellen,microsoft,wangen-bruettisellen.ch,90,spf_strict; mx_spf_match; provider_classified
 70,Wasterkingen,microsoft,wasterkingen.ch,90,spf_strict; mx_spf_match; provider_classified
 1069,Weggis,microsoft,weggis.ch,90,spf_strict; mx_spf_match; provider_classified
@@ -1660,10 +1663,10 @@ bfs,name,provider,domain,confidence,flags
 594,Wilderswil,microsoft,wilderswil.ch,90,spf_strict; mx_spf_match; provider_classified
 554,Wiler bei Utzenstorf,microsoft,wiler.ch,90,spf_strict; mx_spf_match; provider_classified
 671,Wileroltigen,microsoft,wileroltigen.ch,90,spf_strict; mx_spf_match; provider_classified
-4288,Wiliberg,sovereign,wiliberg.ch,90,spf_strict; mx_spf_match; provider_classified
+4288,Wiliberg,sovereign,wiliberg.ch,90,spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
 423,Willadingen,microsoft,willadingen.ch,90,spf_strict; mx_spf_match; provider_classified
 769,Wimmis,microsoft,wimmis.ch,90,spf_strict; mx_spf_match; provider_classified
-4123,Windisch,sovereign,windisch.ch,90,spf_strict; mx_spf_match; provider_classified
+4123,Windisch,sovereign,windisch.ch,90,spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
 2866,Wintersingen,microsoft,wintersingen.ch,90,spf_strict; mx_spf_match; provider_classified
 2501,Winznau,microsoft,winznau.ch,90,spf_strict; mx_spf_match; provider_classified
 2502,Wisen,sovereign,wisen.ch,90,spf_strict; mx_spf_match; provider_classified
@@ -1738,10 +1741,10 @@ bfs,name,provider,domain,confidence,flags
 215,Dättlikon,sovereign,daettlikon.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
 952,Dürrenroth,sovereign,duerrenroth.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
 3212,Eggersriet,sovereign,eggersriet.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
-901,Eggiwil,sovereign,eggiwil.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
+901,Eggiwil,sovereign,eggiwil.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified; provider_via_gateway_spf
 55,Eglisau,sovereign,eglisau.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
 3252,Eichberg SG,sovereign,eichberg.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
-924,Eriz,sovereign,eriz.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
+924,Eriz,sovereign,eriz.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified; provider_via_gateway_spf
 763,Erlenbach im Simmental,sovereign,erlenbach-be.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
 2503,Erlinsbach,sovereign,erlinsbach-so.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
 2615,Erschwil,sovereign,erschwil.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
@@ -1755,7 +1758,6 @@ bfs,name,provider,domain,confidence,flags
 303,Grossaffoltern,sovereign,grossaffoltern.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
 1131,Grossdietwil,sovereign,grossdietwil.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
 608,Grosshöchstetten,sovereign,grosshoechstetten.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
-4100,Hausen,sovereign,hausen.swiss,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
 6809,Haute-Ajoie,sovereign,hauteajoie.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
 3032,Heiden,sovereign,heiden.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
 927,Heiligenschwendi,sovereign,heiligenschwendi.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
@@ -1769,7 +1771,7 @@ bfs,name,provider,domain,confidence,flags
 3201,Häggenschwil,sovereign,haeggenschwil.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
 87,Hüttikon,sovereign,huettikon.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
 496,Ins,sovereign,ins.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
-738,Jens,sovereign,jens.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
+738,Jens,sovereign,jens.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified; provider_via_gateway_spf
 304,Kallnach,sovereign,kallnach.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
 3313,Kaltbrunn,sovereign,kaltbrunn.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
 412,Kirchberg,sovereign,kirchberg-be.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
@@ -1801,7 +1803,7 @@ bfs,name,provider,domain,confidence,flags
 3396,Neckertal,sovereign,neckertal.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
 3423,Niederhelfenschwil,sovereign,niederhelfenschwil.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
 418,Oberburg,sovereign,oberburg.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
-619,Oberdiessbach,sovereign,oberdiessbach.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
+619,Oberdiessbach,sovereign,oberdiessbach.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified; provider_via_gateway_spf
 3375,Oberhelfenschwil,sovereign,oberhelfenschwil.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
 3254,Oberriet,sovereign,oberriet.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
 4038,Obersiggenthal,sovereign,obersiggenthal.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
@@ -1846,9 +1848,8 @@ bfs,name,provider,domain,confidence,flags
 3219,Untereggen,sovereign,untereggen.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
 551,Urtenen-Schönbühl,sovereign,urtenen-schoenbuehl.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
 552,Utzenstorf,sovereign,utzenstorf.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
-6730,Val Terbi,sovereign,val-terbi.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
 6037,Val de Bagnes,sovereign,valdebagnes.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
-2163,Val-de-Charmey,microsoft,val-de-charmey.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
+2163,Val-de-Charmey,microsoft,val-de-charmey.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified; provider_via_gateway_spf
 2052,Vernay,sovereign,vernay.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
 6267,Veysonnaz,sovereign,veysonnaz.org,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
 3297,Vilters-Wangs,sovereign,vilters-wangs.ch,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
@@ -1876,7 +1877,7 @@ bfs,name,provider,domain,confidence,flags
 1401,Alpnach,sovereign,alpnach.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 1361,Alpthal,sovereign,alpthal.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 1341,Altendorf,swiss-isp,altendorf.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
-211,Altikon,sovereign,altikon.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
+211,Altikon,sovereign,altikon.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
 4641,Altnau,swiss-isp,altnau.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 4881,Amlikon-Bissegg,swiss-isp,amlikon-bissegg.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 2763,Arlesheim,microsoft,arlesheim.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
@@ -1900,11 +1901,11 @@ bfs,name,provider,domain,confidence,flags
 352,Bolligen,sovereign,bolligen.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 3721,Bonaduz,sovereign,bonaduz.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 4643,Bottighofen,swiss-isp,bottighofen.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
-605,Bowil,sovereign,bowil.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
+605,Bowil,sovereign,bowil.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
 3792,Bregaglia,sovereign,bregaglia.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 2613,Breitenbach,sovereign,breitenbach.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 2883,Bretzwil,sovereign,bretzwil.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
-4274,Brittnau,sovereign,brittnau.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
+4274,Brittnau,sovereign,brittnau.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
 4003,Buchs,sovereign,buchs-aargau.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 2783,Burg im Leimental,sovereign,burg-il.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 4230,Buttwil,sovereign,buttwil.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
@@ -1919,7 +1920,7 @@ bfs,name,provider,domain,confidence,flags
 3881,Conters im Prättigau,sovereign,conters.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 6619,Corsier,sovereign,corsier.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 2011,Cugy,sovereign,cugy-fr.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
-6711,Delsberg,sovereign,delemont.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
+6711,Delsberg,sovereign,delemont.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
 216,Dinhard,sovereign,dinhard.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 4406,Dozwil,swiss-isp,dozwil.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 84,Dällikon,swiss-isp,daellikon.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
@@ -1933,7 +1934,7 @@ bfs,name,provider,domain,confidence,flags
 492,Erlach,sovereign,erlach.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 4806,Eschenz,swiss-isp,eschenz.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 2518,Etziken,sovereign,etziken.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
-925,Fahrni,sovereign,gemeinde-fahrni.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
+925,Fahrni,sovereign,gemeinde-fahrni.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
 3572,Falera,sovereign,falera.net,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 4561,Felben-Wellhausen,swiss-isp,felben-wellhausen.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 3861,Fideris,sovereign,fideris.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
@@ -1942,7 +1943,7 @@ bfs,name,provider,domain,confidence,flags
 3732,Flims,sovereign,gemeindeflims.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 3951,Fläsch,sovereign,flaesch.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 663,Frauenkappelen,sovereign,frauenkappelen.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
-1322,Freienbach,sovereign,freienbach.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
+1322,Freienbach,sovereign,freienbach.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
 4163,Frick,swiss-isp,frick.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 4307,Full-Reuenthal,sovereign,full-reuenthal.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 1342,Galgenen,sovereign,galgenen.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
@@ -1977,14 +1978,13 @@ bfs,name,provider,domain,confidence,flags
 3619,Ilanz/Glion,sovereign,ilanz-glion.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 1363,Illgau,sovereign,illgau.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 1343,Innerthal,sovereign,innerthal.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
-581,Interlaken,sovereign,interlaken.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 2849,Itingen,microsoft,itingen.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 2138,Jaun,sovereign,jaun.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 540,Jegenstorf,sovereign,jegenstorf.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 6626,Jussy,sovereign,jussy.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 4169,Kaisten,swiss-isp,kaisten.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 2549,Kammersrohr,sovereign,kammersrohr.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
-565,Kandersteg,sovereign,gemeindekandersteg.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
+565,Kandersteg,sovereign,gemeindekandersteg.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
 6,Kappel am Albis,swiss-isp,kappel-am-albis.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 870,Kehrsatz,swiss-isp,kehrsatz.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 4666,Kemmental,swiss-isp,kemmental.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
@@ -2047,7 +2047,7 @@ bfs,name,provider,domain,confidence,flags
 4037,Oberrohrdorf,sovereign,oberrohrdorf.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 93,Oberweningen,swiss-isp,oberweningen.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 744,Orpund,sovereign,orpund.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
-438,Orvin,sovereign,orvin.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
+438,Orvin,sovereign,orvin.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
 37,Ossingen,sovereign,ossingen.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 4841,Pfyn,swiss-isp,pfyn.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 392,Pieterlen,sovereign,pieterlen.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
@@ -2061,7 +2061,7 @@ bfs,name,provider,domain,confidence,flags
 4846,Raperswilen,swiss-isp,raperswilen.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 1140,Reiden,swiss-isp,reiden.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 3035,Reute,sovereign,reute.ar.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
-767,Reutigen,sovereign,reutigen.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
+767,Reutigen,sovereign,reutigen.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
 3714,Rheinwald,sovereign,rheinwald.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 2582,Rickenbach,sovereign,rickenbachso.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 4751,Rickenbach,swiss-isp,rickenbach-tg.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
@@ -2069,7 +2069,7 @@ bfs,name,provider,domain,confidence,flags
 12,Rifferswil,sovereign,rifferswil.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 879,Riggisberg,sovereign,riggisberg.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 2479,Rodersdorf,sovereign,rodersdorf.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
-338,Rohrbach,sovereign,rohrbach-be.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
+338,Rohrbach,sovereign,rohrbach-be.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
 4436,Romanshorn,swiss-isp,romanshorn.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 5798,Ropraz,sovereign,ropraz.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 1370,Rothenthurm,sovereign,rothenthurm.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
@@ -2123,7 +2123,7 @@ bfs,name,provider,domain,confidence,flags
 4286,Uerkheim,sovereign,uerkheim.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 249,Unterengstringen,swiss-isp,unterengstringen.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 1375,Unteriberg,sovereign,unteriberg.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
-945,Unterlangenegg,sovereign,unterlangenegg.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
+945,Unterlangenegg,sovereign,unterlangenegg.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
 1709,Unterägeri,sovereign,unteraegeri.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 885,Uttigen,sovereign,uttigen.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 4451,Uttwil,swiss-isp,uttwil.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
@@ -2155,7 +2155,7 @@ bfs,name,provider,domain,confidence,flags
 360,Wohlen bei Bern,sovereign,wohlen-be.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 3038,Wolfhalden,sovereign,wolfhalden.ar.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 1107,Wolhusen,swiss-isp,wolhusen.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
-1323,Wollerau,sovereign,wollerau.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
+1323,Wollerau,sovereign,wollerau.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
 627,Worb,sovereign,worb.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 960,Wyssachen,sovereign,wyssachen.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 293,Wädenswil,swiss-isp,waedenswil.ch,95,multiple_mx; spf_strict; mx_spf_match; provider_classified

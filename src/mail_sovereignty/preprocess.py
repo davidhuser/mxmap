@@ -8,13 +8,14 @@ from urllib.parse import urlparse
 
 import httpx
 
-from mail_sovereignty.classify import classify
+from mail_sovereignty.classify import classify, detect_gateway
 from mail_sovereignty.constants import CONCURRENCY, SPARQL_QUERY, SPARQL_URL
 from mail_sovereignty.dns import (
     lookup_mx,
     lookup_spf,
     resolve_mx_asns,
     resolve_mx_cnames,
+    resolve_spf_includes,
 )
 
 
@@ -131,9 +132,17 @@ async def scan_municipality(
                     spf = await lookup_spf(guess)
                     break
 
+        spf_resolved = await resolve_spf_includes(spf) if spf else ""
         mx_cnames = await resolve_mx_cnames(mx) if mx else {}
         mx_asns = await resolve_mx_asns(mx) if mx else set()
-        provider = classify(mx, spf, mx_cnames=mx_cnames, mx_asns=mx_asns or None)
+        provider = classify(
+            mx,
+            spf,
+            mx_cnames=mx_cnames,
+            mx_asns=mx_asns or None,
+            resolved_spf=spf_resolved or None,
+        )
+        gateway = detect_gateway(mx) if mx else None
 
         entry: dict[str, Any] = {
             "bfs": m["bfs"],
@@ -144,6 +153,10 @@ async def scan_municipality(
             "spf": spf,
             "provider": provider,
         }
+        if spf_resolved and spf_resolved != spf:
+            entry["spf_resolved"] = spf_resolved
+        if gateway:
+            entry["gateway"] = gateway
         if mx_cnames:
             entry["mx_cnames"] = mx_cnames
         if mx_asns:
