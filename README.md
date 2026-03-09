@@ -43,6 +43,11 @@ uv run ruff check src tests
 uv run ruff format src tests
 ```
 
+## Related work
+
+* [hpr4379 :: Mapping Municipalities' Digital Dependencies](https://hackerpublicradio.org/eps/hpr4379/index.html)
+* if you know of other similar projects, please open an issue or submit a PR to add them here!
+
 ## Contributing
 
 If you spot a misclassification, please open an issue with the BFS number and the correct provider.
