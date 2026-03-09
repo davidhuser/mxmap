@@ -1,7 +1,7 @@
 {
-  "total": 2171,
-  "average_score": 90.2,
-  "high_confidence_pct": 95.3,
+  "total": 2114,
+  "average_score": 90.7,
+  "high_confidence_pct": 95.5,
   "quality_passed": true,
   "entries": {
     "1": {
@@ -144,7 +144,8 @@
         "multiple_mx",
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "13": {
@@ -156,7 +157,8 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "14": {
@@ -168,7 +170,8 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "22": {
@@ -180,7 +183,8 @@
         "multiple_mx",
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "23": {
@@ -204,7 +208,8 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "25": {
@@ -228,7 +233,8 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "27": {
@@ -288,7 +294,8 @@
         "multiple_mx",
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "34": {
@@ -300,7 +307,8 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "35": {
@@ -336,7 +344,8 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "39": {
@@ -408,7 +417,8 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "53": {
@@ -450,14 +460,15 @@
     },
     "56": {
       "name": "Embrach",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "embrach.ch",
       "confidence": 83,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "57": {
@@ -627,15 +638,16 @@
     },
     "71": {
       "name": "Wil ZH",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "wil-zh.ch",
-      "confidence": 85,
+      "confidence": 90,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "72": {
@@ -647,7 +659,8 @@
         "multiple_mx",
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "81": {
@@ -731,7 +744,8 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "88": {
@@ -761,10 +775,9 @@
       "name": "Niederhasli",
       "provider": "sovereign",
       "domain": "niederhasli.ch",
-      "confidence": 80,
+      "confidence": 50,
       "flags": [
-        "spf_strict",
-        "sovereign_mx_with_cloud_spf",
+        "no_spf",
         "provider_classified",
         "autodiscover_suggests:microsoft"
       ]
@@ -845,10 +858,9 @@
       "name": "Rümlang",
       "provider": "sovereign",
       "domain": "ruemlang.ch",
-      "confidence": 80,
+      "confidence": 50,
       "flags": [
-        "spf_strict",
-        "sovereign_mx_with_cloud_spf",
+        "no_spf",
         "provider_classified",
         "autodiscover_suggests:microsoft"
       ]
@@ -881,24 +893,24 @@
       "name": "Stadel bei Niederglatt",
       "provider": "sovereign",
       "domain": "stadel.ch",
-      "confidence": 80,
+      "confidence": 50,
       "flags": [
-        "spf_strict",
-        "sovereign_mx_with_cloud_spf",
+        "no_spf",
         "provider_classified",
         "autodiscover_suggests:microsoft"
       ]
     },
     "101": {
       "name": "Steinmaur",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "steinmaur.ch",
       "confidence": 85,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "102": {
@@ -910,7 +922,8 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "111": {
@@ -926,15 +939,16 @@
     },
     "112": {
       "name": "Bubikon",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "bubikon.ch",
-      "confidence": 85,
+      "confidence": 90,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "113": {
@@ -952,10 +966,9 @@
       "name": "Fischenthal",
       "provider": "sovereign",
       "domain": "fischenthal.ch",
-      "confidence": 80,
+      "confidence": 50,
       "flags": [
-        "spf_strict",
-        "sovereign_mx_with_cloud_spf",
+        "no_spf",
         "provider_classified"
       ]
     },
@@ -1159,7 +1172,8 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "154": {
@@ -1171,7 +1185,8 @@
         "multiple_mx",
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "155": {
@@ -1223,15 +1238,16 @@
     },
     "159": {
       "name": "Uetikon am See",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "uetikonamsee.ch",
-      "confidence": 83,
+      "confidence": 88,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "160": {
@@ -1243,20 +1259,22 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "161": {
       "name": "Zollikon",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "zollikon.ch",
-      "confidence": 85,
+      "confidence": 90,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "172": {
@@ -1280,7 +1298,8 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "176": {
@@ -1412,14 +1431,15 @@
     },
     "196": {
       "name": "Mönchaltorf",
-      "provider": "sovereign",
+      "provider": "google",
       "domain": "moenchaltorf.ch",
       "confidence": 85,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "197": {
@@ -1436,15 +1456,16 @@
     },
     "198": {
       "name": "Uster",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "uster.ch",
-      "confidence": 85,
+      "confidence": 90,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "199": {
@@ -1516,7 +1537,8 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "216": {
@@ -1611,7 +1633,8 @@
       "flags": [
         "multiple_mx",
         "no_spf",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "226": {
@@ -1623,7 +1646,8 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "227": {
@@ -1701,27 +1725,29 @@
     },
     "243": {
       "name": "Dietikon",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "dietikon.ch",
       "confidence": 85,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "244": {
       "name": "Geroldswil",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "geroldswil.ch",
-      "confidence": 93,
+      "confidence": 98,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "245": {
@@ -1749,14 +1775,15 @@
     },
     "247": {
       "name": "Schlieren",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "schlieren.ch",
       "confidence": 85,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "248": {
@@ -1826,7 +1853,8 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "292": {
@@ -1838,7 +1866,8 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "293": {
@@ -1991,17 +2020,6 @@
       "confidence": 90,
       "flags": [
         "multiple_mx",
-        "mx_spf_match",
-        "provider_classified"
-      ]
-    },
-    "308": {
-      "name": "Niederried bei Kallnach",
-      "provider": "sovereign",
-      "domain": "niederried.ch",
-      "confidence": 88,
-      "flags": [
-        "spf_softfail",
         "mx_spf_match",
         "provider_classified"
       ]
@@ -2388,9 +2406,8 @@
       "name": "Vechigen",
       "provider": "swiss-isp",
       "domain": "vechigen.ch",
-      "confidence": 95,
+      "confidence": 90,
       "flags": [
-        "multiple_mx",
         "spf_strict",
         "mx_spf_match",
         "provider_classified"
@@ -2405,7 +2422,8 @@
         "multiple_mx",
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "361": {
@@ -2602,12 +2620,11 @@
       "name": "Rüti bei Büren",
       "provider": "microsoft",
       "domain": "ruetibeibueren.ch",
-      "confidence": 95,
+      "confidence": 90,
       "flags": [
         "spf_strict",
         "mx_spf_match",
-        "provider_classified",
-        "autodiscover_confirms"
+        "provider_classified"
       ]
     },
     "394": {
@@ -2650,11 +2667,10 @@
       "name": "Bäriswil",
       "provider": "sovereign",
       "domain": "baeriswil.ch",
-      "confidence": 93,
+      "confidence": 55,
       "flags": [
         "multiple_mx",
-        "spf_softfail",
-        "mx_spf_match",
+        "no_spf",
         "provider_classified"
       ]
     },
@@ -3206,17 +3222,6 @@
         "provider_classified"
       ]
     },
-    "520": {
-      "name": "Montfavergier",
-      "provider": "sovereign",
-      "domain": "montfavergier.ch",
-      "confidence": 88,
-      "flags": [
-        "spf_softfail",
-        "mx_spf_match",
-        "provider_classified"
-      ]
-    },
     "533": {
       "name": "Bätterkinden",
       "provider": "microsoft",
@@ -3359,17 +3364,6 @@
         "mx_spf_match",
         "provider_classified",
         "autodiscover_confirms"
-      ]
-    },
-    "555": {
-      "name": "Zauggenried",
-      "provider": "unknown",
-      "domain": "zauggenried.ch",
-      "confidence": 15,
-      "flags": [
-        "no_mx",
-        "no_spf",
-        "provider_unknown"
       ]
     },
     "556": {
@@ -3606,13 +3600,14 @@
     },
     "581": {
       "name": "Interlaken",
-      "provider": "unknown",
-      "domain": "interlaken-gemeinde.ch",
-      "confidence": 15,
+      "provider": "sovereign",
+      "domain": "interlaken.ch",
+      "confidence": 95,
       "flags": [
-        "no_mx",
-        "no_spf",
-        "provider_unknown"
+        "multiple_mx",
+        "spf_strict",
+        "mx_spf_match",
+        "provider_classified"
       ]
     },
     "582": {
@@ -3701,24 +3696,22 @@
       "name": "Ringgenberg",
       "provider": "microsoft",
       "domain": "ringgenberg.ch",
-      "confidence": 95,
+      "confidence": 90,
       "flags": [
         "spf_strict",
         "mx_spf_match",
-        "provider_classified",
-        "autodiscover_confirms"
+        "provider_classified"
       ]
     },
     "591": {
       "name": "Saxeten",
       "provider": "microsoft",
       "domain": "saxeten.ch",
-      "confidence": 95,
+      "confidence": 90,
       "flags": [
         "spf_strict",
         "mx_spf_match",
-        "provider_classified",
-        "autodiscover_confirms"
+        "provider_classified"
       ]
     },
     "592": {
@@ -3963,11 +3956,12 @@
       "name": "Oppligen",
       "provider": "microsoft",
       "domain": "oppligen.ch",
-      "confidence": 90,
+      "confidence": 95,
       "flags": [
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "autodiscover_confirms"
       ]
     },
     "623": {
@@ -4694,10 +4688,9 @@
       "name": "Worben",
       "provider": "microsoft",
       "domain": "worben.ch",
-      "confidence": 95,
+      "confidence": 55,
       "flags": [
-        "spf_strict",
-        "mx_spf_match",
+        "no_spf",
         "provider_classified",
         "autodiscover_confirms"
       ]
@@ -4729,11 +4722,10 @@
       "name": "Diemtigen",
       "provider": "microsoft",
       "domain": "diemtigen.ch",
-      "confidence": 90,
+      "confidence": 60,
       "flags": [
         "multiple_mx",
-        "spf_strict",
-        "sovereign_mx_with_cloud_spf",
+        "no_spf",
         "provider_classified",
         "provider_via_gateway_spf",
         "autodiscover_confirms"
@@ -4915,18 +4907,6 @@
         "spf_strict",
         "mx_spf_match",
         "provider_classified"
-      ]
-    },
-    "827": {
-      "name": "Montmelon",
-      "provider": "infomaniak",
-      "domain": "montmelon.ch",
-      "confidence": 95,
-      "flags": [
-        "spf_strict",
-        "mx_spf_match",
-        "provider_classified",
-        "autodiscover_confirms"
       ]
     },
     "841": {
@@ -6053,10 +6033,9 @@
       "name": "Ermensee",
       "provider": "sovereign",
       "domain": "ermensee.ch",
-      "confidence": 90,
+      "confidence": 50,
       "flags": [
-        "spf_strict",
-        "mx_spf_match",
+        "no_spf",
         "provider_classified"
       ]
     },
@@ -6232,17 +6211,6 @@
         "mx_spf_match",
         "provider_classified",
         "autodiscover_confirms"
-      ]
-    },
-    "1057": {
-      "name": "Honau",
-      "provider": "sovereign",
-      "domain": "honau.ch",
-      "confidence": 90,
-      "flags": [
-        "multiple_mx",
-        "mx_spf_match",
-        "provider_classified"
       ]
     },
     "1058": {
@@ -6957,11 +6925,10 @@
       "name": "Isenthal",
       "provider": "sovereign",
       "domain": "isenthal.ch",
-      "confidence": 85,
+      "confidence": 55,
       "flags": [
         "multiple_mx",
-        "spf_strict",
-        "sovereign_mx_with_cloud_spf",
+        "no_spf",
         "provider_classified"
       ]
     },
@@ -6981,10 +6948,9 @@
       "name": "Schattdorf",
       "provider": "sovereign",
       "domain": "schattdorf.ch",
-      "confidence": 90,
+      "confidence": 50,
       "flags": [
-        "spf_strict",
-        "mx_spf_match",
+        "no_spf",
         "provider_classified"
       ]
     },
@@ -7382,7 +7348,7 @@
     "1372": {
       "name": "Schwyz",
       "provider": "sovereign",
-      "domain": "gemeindeschwyz.ch",
+      "domain": "schwyz.ch",
       "confidence": 95,
       "flags": [
         "multiple_mx",
@@ -7828,30 +7794,8 @@
         "multiple_mx",
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
-      ]
-    },
-    "2013": {
-      "name": "Domdidier",
-      "provider": "sovereign",
-      "domain": "domdidier.ch",
-      "confidence": 90,
-      "flags": [
-        "spf_strict",
-        "mx_spf_match",
-        "provider_classified"
-      ]
-    },
-    "2016": {
-      "name": "Fétigny",
-      "provider": "microsoft",
-      "domain": "fetigny.ch",
-      "confidence": 95,
-      "flags": [
-        "spf_strict",
-        "mx_spf_match",
         "provider_classified",
-        "autodiscover_confirms"
+        "provider_via_gateway_spf"
       ]
     },
     "2022": {
@@ -7873,18 +7817,6 @@
       "confidence": 93,
       "flags": [
         "spf_softfail",
-        "mx_spf_match",
-        "provider_classified",
-        "autodiscover_confirms"
-      ]
-    },
-    "2027": {
-      "name": "Ménières",
-      "provider": "microsoft",
-      "domain": "menieres.ch",
-      "confidence": 95,
-      "flags": [
-        "spf_strict",
         "mx_spf_match",
         "provider_classified",
         "autodiscover_confirms"
@@ -7934,7 +7866,8 @@
       "flags": [
         "multiple_mx",
         "no_spf",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "2043": {
@@ -7946,7 +7879,8 @@
         "multiple_mx",
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "2044": {
@@ -7981,7 +7915,8 @@
         "multiple_mx",
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "2051": {
@@ -7991,18 +7926,6 @@
       "confidence": 90,
       "flags": [
         "spf_strict",
-        "mx_spf_match",
-        "provider_classified"
-      ]
-    },
-    "2052": {
-      "name": "Vernay",
-      "provider": "sovereign",
-      "domain": "vernay.ch",
-      "confidence": 93,
-      "flags": [
-        "multiple_mx",
-        "spf_softfail",
         "mx_spf_match",
         "provider_classified"
       ]
@@ -8159,18 +8082,6 @@
         "spf_strict",
         "mx_spf_match",
         "provider_classified"
-      ]
-    },
-    "2090": {
-      "name": "Morlens",
-      "provider": "unknown",
-      "domain": "",
-      "confidence": 0,
-      "flags": [
-        "no_domain",
-        "no_mx",
-        "no_spf",
-        "provider_unknown"
       ]
     },
     "2096": {
@@ -8691,18 +8602,6 @@
         "provider_classified"
       ]
     },
-    "2200": {
-      "name": "Grolley",
-      "provider": "microsoft",
-      "domain": "grolley.ch",
-      "confidence": 95,
-      "flags": [
-        "spf_strict",
-        "mx_spf_match",
-        "provider_classified",
-        "autodiscover_confirms"
-      ]
-    },
     "2206": {
       "name": "Marly",
       "provider": "sovereign",
@@ -8726,18 +8625,6 @@
         "mx_spf_match",
         "provider_classified",
         "autodiscover_confirms"
-      ]
-    },
-    "2210": {
-      "name": "Montévraz",
-      "provider": "unknown",
-      "domain": "",
-      "confidence": 0,
-      "flags": [
-        "no_domain",
-        "no_mx",
-        "no_spf",
-        "provider_unknown"
       ]
     },
     "2211": {
@@ -8765,18 +8652,6 @@
         "autodiscover_confirms"
       ]
     },
-    "2217": {
-      "name": "Ponthaux",
-      "provider": "microsoft",
-      "domain": "ponthaux.ch",
-      "confidence": 95,
-      "flags": [
-        "spf_strict",
-        "mx_spf_match",
-        "provider_classified",
-        "autodiscover_confirms"
-      ]
-    },
     "2220": {
       "name": "Le Mouret",
       "provider": "microsoft",
@@ -8787,17 +8662,6 @@
         "mx_spf_match",
         "provider_classified",
         "autodiscover_confirms"
-      ]
-    },
-    "2223": {
-      "name": "Le Glèbe",
-      "provider": "sovereign",
-      "domain": "leglebe.ch",
-      "confidence": 90,
-      "flags": [
-        "spf_strict",
-        "mx_spf_match",
-        "provider_classified"
       ]
     },
     "2226": {
@@ -8990,18 +8854,6 @@
         "autodiscover_confirms"
       ]
     },
-    "2263": {
-      "name": "Guschelmuth",
-      "provider": "unknown",
-      "domain": "",
-      "confidence": 0,
-      "flags": [
-        "no_domain",
-        "no_mx",
-        "no_spf",
-        "provider_unknown"
-      ]
-    },
     "2265": {
       "name": "Kerzers",
       "provider": "sovereign",
@@ -9085,28 +8937,6 @@
         "mx_spf_match",
         "provider_classified",
         "autodiscover_confirms"
-      ]
-    },
-    "2278": {
-      "name": "Ulmiz",
-      "provider": "microsoft",
-      "domain": "ulmiz.ch",
-      "confidence": 90,
-      "flags": [
-        "mx_spf_match",
-        "provider_classified",
-        "autodiscover_confirms"
-      ]
-    },
-    "2281": {
-      "name": "Haut-Vully",
-      "provider": "sovereign",
-      "domain": "region-vully.ch",
-      "confidence": 90,
-      "flags": [
-        "multiple_mx",
-        "mx_spf_match",
-        "provider_classified"
       ]
     },
     "2284": {
@@ -9662,12 +9492,11 @@
       "name": "Lüsslingen-Nennigkofen",
       "provider": "microsoft",
       "domain": "luesslingen-nennigkofen.ch",
-      "confidence": 95,
+      "confidence": 90,
       "flags": [
         "spf_strict",
         "mx_spf_match",
-        "provider_classified",
-        "autodiscover_confirms"
+        "provider_classified"
       ]
     },
     "2465": {
@@ -9721,10 +9550,9 @@
       "name": "Gempen",
       "provider": "microsoft",
       "domain": "gempen.ch",
-      "confidence": 95,
+      "confidence": 55,
       "flags": [
-        "spf_strict",
-        "mx_spf_match",
+        "no_spf",
         "provider_classified",
         "autodiscover_confirms"
       ]
@@ -10010,18 +9838,6 @@
         "autodiscover_confirms"
       ]
     },
-    "2520": {
-      "name": "Halten",
-      "provider": "microsoft",
-      "domain": "halten.ch",
-      "confidence": 95,
-      "flags": [
-        "spf_strict",
-        "mx_spf_match",
-        "provider_classified",
-        "autodiscover_confirms"
-      ]
-    },
     "2523": {
       "name": "Horriwil",
       "provider": "sovereign",
@@ -10085,18 +9901,6 @@
       "name": "Obergerlafingen",
       "provider": "microsoft",
       "domain": "obergerlafingen.ch",
-      "confidence": 95,
-      "flags": [
-        "spf_strict",
-        "mx_spf_match",
-        "provider_classified",
-        "autodiscover_confirms"
-      ]
-    },
-    "2529": {
-      "name": "Oekingen",
-      "provider": "microsoft",
-      "domain": "oekingen.ch",
       "confidence": 95,
       "flags": [
         "spf_strict",
@@ -10433,24 +10237,24 @@
       "name": "Kappel",
       "provider": "microsoft",
       "domain": "kappel-so.ch",
-      "confidence": 95,
+      "confidence": 90,
       "flags": [
         "spf_strict",
         "mx_spf_match",
-        "provider_classified",
-        "autodiscover_confirms"
+        "provider_classified"
       ]
     },
     "2581": {
       "name": "Olten",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "olten.ch",
       "confidence": 85,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "2582": {
@@ -10707,11 +10511,12 @@
     "2761": {
       "name": "Aesch",
       "provider": "sovereign",
-      "domain": "aesch.ch",
-      "confidence": 55,
+      "domain": "aesch.bl.ch",
+      "confidence": 83,
       "flags": [
         "multiple_mx",
-        "no_spf",
+        "spf_softfail",
+        "sovereign_mx_with_cloud_spf",
         "provider_classified"
       ]
     },
@@ -12213,11 +12018,10 @@
     "3036": {
       "name": "Wald",
       "provider": "sovereign",
-      "domain": "wald.ar.ch",
-      "confidence": 95,
+      "domain": "gemeinde-wald.ch",
+      "confidence": 88,
       "flags": [
-        "multiple_mx",
-        "spf_strict",
+        "spf_softfail",
         "mx_spf_match",
         "provider_classified"
       ]
@@ -12269,32 +12073,10 @@
         "provider_classified"
       ]
     },
-    "3103": {
-      "name": "Rüte",
-      "provider": "sovereign",
-      "domain": "ruete.ch",
-      "confidence": 90,
-      "flags": [
-        "spf_strict",
-        "mx_spf_match",
-        "provider_classified"
-      ]
-    },
     "3104": {
       "name": "Schlatt-Haslen",
       "provider": "sovereign",
       "domain": "schlatt-haslen.ch",
-      "confidence": 90,
-      "flags": [
-        "spf_strict",
-        "mx_spf_match",
-        "provider_classified"
-      ]
-    },
-    "3105": {
-      "name": "Schwende",
-      "provider": "sovereign",
-      "domain": "schwende.ch",
       "confidence": 90,
       "flags": [
         "spf_strict",
@@ -12335,20 +12117,22 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "3202": {
       "name": "Muolen",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "muolen.ch",
-      "confidence": 85,
+      "confidence": 90,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3203": {
@@ -12398,84 +12182,91 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "3213": {
       "name": "Goldach SG",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "goldach.ch",
-      "confidence": 85,
+      "confidence": 90,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3214": {
       "name": "Mörschwil",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "moerschwil.ch",
       "confidence": 83,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "3215": {
       "name": "Rorschach",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "rorschach.ch",
-      "confidence": 83,
+      "confidence": 88,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3216": {
       "name": "Rorschacherberg",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "rorschacherberg.ch",
-      "confidence": 83,
+      "confidence": 88,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3217": {
       "name": "Steinach SG",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "steinach.ch",
-      "confidence": 85,
+      "confidence": 90,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3218": {
       "name": "Tübach",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "tuebach.ch",
-      "confidence": 83,
+      "confidence": 88,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3219": {
@@ -12487,106 +12278,118 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "3231": {
       "name": "Au",
-      "provider": "unknown",
-      "domain": "au.sg.ch",
-      "confidence": 15,
+      "provider": "microsoft",
+      "domain": "au.ch",
+      "confidence": 88,
       "flags": [
-        "no_mx",
-        "no_spf",
-        "provider_unknown"
+        "multiple_mx",
+        "spf_softfail",
+        "sovereign_mx_with_cloud_spf",
+        "provider_classified",
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3232": {
       "name": "Balgach",
       "provider": "sovereign",
       "domain": "balgach.ch",
-      "confidence": 55,
-      "flags": [
-        "multiple_mx",
-        "no_spf",
-        "provider_classified"
-      ]
-    },
-    "3233": {
-      "name": "Berneck",
-      "provider": "sovereign",
-      "domain": "berneck.ch",
-      "confidence": 85,
-      "flags": [
-        "multiple_mx",
-        "spf_strict",
-        "sovereign_mx_with_cloud_spf",
-        "provider_classified",
-        "autodiscover_suggests:microsoft"
-      ]
-    },
-    "3234": {
-      "name": "Diepoldsau",
-      "provider": "sovereign",
-      "domain": "diepoldsau.ch",
-      "confidence": 83,
-      "flags": [
-        "multiple_mx",
-        "spf_softfail",
-        "sovereign_mx_with_cloud_spf",
-        "provider_classified",
-        "autodiscover_suggests:microsoft"
-      ]
-    },
-    "3235": {
-      "name": "Rheineck",
-      "provider": "sovereign",
-      "domain": "rheineck.ch",
-      "confidence": 85,
-      "flags": [
-        "multiple_mx",
-        "spf_strict",
-        "sovereign_mx_with_cloud_spf",
-        "provider_classified"
-      ]
-    },
-    "3236": {
-      "name": "St. Margrethen",
-      "provider": "sovereign",
-      "domain": "stmargrethen.ch",
       "confidence": 93,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf"
       ]
     },
-    "3237": {
-      "name": "Thal",
-      "provider": "sovereign",
-      "domain": "thal.ch",
+    "3233": {
+      "name": "Berneck",
+      "provider": "microsoft",
+      "domain": "berneck.ch",
+      "confidence": 90,
+      "flags": [
+        "multiple_mx",
+        "spf_strict",
+        "sovereign_mx_with_cloud_spf",
+        "provider_classified",
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
+      ]
+    },
+    "3234": {
+      "name": "Diepoldsau",
+      "provider": "microsoft",
+      "domain": "diepoldsau.ch",
+      "confidence": 88,
+      "flags": [
+        "multiple_mx",
+        "spf_softfail",
+        "sovereign_mx_with_cloud_spf",
+        "provider_classified",
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
+      ]
+    },
+    "3235": {
+      "name": "Rheineck",
+      "provider": "microsoft",
+      "domain": "rheineck.ch",
       "confidence": 85,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf"
+      ]
+    },
+    "3236": {
+      "name": "St. Margrethen",
+      "provider": "microsoft",
+      "domain": "stmargrethen.ch",
+      "confidence": 98,
+      "flags": [
+        "multiple_mx",
+        "spf_softfail",
+        "mx_spf_match",
+        "provider_classified",
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
+      ]
+    },
+    "3237": {
+      "name": "Thal",
+      "provider": "microsoft",
+      "domain": "thal.ch",
+      "confidence": 90,
+      "flags": [
+        "multiple_mx",
+        "spf_strict",
+        "sovereign_mx_with_cloud_spf",
+        "provider_classified",
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3238": {
       "name": "Widnau",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "widnau.ch",
-      "confidence": 83,
+      "confidence": 88,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3251": {
@@ -12598,7 +12401,8 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "3252": {
@@ -12610,7 +12414,8 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "3253": {
@@ -12622,57 +12427,62 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "3254": {
       "name": "Oberriet",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "oberriet.ch",
-      "confidence": 93,
+      "confidence": 98,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3255": {
       "name": "Rebstein",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "rebstein.ch",
       "confidence": 85,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "3256": {
       "name": "Rüthi",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "ruethi.ch",
-      "confidence": 85,
+      "confidence": 90,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3271": {
       "name": "Buchs",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "buchs-sg.ch",
       "confidence": 85,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "3272": {
@@ -12696,163 +12506,176 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "3274": {
       "name": "Sennwald",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "sennwald.ch",
-      "confidence": 83,
+      "confidence": 88,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3275": {
       "name": "Sevelen SG",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "sevelen.ch",
-      "confidence": 85,
+      "confidence": 90,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3276": {
       "name": "Wartau",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "wartau.ch",
-      "confidence": 83,
+      "confidence": 88,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3291": {
       "name": "Bad Ragaz",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "badragaz.ch",
-      "confidence": 83,
+      "confidence": 88,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3292": {
       "name": "Flums",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "flums.ch",
-      "confidence": 83,
+      "confidence": 88,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3293": {
       "name": "Mels",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "mels.ch",
-      "confidence": 85,
+      "confidence": 90,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3294": {
       "name": "Pfäfers",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "pfaefers.ch",
-      "confidence": 93,
+      "confidence": 98,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3295": {
       "name": "Quarten",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "quarten.ch",
-      "confidence": 83,
+      "confidence": 88,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3296": {
       "name": "Sargans",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "sargans.ch",
-      "confidence": 83,
+      "confidence": 88,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3297": {
       "name": "Vilters-Wangs",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "vilters-wangs.ch",
-      "confidence": 93,
+      "confidence": 98,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3298": {
       "name": "Walenstadt",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "walenstadt.ch",
-      "confidence": 83,
+      "confidence": 88,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3311": {
       "name": "Amden",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "amden.ch",
-      "confidence": 93,
+      "confidence": 98,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3312": {
@@ -12868,15 +12691,16 @@
     },
     "3313": {
       "name": "Kaltbrunn",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "kaltbrunn.ch",
-      "confidence": 93,
+      "confidence": 98,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3315": {
@@ -12888,7 +12712,8 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "3316": {
@@ -12900,7 +12725,8 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "3338": {
@@ -12912,20 +12738,22 @@
         "multiple_mx",
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "3339": {
       "name": "Uznach",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "uznach.ch",
-      "confidence": 95,
+      "confidence": 100,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "mx_spf_match",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3340": {
@@ -12942,27 +12770,29 @@
     },
     "3341": {
       "name": "Gommiswald",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "gommiswald.ch",
-      "confidence": 80,
+      "confidence": 85,
       "flags": [
         "multiple_mx",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3342": {
       "name": "Eschenbach",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "eschenbach.ch",
-      "confidence": 85,
+      "confidence": 90,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3352": {
@@ -12986,95 +12816,77 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "3360": {
       "name": "Nesslau",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "nesslau.ch",
-      "confidence": 83,
+      "confidence": 88,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
-      ]
-    },
-    "3372": {
-      "name": "Hemberg",
-      "provider": "sovereign",
-      "domain": "hemberg.ch",
-      "confidence": 95,
-      "flags": [
-        "multiple_mx",
-        "spf_strict",
-        "mx_spf_match",
-        "provider_classified"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3374": {
       "name": "Lichtensteig",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "lichtensteig.ch",
-      "confidence": 85,
+      "confidence": 90,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
-      ]
-    },
-    "3375": {
-      "name": "Oberhelfenschwil",
-      "provider": "sovereign",
-      "domain": "oberhelfenschwil.ch",
-      "confidence": 93,
-      "flags": [
-        "multiple_mx",
-        "spf_softfail",
-        "mx_spf_match",
-        "provider_classified"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3379": {
       "name": "Wattwil",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "wattwil.ch",
       "confidence": 83,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "3392": {
       "name": "Kirchberg",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "kirchberg.ch",
-      "confidence": 93,
+      "confidence": 98,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3393": {
       "name": "Lütisburg",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "luetisburg.ch",
-      "confidence": 85,
+      "confidence": 90,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3394": {
@@ -13098,46 +12910,50 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "3396": {
       "name": "Neckertal",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "neckertal.ch",
-      "confidence": 93,
+      "confidence": 98,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3401": {
       "name": "Degersheim",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "degersheim.ch",
-      "confidence": 93,
+      "confidence": 98,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3402": {
       "name": "Flawil",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "flawil.ch",
-      "confidence": 85,
+      "confidence": 90,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3405": {
@@ -13180,79 +12996,85 @@
     },
     "3422": {
       "name": "Niederbüren",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "niederbueren.ch",
-      "confidence": 83,
+      "confidence": 88,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3423": {
       "name": "Niederhelfenschwil",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "niederhelfenschwil.ch",
-      "confidence": 93,
+      "confidence": 98,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3424": {
       "name": "Oberbüren",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "oberbueren.ch",
-      "confidence": 85,
+      "confidence": 90,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3426": {
       "name": "Zuzwil",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "zuzwil.ch",
-      "confidence": 85,
+      "confidence": 90,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3427": {
       "name": "Wil",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "stadtwil.ch",
       "confidence": 85,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "3441": {
       "name": "Andwil SG",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "andwil.ch",
-      "confidence": 85,
+      "confidence": 90,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3442": {
@@ -13270,15 +13092,16 @@
     },
     "3443": {
       "name": "Gossau",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "stadtgossau.ch",
-      "confidence": 95,
+      "confidence": 100,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "mx_spf_match",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3444": {
@@ -13290,7 +13113,8 @@
         "multiple_mx",
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "3506": {
@@ -13340,15 +13164,16 @@
     },
     "3543": {
       "name": "Surses",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "surses.ch",
-      "confidence": 85,
+      "confidence": 90,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3544": {
@@ -13445,17 +13270,6 @@
         "mx_spf_match",
         "provider_classified",
         "autodiscover_confirms"
-      ]
-    },
-    "3617": {
-      "name": "Mundaun",
-      "provider": "sovereign",
-      "domain": "mundaun.ch",
-      "confidence": 90,
-      "flags": [
-        "multiple_mx",
-        "mx_spf_match",
-        "provider_classified"
       ]
     },
     "3618": {
@@ -13733,7 +13547,8 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "3723": {
@@ -13796,15 +13611,16 @@
     },
     "3746": {
       "name": "Zernez",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "zernez.ch",
-      "confidence": 95,
+      "confidence": 100,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "mx_spf_match",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "3752": {
@@ -14141,13 +13957,14 @@
     },
     "3851": {
       "name": "Davos",
-      "provider": "swiss-isp",
-      "domain": "davos.gr.ch",
-      "confidence": 90,
+      "provider": "microsoft",
+      "domain": "davos.ch",
+      "confidence": 95,
       "flags": [
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "autodiscover_confirms"
       ]
     },
     "3861": {
@@ -14267,18 +14084,6 @@
         "spf_strict",
         "mx_spf_match",
         "provider_classified"
-      ]
-    },
-    "3932": {
-      "name": "Tschiertschen-Praden",
-      "provider": "microsoft",
-      "domain": "tschiertschen-praden.ch",
-      "confidence": 95,
-      "flags": [
-        "spf_strict",
-        "mx_spf_match",
-        "provider_classified",
-        "autodiscover_confirms"
       ]
     },
     "3945": {
@@ -14616,14 +14421,15 @@
     },
     "4012": {
       "name": "Suhr",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "suhr.ch",
       "confidence": 85,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "4013": {
@@ -14800,17 +14606,6 @@
         "spf_softfail",
         "mx_spf_match",
         "provider_classified"
-      ]
-    },
-    "4036": {
-      "name": "Oberehrendingen",
-      "provider": "unknown",
-      "domain": "oberehrendingen.ch",
-      "confidence": 15,
-      "flags": [
-        "no_mx",
-        "no_spf",
-        "provider_unknown"
       ]
     },
     "4037": {
@@ -15363,27 +15158,6 @@
         "autodiscover_confirms"
       ]
     },
-    "4114": {
-      "name": "Schinznach-Bad",
-      "provider": "merged",
-      "domain": "",
-      "confidence": 100,
-      "flags": [
-        "merged_municipality"
-      ]
-    },
-    "4115": {
-      "name": "Schinznach-Dorf",
-      "provider": "swiss-isp",
-      "domain": "schinznach-dorf.ch",
-      "confidence": 95,
-      "flags": [
-        "multiple_mx",
-        "spf_strict",
-        "mx_spf_match",
-        "provider_classified"
-      ]
-    },
     "4117": {
       "name": "Thalheim",
       "provider": "microsoft",
@@ -15418,16 +15192,6 @@
         "mx_spf_match",
         "provider_classified",
         "autodiscover_confirms"
-      ]
-    },
-    "4122": {
-      "name": "Villnachern",
-      "provider": "aws",
-      "domain": "villnachern.ch",
-      "confidence": 70,
-      "flags": [
-        "spf_strict",
-        "provider_classified"
       ]
     },
     "4123": {
@@ -15977,15 +15741,16 @@
     },
     "4201": {
       "name": "Lenzburg",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "lenzburg.ch",
-      "confidence": 85,
+      "confidence": 90,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "4202": {
@@ -16172,9 +15937,10 @@
       "name": "Boswil",
       "provider": "microsoft",
       "domain": "boswil.ch",
-      "confidence": 55,
+      "confidence": 95,
       "flags": [
-        "no_spf",
+        "spf_strict",
+        "mx_spf_match",
         "provider_classified",
         "autodiscover_confirms"
       ]
@@ -16545,12 +16311,11 @@
       "name": "Moosleerau",
       "provider": "microsoft",
       "domain": "moosleerau.ch",
-      "confidence": 95,
+      "confidence": 90,
       "flags": [
         "spf_strict",
         "mx_spf_match",
-        "provider_classified",
-        "autodiscover_confirms"
+        "provider_classified"
       ]
     },
     "4279": {
@@ -16567,15 +16332,16 @@
     },
     "4280": {
       "name": "Oftringen",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "oftringen.ch",
-      "confidence": 83,
+      "confidence": 88,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "4281": {
@@ -16687,30 +16453,6 @@
         "autodiscover_confirms"
       ]
     },
-    "4301": {
-      "name": "Baldingen",
-      "provider": "microsoft",
-      "domain": "baldingen.ch",
-      "confidence": 95,
-      "flags": [
-        "spf_strict",
-        "mx_spf_match",
-        "provider_classified",
-        "autodiscover_confirms"
-      ]
-    },
-    "4302": {
-      "name": "Böbikon",
-      "provider": "microsoft",
-      "domain": "boebikon.ch",
-      "confidence": 95,
-      "flags": [
-        "spf_strict",
-        "mx_spf_match",
-        "provider_classified",
-        "autodiscover_confirms"
-      ]
-    },
     "4303": {
       "name": "Böttstein",
       "provider": "microsoft",
@@ -16767,18 +16509,6 @@
         "spf_strict",
         "mx_spf_match",
         "provider_classified"
-      ]
-    },
-    "4308": {
-      "name": "Kaiserstuhl",
-      "provider": "microsoft",
-      "domain": "kaiserstuhl.ch",
-      "confidence": 95,
-      "flags": [
-        "spf_strict",
-        "mx_spf_match",
-        "provider_classified",
-        "autodiscover_confirms"
       ]
     },
     "4309": {
@@ -16853,43 +16583,6 @@
         "autodiscover_confirms"
       ]
     },
-    "4315": {
-      "name": "Rekingen",
-      "provider": "microsoft",
-      "domain": "rekingen.ch",
-      "confidence": 95,
-      "flags": [
-        "spf_strict",
-        "mx_spf_match",
-        "provider_classified",
-        "autodiscover_confirms"
-      ]
-    },
-    "4316": {
-      "name": "Rietheim",
-      "provider": "microsoft",
-      "domain": "rietheim.ch",
-      "confidence": 100,
-      "flags": [
-        "multiple_mx",
-        "spf_strict",
-        "mx_spf_match",
-        "provider_classified",
-        "autodiscover_confirms"
-      ]
-    },
-    "4317": {
-      "name": "Rümikon AG",
-      "provider": "microsoft",
-      "domain": "ruemikon.ch",
-      "confidence": 95,
-      "flags": [
-        "spf_strict",
-        "mx_spf_match",
-        "provider_classified",
-        "autodiscover_confirms"
-      ]
-    },
     "4318": {
       "name": "Schneisingen",
       "provider": "microsoft",
@@ -16918,30 +16611,6 @@
       "name": "Tegerfelden",
       "provider": "microsoft",
       "domain": "tegerfelden.ch",
-      "confidence": 95,
-      "flags": [
-        "spf_strict",
-        "mx_spf_match",
-        "provider_classified",
-        "autodiscover_confirms"
-      ]
-    },
-    "4322": {
-      "name": "Wislikofen",
-      "provider": "microsoft",
-      "domain": "wislikofen.ch",
-      "confidence": 95,
-      "flags": [
-        "spf_strict",
-        "mx_spf_match",
-        "provider_classified",
-        "autodiscover_confirms"
-      ]
-    },
-    "4323": {
-      "name": "Bad Zurzach",
-      "provider": "microsoft",
-      "domain": "zurzach.ch",
       "confidence": 95,
       "flags": [
         "spf_strict",
@@ -17308,15 +16977,16 @@
     },
     "4606": {
       "name": "Stettfurt",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "stettfurt.ch",
-      "confidence": 85,
+      "confidence": 90,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "4611": {
@@ -17441,11 +17111,12 @@
       "name": "Langrickenbach",
       "provider": "microsoft",
       "domain": "langrickenbach.ch",
-      "confidence": 90,
+      "confidence": 95,
       "flags": [
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "autodiscover_confirms"
       ]
     },
     "4683": {
@@ -17638,7 +17309,8 @@
         "multiple_mx",
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "4776": {
@@ -17681,10 +17353,11 @@
       "name": "Wuppenau",
       "provider": "sovereign",
       "domain": "wuppenau.ch",
-      "confidence": 55,
+      "confidence": 93,
       "flags": [
         "multiple_mx",
-        "no_spf",
+        "spf_softfail",
+        "mx_spf_match",
         "provider_classified"
       ]
     },
@@ -17960,18 +17633,6 @@
         "autodiscover_suggests:microsoft"
       ]
     },
-    "5007": {
-      "name": "Gorduno",
-      "provider": "unknown",
-      "domain": "",
-      "confidence": 0,
-      "flags": [
-        "no_domain",
-        "no_mx",
-        "no_spf",
-        "provider_unknown"
-      ]
-    },
     "5009": {
       "name": "Isone",
       "provider": "microsoft",
@@ -17994,18 +17655,6 @@
         "mx_spf_match",
         "provider_classified",
         "autodiscover_confirms"
-      ]
-    },
-    "5013": {
-      "name": "Monte Carasso",
-      "provider": "unknown",
-      "domain": "",
-      "confidence": 0,
-      "flags": [
-        "no_domain",
-        "no_mx",
-        "no_spf",
-        "provider_unknown"
       ]
     },
     "5017": {
@@ -18309,17 +17958,6 @@
         "mx_spf_match",
         "provider_classified",
         "autodiscover_confirms"
-      ]
-    },
-    "5137": {
-      "name": "Isorno",
-      "provider": "sovereign",
-      "domain": "isorno.ch",
-      "confidence": 90,
-      "flags": [
-        "spf_strict",
-        "mx_spf_match",
-        "provider_classified"
       ]
     },
     "5138": {
@@ -18640,18 +18278,6 @@
         "autodiscover_confirms"
       ]
     },
-    "5209": {
-      "name": "Pambio-Noranco",
-      "provider": "unknown",
-      "domain": "",
-      "confidence": 0,
-      "flags": [
-        "no_domain",
-        "no_mx",
-        "no_spf",
-        "provider_unknown"
-      ]
-    },
     "5210": {
       "name": "Paradiso",
       "provider": "sovereign",
@@ -18879,12 +18505,11 @@
       "name": "Coldrerio",
       "provider": "microsoft",
       "domain": "coldrerio.ch",
-      "confidence": 95,
+      "confidence": 90,
       "flags": [
         "spf_strict",
         "mx_spf_match",
-        "provider_classified",
-        "autodiscover_confirms"
+        "provider_classified"
       ]
     },
     "5254": {
@@ -18909,30 +18534,6 @@
         "mx_spf_match",
         "provider_classified",
         "autodiscover_confirms"
-      ]
-    },
-    "5258": {
-      "name": "Morbio Superiore",
-      "provider": "sovereign",
-      "domain": "comunebreggia.ch",
-      "confidence": 30,
-      "flags": [
-        "no_mx",
-        "no_spf",
-        "provider_classified",
-        "manual_override"
-      ]
-    },
-    "5259": {
-      "name": "Muggio",
-      "provider": "unknown",
-      "domain": "",
-      "confidence": 0,
-      "flags": [
-        "no_domain",
-        "no_mx",
-        "no_spf",
-        "provider_unknown"
       ]
     },
     "5260": {
@@ -19042,9 +18643,10 @@
       "name": "Cerentino",
       "provider": "sovereign",
       "domain": "cerentino.ch",
-      "confidence": 50,
+      "confidence": 90,
       "flags": [
-        "no_spf",
+        "spf_strict",
+        "mx_spf_match",
         "provider_classified"
       ]
     },
@@ -19079,29 +18681,6 @@
         "spf_softfail",
         "mx_spf_match",
         "provider_classified"
-      ]
-    },
-    "5319": {
-      "name": "Moghegno",
-      "provider": "sovereign",
-      "domain": "moghegno.ch",
-      "confidence": 88,
-      "flags": [
-        "spf_softfail",
-        "mx_spf_match",
-        "provider_classified"
-      ]
-    },
-    "5321": {
-      "name": "Prato-Sornico",
-      "provider": "unknown",
-      "domain": "",
-      "confidence": 0,
-      "flags": [
-        "no_domain",
-        "no_mx",
-        "no_spf",
-        "provider_unknown"
       ]
     },
     "5323": {
@@ -19142,15 +18721,16 @@
     },
     "5396": {
       "name": "Terre di Pedemonte",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "pedemonte.ch",
-      "confidence": 85,
+      "confidence": 90,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "5397": {
@@ -19162,7 +18742,8 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "5398": {
@@ -19205,11 +18786,12 @@
       "name": "Bex",
       "provider": "microsoft",
       "domain": "bex.ch",
-      "confidence": 90,
+      "confidence": 95,
       "flags": [
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "autodiscover_confirms"
       ]
     },
     "5403": {
@@ -19285,15 +18867,16 @@
     },
     "5409": {
       "name": "Ollon",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "ollon.ch",
-      "confidence": 85,
+      "confidence": 90,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "5410": {
@@ -20345,7 +19928,8 @@
         "multiple_mx",
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "5571": {
@@ -20480,11 +20064,12 @@
       "name": "Renens",
       "provider": "microsoft",
       "domain": "renens.ch",
-      "confidence": 55,
+      "confidence": 80,
       "flags": [
-        "no_spf",
-        "provider_classified",
-        "autodiscover_confirms"
+        "spf_strict",
+        "mx_spf_match",
+        "multi_provider_spf:infomaniak+microsoft",
+        "provider_classified"
       ]
     },
     "5592": {
@@ -20515,10 +20100,9 @@
       "name": "Forel",
       "provider": "microsoft",
       "domain": "forel.ch",
-      "confidence": 95,
+      "confidence": 55,
       "flags": [
-        "spf_strict",
-        "mx_spf_match",
+        "no_spf",
         "provider_classified",
         "autodiscover_confirms"
       ]
@@ -20527,11 +20111,10 @@
       "name": "Lutry",
       "provider": "sovereign",
       "domain": "lutry.ch",
-      "confidence": 93,
+      "confidence": 55,
       "flags": [
         "multiple_mx",
-        "spf_softfail",
-        "mx_spf_match",
+        "no_spf",
         "provider_classified"
       ]
     },
@@ -21071,9 +20654,10 @@
       "name": "Ogens",
       "provider": "infomaniak",
       "domain": "ogens.ch",
-      "confidence": 50,
+      "confidence": 90,
       "flags": [
-        "no_spf",
+        "spf_strict",
+        "mx_spf_match",
         "provider_classified"
       ]
     },
@@ -21164,12 +20748,13 @@
       "name": "Arzier-Le Muids",
       "provider": "microsoft",
       "domain": "arzier.ch",
-      "confidence": 80,
+      "confidence": 85,
       "flags": [
         "spf_strict",
         "mx_spf_match",
         "multi_provider_spf:infomaniak+microsoft",
-        "provider_classified"
+        "provider_classified",
+        "autodiscover_confirms"
       ]
     },
     "5703": {
@@ -21188,22 +20773,24 @@
       "name": "Begnins",
       "provider": "microsoft",
       "domain": "begnins.ch",
-      "confidence": 90,
+      "confidence": 95,
       "flags": [
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "autodiscover_confirms"
       ]
     },
     "5705": {
       "name": "Bogis-Bossey",
       "provider": "microsoft",
       "domain": "bogis-bossey.ch",
-      "confidence": 90,
+      "confidence": 95,
       "flags": [
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "autodiscover_confirms"
       ]
     },
     "5706": {
@@ -21452,6 +21039,7 @@
         "spf_softfail",
         "mx_spf_match",
         "provider_classified",
+        "provider_via_gateway_spf",
         "autodiscover_confirms"
       ]
     },
@@ -22268,10 +21856,9 @@
       "name": "Le Lieu",
       "provider": "microsoft",
       "domain": "lelieu.ch",
-      "confidence": 95,
+      "confidence": 55,
       "flags": [
-        "spf_strict",
-        "mx_spf_match",
+        "no_spf",
         "provider_classified",
         "autodiscover_confirms"
       ]
@@ -22443,7 +22030,8 @@
         "multiple_mx",
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "5908": {
@@ -22835,7 +22423,8 @@
       "flags": [
         "multiple_mx",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "6023": {
@@ -22895,7 +22484,8 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "6034": {
@@ -22928,7 +22518,8 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "6052": {
@@ -23002,27 +22593,6 @@
         "autodiscover_confirms"
       ]
     },
-    "6064": {
-      "name": "Niederwald",
-      "provider": "unknown",
-      "domain": "",
-      "confidence": 0,
-      "flags": [
-        "no_domain",
-        "no_mx",
-        "no_spf",
-        "provider_unknown"
-      ]
-    },
-    "6074": {
-      "name": "Münster-Geschinen",
-      "provider": "merged",
-      "domain": "",
-      "confidence": 100,
-      "flags": [
-        "merged_municipality"
-      ]
-    },
     "6076": {
       "name": "Obergoms",
       "provider": "sovereign",
@@ -23084,14 +22654,15 @@
     },
     "6087": {
       "name": "Saint-Martin",
-      "provider": "sovereign",
+      "provider": "infomaniak",
       "domain": "saint-martin.ch",
       "confidence": 83,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "6089": {
@@ -23114,7 +22685,8 @@
         "multiple_mx",
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "6101": {
@@ -23403,14 +22975,15 @@
     },
     "6153": {
       "name": "Monthey",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "monthey.ch",
       "confidence": 85,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "6154": {
@@ -23473,14 +23046,14 @@
     },
     "6159": {
       "name": "Vouvry",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "vouvry.ch",
       "confidence": 95,
       "flags": [
-        "multiple_mx",
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "autodiscover_confirms"
       ]
     },
     "6172": {
@@ -23697,7 +23270,8 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "6212": {
@@ -23709,7 +23283,8 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "6213": {
@@ -23802,29 +23377,30 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "6235": {
       "name": "Chippis",
-      "provider": "sovereign",
+      "provider": "infomaniak",
       "domain": "chippis.ch",
       "confidence": 83,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "6238": {
       "name": "Grône",
       "provider": "microsoft",
       "domain": "grone.ch",
-      "confidence": 95,
+      "confidence": 55,
       "flags": [
-        "spf_strict",
-        "mx_spf_match",
+        "no_spf",
         "provider_classified",
         "autodiscover_confirms"
       ]
@@ -23874,14 +23450,15 @@
     },
     "6252": {
       "name": "Anniviers",
-      "provider": "sovereign",
+      "provider": "infomaniak",
       "domain": "anniviers.org",
       "confidence": 83,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "6253": {
@@ -23909,27 +23486,29 @@
     },
     "6261": {
       "name": "Arbaz",
-      "provider": "sovereign",
+      "provider": "microsoft",
       "domain": "arbaz.ch",
-      "confidence": 83,
+      "confidence": 88,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
-        "autodiscover_suggests:microsoft"
+        "provider_via_gateway_spf",
+        "autodiscover_confirms"
       ]
     },
     "6263": {
       "name": "Grimisuat",
-      "provider": "sovereign",
+      "provider": "infomaniak",
       "domain": "grimisuat.ch",
       "confidence": 83,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "6265": {
@@ -23941,19 +23520,21 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "6266": {
       "name": "Sitten",
-      "provider": "sovereign",
+      "provider": "infomaniak",
       "domain": "sion.ch",
       "confidence": 83,
       "flags": [
         "multiple_mx",
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "6267": {
@@ -23965,7 +23546,8 @@
         "multiple_mx",
         "spf_softfail",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "6281": {
@@ -24393,24 +23975,6 @@
         "provider_classified"
       ]
     },
-    "6453": {
-      "name": "Enges",
-      "provider": "merged",
-      "domain": "",
-      "confidence": 100,
-      "flags": [
-        "merged_municipality"
-      ]
-    },
-    "6454": {
-      "name": "Hauterive",
-      "provider": "merged",
-      "domain": "",
-      "confidence": 100,
-      "flags": [
-        "merged_municipality"
-      ]
-    },
     "6455": {
       "name": "Le Landeron",
       "provider": "sovereign",
@@ -24445,28 +24009,6 @@
       "flags": [
         "multiple_mx",
         "no_spf",
-        "provider_classified"
-      ]
-    },
-    "6459": {
-      "name": "Saint-Blaise",
-      "provider": "sovereign",
-      "domain": "saint-blaise.ch",
-      "confidence": 90,
-      "flags": [
-        "spf_strict",
-        "mx_spf_match",
-        "provider_classified"
-      ]
-    },
-    "6461": {
-      "name": "La Tène",
-      "provider": "sovereign",
-      "domain": "commune-la-tene.ch",
-      "confidence": 90,
-      "flags": [
-        "spf_strict",
-        "mx_spf_match",
         "provider_classified"
       ]
     },
@@ -25099,16 +24641,6 @@
         "autodiscover_confirms"
       ]
     },
-    "6705": {
-      "name": "Corban",
-      "provider": "infomaniak",
-      "domain": "corban.ch",
-      "confidence": 85,
-      "flags": [
-        "mx_spf_match",
-        "provider_classified"
-      ]
-    },
     "6706": {
       "name": "Courchapoix",
       "provider": "infomaniak",
@@ -25383,17 +24915,6 @@
         "provider_classified"
       ]
     },
-    "6752": {
-      "name": "Montfavergier",
-      "provider": "sovereign",
-      "domain": "montfavergier.ch",
-      "confidence": 88,
-      "flags": [
-        "spf_softfail",
-        "mx_spf_match",
-        "provider_classified"
-      ]
-    },
     "6753": {
       "name": "Muriaux",
       "provider": "infomaniak",
@@ -25466,18 +24987,6 @@
         "autodiscover_confirms"
       ]
     },
-    "6773": {
-      "name": "Beurnevésin",
-      "provider": "unknown",
-      "domain": "",
-      "confidence": 0,
-      "flags": [
-        "no_domain",
-        "no_mx",
-        "no_spf",
-        "provider_unknown"
-      ]
-    },
     "6774": {
       "name": "Boncourt",
       "provider": "sovereign",
@@ -25487,16 +24996,6 @@
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
-        "provider_classified"
-      ]
-    },
-    "6775": {
-      "name": "Bonfol",
-      "provider": "infomaniak",
-      "domain": "bonfol.ch",
-      "confidence": 85,
-      "flags": [
-        "mx_spf_match",
         "provider_classified"
       ]
     },
@@ -25605,18 +25104,6 @@
         "autodiscover_confirms"
       ]
     },
-    "6797": {
-      "name": "Montmelon",
-      "provider": "infomaniak",
-      "domain": "montmelon.ch",
-      "confidence": 95,
-      "flags": [
-        "spf_strict",
-        "mx_spf_match",
-        "provider_classified",
-        "autodiscover_confirms"
-      ]
-    },
     "6800": {
       "name": "Pruntrut",
       "provider": "sovereign",
@@ -25626,16 +25113,6 @@
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
-        "provider_classified"
-      ]
-    },
-    "6803": {
-      "name": "Rocourt",
-      "provider": "infomaniak",
-      "domain": "rocourt.ch",
-      "confidence": 85,
-      "flags": [
-        "mx_spf_match",
         "provider_classified"
       ]
     },

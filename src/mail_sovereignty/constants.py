@@ -45,6 +45,19 @@ SPARQL_QUERY = """
 SELECT ?item ?itemLabel ?bfs ?website ?cantonLabel WHERE {
   ?item wdt:P31 wd:Q70208 .          # instance of: municipality of Switzerland
   ?item wdt:P771 ?bfs .              # Swiss municipality code (BFS number)
+  FILTER NOT EXISTS {                  # exclude dissolved municipalities
+    ?item wdt:P576 ?dissolved .
+    FILTER(?dissolved <= NOW())
+  }
+  FILTER NOT EXISTS {                  # exclude municipalities with ended P31 statement
+    ?item p:P31 ?stmt .
+    ?stmt ps:P31 wd:Q70208 .
+    ?stmt pq:P582 ?endTime .
+    FILTER(?endTime <= NOW())
+  }
+  FILTER NOT EXISTS {                  # exclude municipalities replaced by a successor
+    ?item wdt:P1366 ?successor .
+  }
   OPTIONAL { ?item wdt:P856 ?website . }
   OPTIONAL { ?item wdt:P131 ?canton .
              ?canton wdt:P31 wd:Q23058 . }

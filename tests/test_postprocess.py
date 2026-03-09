@@ -109,7 +109,7 @@ class TestManualOverrides:
             assert "provider" in entry, f"BFS {bfs} missing 'provider'"
 
     def test_valid_providers(self):
-        valid = {"sovereign", "infomaniak", "merged"}
+        valid = {"sovereign", "infomaniak"}
         for bfs, entry in MANUAL_OVERRIDES.items():
             assert entry["provider"] in valid, (
                 f"BFS {bfs}: unexpected provider {entry['provider']}"
@@ -306,31 +306,3 @@ class TestPostprocessRun:
 
         result = json.loads(path.read_text())
         assert result["municipalities"]["6404"]["provider"] == "sovereign"
-
-    async def test_merged_override(self, tmp_path):
-        data = {
-            "generated": "2025-01-01",
-            "total": 1,
-            "counts": {"unknown": 1},
-            "municipalities": {
-                "4114": {
-                    "bfs": "4114",
-                    "name": "Schinznach-Bad",
-                    "canton": "Aargau",
-                    "domain": "test.ch",
-                    "mx": ["mx.test.ch"],
-                    "spf": "v=spf1",
-                    "provider": "unknown",
-                },
-            },
-        }
-        path = tmp_path / "data.json"
-        path.write_text(json.dumps(data))
-
-        await run(path)
-
-        result = json.loads(path.read_text())
-        m = result["municipalities"]["4114"]
-        assert m["provider"] == "merged"
-        assert m["mx"] == []
-        assert m["spf"] == ""

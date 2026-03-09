@@ -161,7 +161,7 @@
     </div>
     <div class="info-card">
       <h3>How is it done?</h3>
-      <p>Built from publicly available data — municipality domains and their DNS records (MX and SPF). All data and source code are open, created by David Huser and <a href="https://github.com/davidhuser/mxmap" target="_blank">available on GitHub</a>. Found an error? <a href="https://github.com/davidhuser/mxmap/issues" target="_blank">Submit an issue</a>.<br><span id="generated" class="updated"></span></p>
+      <p>Built from publicly available data (2026) — municipality domains and their DNS records (MX and SPF). All data and source code are open, created by David Huser and <a href="https://github.com/davidhuser/mxmap" target="_blank">available on GitHub</a>. Found an error? <a href="https://github.com/davidhuser/mxmap/issues" target="_blank">Submit an issue</a>.<br><span id="generated" class="updated"></span></p>
     </div>
   </div>
 </div>
@@ -178,7 +178,6 @@ const COLORS = {
   infomaniak: '#2563eb',  // strong blue — Swiss provider
   'swiss-isp': '#0ea5e9',  // sky blue — Swiss ISP
   sovereign:  '#16a34a',  // vivid green — self-hosted (best)
-  merged:     '#BBBBBB',  // gray
   unknown:    '#8b8b8b'   // gray with hatching
 };
 
@@ -189,7 +188,6 @@ const LABELS = {
   infomaniak: 'Infomaniak',
   'swiss-isp': 'Swiss ISP',
   sovereign:  'Sovereign / Self-hosted',
-  merged:     'Merged municipality',
   unknown:    'Unknown'
 };
 
@@ -390,7 +388,6 @@ async function loadData() {
       '<strong>Email Provider</strong>' +
       legendGroupHtml('US Hyperscaler', ['microsoft', 'google', 'aws'], dnsData.counts) +
       legendGroupHtml('Domestic / Sovereign', ['sovereign', 'infomaniak', 'swiss-isp'], dnsData.counts) +
-      legendGroupHtml(null, ['merged', 'unknown'], dnsData.counts) +
       '</div>';
     L.DomEvent.disableClickPropagation(div);
     return div;
@@ -432,7 +429,7 @@ async function loadData() {
         return;
       }
       const color = COLORS[m.provider] || COLORS.unknown;
-      const textColor = ['aws', 'swiss-isp', 'merged', 'unknown'].includes(m.provider) ? '#333' : '#fff';
+      const textColor = ['aws', 'swiss-isp', 'unknown'].includes(m.provider) ? '#333' : '#fff';
       const label = LABELS[m.provider] || m.provider;
 
       let mxSection = '';

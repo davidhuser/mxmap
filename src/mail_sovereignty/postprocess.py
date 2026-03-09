@@ -275,12 +275,6 @@ MANUAL_OVERRIDES = {
         "domain": "ruetibeilyssach.ch",
         "provider": "infomaniak",
     },  # Rueti bei Lyssach
-    "5258": {"domain": "comunebreggia.ch", "provider": "sovereign"},  # Morbio Superiore
-    # Merged municipalities (no longer independent)
-    "4114": {"domain": "", "provider": "merged"},  # Schinznach-Bad -> Brugg (2020)
-    "6074": {"domain": "", "provider": "merged"},  # Muenster-Geschinen -> Goms (2017)
-    "6453": {"domain": "", "provider": "merged"},  # Enges -> Latena (2025)
-    "6454": {"domain": "", "provider": "merged"},  # Hauterive -> Latena (2025)
 }
 
 
