@@ -19,7 +19,7 @@ The data pipeline has three steps:
 
 ```mermaid
 flowchart TD
-    trigger["Nightly trigger · 04:00 UTC"] --> wikidata
+    trigger["Nightly trigger"] --> wikidata
 
     subgraph pre ["1 · Preprocess"]
         wikidata[/"Wikidata SPARQL"/] --> fetch["Fetch ~2100 municipalities"]
@@ -28,8 +28,9 @@ flowchart TD
         dns --> spf_resolve["Resolve SPF includes<br/>& redirects"]
         spf_resolve --> cname["Follow CNAME chains"]
         cname --> asn["ASN lookups<br/>(Team Cymru)"]
-        asn --> gateway["Detect gateways<br/>(SeppMail, Cleanmail …)"]
-        gateway --> classify["Classify providers<br/>MX → CNAME → SPF"]
+        asn --> autodiscover["Autodiscover DNS<br/>(CNAME + SRV)"]
+        autodiscover --> gateway["Detect gateways<br/>(SeppMail, Barracuda,<br/>Proofpoint, Sophos ...)"]
+        gateway --> classify["Classify providers<br/>MX → CNAME → SPF → Autodiscover"]
     end
 
     classify --> overrides
@@ -46,7 +47,8 @@ flowchart TD
     data --> score
 
     subgraph val ["3 · Validate"]
-        score["Confidence scoring · 0–100"] --> gate{"Quality gate<br/>avg ≥ 70 · high-conf ≥ 80%"}
+        score["Confidence scoring · 0–100"] --> gwarn["Flag potential<br/>unknown gateways"]
+        gwarn --> gate{"Quality gate<br/>avg ≥ 70 · high-conf ≥ 80%"}
     end
 
     gate -- "Pass" --> deploy["Commit & deploy to Pages"]

@@ -89,6 +89,10 @@ GATEWAY_KEYWORDS = {
     "barracuda": ["barracudanetworks.com", "barracuda.com"],
     "trendmicro": ["tmes.trendmicro.eu", "tmes.trendmicro.com"],
     "hornetsecurity": ["hornetsecurity.com", "hornetsecurity.ch"],
+    "abxsec": ["abxsec.com"],
+    "proofpoint": ["ppe-hosted.com"],
+    "sophos": ["hydra.sophos.com"],
+    "spamvor": ["spamvor.com"],
 }
 
 SWISS_ISP_ASNS: dict[int, str] = {

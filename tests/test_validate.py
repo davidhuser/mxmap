@@ -2,7 +2,12 @@ import json
 
 import pytest
 
-from mail_sovereignty.validate import print_report, run, score_entry
+from mail_sovereignty.validate import (
+    _detect_potential_gateways,
+    print_report,
+    run,
+    score_entry,
+)
 
 
 # ── score_entry() ────────────────────────────────────────────────────
@@ -262,6 +267,95 @@ class TestPrintReport:
         print_report(entries)
         captured = capsys.readouterr()
         assert "VALIDATION REPORT" in captured.out
+
+
+# ── _detect_potential_gateways() ──────────────────────────────────────
+
+
+def _make_sovereign_entry(name, domain, mx_raw):
+    return {
+        "bfs": "0",
+        "name": name,
+        "provider": "sovereign",
+        "domain": domain,
+        "score": 70,
+        "flags": [],
+        "mx_raw": mx_raw,
+        "spf_raw": "",
+    }
+
+
+class TestDetectPotentialGateways:
+    def test_detects_shared_mx_suffix(self):
+        entries = [
+            _make_sovereign_entry(f"Town{i}", f"town{i}.ch", ["mx.gateway.com"])
+            for i in range(6)
+        ]
+        result = _detect_potential_gateways(entries)
+        assert len(result) == 1
+        assert result[0][0] == "gateway.com"
+        assert result[0][1] == 6
+
+    def test_ignores_own_domain(self):
+        entries = [
+            _make_sovereign_entry(f"Town{i}", "shared.ch", ["mail.shared.ch"])
+            for i in range(6)
+        ]
+        result = _detect_potential_gateways(entries)
+        assert len(result) == 0
+
+    def test_ignores_known_gateways(self):
+        entries = [
+            _make_sovereign_entry(f"Town{i}", f"town{i}.ch", ["mx.seppmail.cloud"])
+            for i in range(6)
+        ]
+        result = _detect_potential_gateways(entries)
+        assert len(result) == 0
+
+    def test_below_threshold_not_flagged(self):
+        entries = [
+            _make_sovereign_entry(f"Town{i}", f"town{i}.ch", ["mx.gateway.com"])
+            for i in range(4)
+        ]
+        result = _detect_potential_gateways(entries)
+        assert len(result) == 0
+
+    def test_non_sovereign_ignored(self):
+        entries = [
+            {
+                "bfs": "0",
+                "name": f"Town{i}",
+                "provider": "microsoft",
+                "domain": f"town{i}.ch",
+                "score": 90,
+                "flags": [],
+                "mx_raw": ["mx.gateway.com"],
+                "spf_raw": "",
+            }
+            for i in range(6)
+        ]
+        result = _detect_potential_gateways(entries)
+        assert len(result) == 0
+
+    def test_returns_sample_names(self):
+        entries = [
+            _make_sovereign_entry(f"Town{i}", f"town{i}.ch", ["mx.gateway.com"])
+            for i in range(7)
+        ]
+        result = _detect_potential_gateways(entries)
+        assert len(result) == 1
+        assert len(result[0][2]) == 3
+        assert result[0][2] == ["Town0", "Town1", "Town2"]
+
+    def test_print_report_shows_gateway_warning(self, capsys):
+        entries = [
+            _make_sovereign_entry(f"Town{i}", f"town{i}.ch", ["mx.newgw.com"])
+            for i in range(6)
+        ]
+        print_report(entries)
+        captured = capsys.readouterr()
+        assert "Potential undetected gateways" in captured.out
+        assert "newgw.com" in captured.out
 
 
 # ── run() ────────────────────────────────────────────────────────────

@@ -183,6 +183,34 @@ class TestClassify:
         )
         assert result == "microsoft"
 
+    def test_abxsec_gateway_with_microsoft_spf(self):
+        result = classify(
+            ["mta1.abxsec.com"],
+            "v=spf1 include:spf.protection.outlook.com -all",
+        )
+        assert result == "microsoft"
+
+    def test_proofpoint_gateway_with_microsoft_spf(self):
+        result = classify(
+            ["mx1.ppe-hosted.com"],
+            "v=spf1 include:spf.protection.outlook.com -all",
+        )
+        assert result == "microsoft"
+
+    def test_sophos_gateway_with_microsoft_spf(self):
+        result = classify(
+            ["mx.hydra.sophos.com"],
+            "v=spf1 include:spf.protection.outlook.com -all",
+        )
+        assert result == "microsoft"
+
+    def test_spamvor_gateway_stays_sovereign_no_hyperscaler_spf(self):
+        result = classify(
+            ["relay.spamvor.com"],
+            "v=spf1 ip4:1.2.3.4 -all",
+        )
+        assert result == "sovereign"
+
     def test_gateway_does_not_override_direct_mx_match(self):
         """If MX directly matches a provider, gateway check is skipped."""
         result = classify(
@@ -295,6 +323,18 @@ class TestDetectGateway:
 
     def test_hornetsecurity(self):
         assert detect_gateway(["mx01.hornetsecurity.com"]) == "hornetsecurity"
+
+    def test_abxsec(self):
+        assert detect_gateway(["mta1.abxsec.com"]) == "abxsec"
+
+    def test_proofpoint(self):
+        assert detect_gateway(["mx1.ppe-hosted.com"]) == "proofpoint"
+
+    def test_sophos(self):
+        assert detect_gateway(["mx.hydra.sophos.com"]) == "sophos"
+
+    def test_spamvor(self):
+        assert detect_gateway(["relay.spamvor.com"]) == "spamvor"
 
     def test_no_gateway(self):
         assert detect_gateway(["mail.example.ch"]) is None

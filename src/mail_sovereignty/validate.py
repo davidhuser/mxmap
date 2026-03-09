@@ -11,7 +11,7 @@ from mail_sovereignty.classify import (
     classify_from_spf,
     spf_mentions_providers,
 )
-from mail_sovereignty.constants import PROVIDER_KEYWORDS
+from mail_sovereignty.constants import GATEWAY_KEYWORDS, PROVIDER_KEYWORDS
 
 # Quality gate thresholds (override via env vars in CI)
 MIN_AVERAGE_SCORE = int(os.environ.get("MIN_AVERAGE_SCORE", "70"))
@@ -40,6 +40,59 @@ MANUAL_OVERRIDE_BFS = {
     "6453",
     "6454",
 }
+
+
+POTENTIAL_GATEWAY_THRESHOLD = 5
+
+
+def _detect_potential_gateways(
+    scored_entries: list[dict[str, Any]],
+) -> list[tuple[str, int, list[str]]]:
+    """Find MX domain suffixes shared by many sovereign municipalities.
+
+    Returns a list of (suffix, municipality_count, sample_names) tuples
+    sorted by count descending, for suffixes with count >= threshold.
+    """
+    known_suffixes: set[str] = set()
+    for keywords in GATEWAY_KEYWORDS.values():
+        for kw in keywords:
+            parts = kw.lower().split(".")
+            if len(parts) >= 2:
+                known_suffixes.add(".".join(parts[-2:]))
+
+    suffix_municipalities: dict[str, list[str]] = {}
+    for entry in scored_entries:
+        if entry.get("provider") != "sovereign":
+            continue
+        mx_raw = entry.get("mx_raw", [])
+        if not mx_raw:
+            continue
+        domain = entry.get("domain", "")
+        domain_suffix = ".".join(domain.lower().split(".")[-2:]) if domain else ""
+        seen_suffixes: set[str] = set()
+        for mx in mx_raw:
+            parts = mx.lower().rstrip(".").split(".")
+            if len(parts) < 2:
+                continue
+            suffix = ".".join(parts[-2:])
+            if suffix in seen_suffixes:
+                continue
+            seen_suffixes.add(suffix)
+            if suffix == domain_suffix:
+                continue
+            if suffix in known_suffixes:
+                continue
+            if suffix not in suffix_municipalities:
+                suffix_municipalities[suffix] = []
+            suffix_municipalities[suffix].append(entry.get("name", ""))
+
+    results = []
+    for suffix, names in sorted(
+        suffix_municipalities.items(), key=lambda x: -len(x[1])
+    ):
+        if len(names) >= POTENTIAL_GATEWAY_THRESHOLD:
+            results.append((suffix, len(names), names[:3]))
+    return results
 
 
 def score_entry(entry: dict[str, Any]) -> dict[str, Any]:
@@ -238,6 +291,13 @@ def print_report(scored_entries: list[dict[str, Any]]) -> None:
                 f"mx_provider={classify_from_mx(e.get('mx_raw', []))} "
                 f"spf_provider={classify_from_spf(e.get('spf_raw', ''))}"
             )
+
+    potential_gateways = _detect_potential_gateways(scored_entries)
+    if potential_gateways:
+        print("\n  Potential undetected gateways:")
+        for suffix, count, samples in potential_gateways:
+            sample_str = ", ".join(samples)
+            print(f"    {suffix:<30} {count:>3} municipalities  (e.g. {sample_str})")
 
     print(f"\n{'=' * 60}\n")
 
