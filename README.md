@@ -7,7 +7,7 @@ An interactive map showing where Swiss municipalities host their email — wheth
 
 **[View the live map](https://mxmap.ch)**
 
-[![Screenshot of MXmap](og-image.png)](https://mxmap.ch)
+[![Screenshot of MXmap](og-image.jpg)](https://mxmap.ch)
 
 ## How it works
 
