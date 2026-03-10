@@ -103,14 +103,11 @@ def classify(
         return "sovereign"
 
     spf_blob = (spf_record or "").lower()
-    if any(k in spf_blob for k in MICROSOFT_KEYWORDS):
-        return "microsoft"
-    if any(k in spf_blob for k in GOOGLE_KEYWORDS):
-        return "google"
-    if any(k in spf_blob for k in INFOMANIAK_KEYWORDS):
-        return "infomaniak"
-    if any(k in spf_blob for k in AWS_KEYWORDS):
-        return "aws"
+    provider = _check_spf_for_provider(spf_blob)
+    if not provider and resolved_spf:
+        provider = _check_spf_for_provider(resolved_spf.lower())
+    if provider:
+        return provider
 
     return "unknown"
 

@@ -300,6 +300,35 @@ class TestClassify:
         )
         assert result == "sovereign"
 
+    # ── SPF-only resolved fallback ──
+
+    def test_spf_only_resolved_fallback(self):
+        """No MX, raw SPF has no keywords, resolved_spf has Microsoft → microsoft."""
+        result = classify(
+            [],
+            "v=spf1 include:custom.ch -all",
+            resolved_spf="v=spf1 include:custom.ch -all v=spf1 include:spf.protection.outlook.com -all",
+        )
+        assert result == "microsoft"
+
+    def test_spf_only_raw_takes_precedence(self):
+        """No MX, raw SPF has Google, resolved_spf has Microsoft → google (raw wins)."""
+        result = classify(
+            [],
+            "v=spf1 include:_spf.google.com -all",
+            resolved_spf="v=spf1 include:spf.protection.outlook.com -all",
+        )
+        assert result == "google"
+
+    def test_spf_only_no_resolved_stays_unknown(self):
+        """No MX, raw SPF has no keywords, no resolved_spf → unknown."""
+        result = classify(
+            [],
+            "v=spf1 ip4:1.2.3.4 -all",
+            resolved_spf=None,
+        )
+        assert result == "unknown"
+
 
 # ── classify_from_autodiscover() ────────────────────────────────────
 

@@ -109,7 +109,7 @@ class TestManualOverrides:
             assert "provider" in entry, f"BFS {bfs} missing 'provider'"
 
     def test_valid_providers(self):
-        valid = {"sovereign", "infomaniak", "microsoft"}
+        valid = {"sovereign", "infomaniak", "microsoft", "swiss-isp"}
         for bfs, entry in MANUAL_OVERRIDES.items():
             assert entry["provider"] in valid, (
                 f"BFS {bfs}: unexpected provider {entry['provider']}"
@@ -305,4 +305,4 @@ class TestPostprocessRun:
         await run(path)
 
         result = json.loads(path.read_text())
-        assert result["municipalities"]["6404"]["provider"] == "sovereign"
+        assert result["municipalities"]["6404"]["provider"] == "swiss-isp"

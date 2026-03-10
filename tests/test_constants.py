@@ -6,6 +6,7 @@ from mail_sovereignty.constants import (
     PROVIDER_KEYWORDS,
     FOREIGN_SENDER_KEYWORDS,
     SKIP_DOMAINS,
+    SWISS_ISP_ASNS,
 )
 
 
@@ -36,3 +37,14 @@ def test_skip_domains_contains_expected():
     assert "example.com" in SKIP_DOMAINS
     assert "sentry.io" in SKIP_DOMAINS
     assert "schema.org" in SKIP_DOMAINS
+
+
+def test_swiss_isp_asns_contains_key_providers():
+    assert 3303 in SWISS_ISP_ASNS  # Swisscom
+    assert 559 in SWISS_ISP_ASNS  # SWITCH
+    assert 29691 in SWISS_ISP_ASNS  # Hostpoint
+    assert 15600 in SWISS_ISP_ASNS  # Quickline
+
+
+def test_swiss_isp_asns_minimum_count():
+    assert len(SWISS_ISP_ASNS) >= 13

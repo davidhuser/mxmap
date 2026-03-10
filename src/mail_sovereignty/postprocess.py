@@ -181,91 +181,126 @@ async def process_unknown(
 
 MANUAL_OVERRIDES = {
     # Neuchatel canton: all use @ne.ch (cantonal mail gateway operated by SIEN,
-    # MX points to cantonal servers nemx9a.ne.ch / ne2mx9a.ne.ch, not Microsoft)
+    # MX points to cantonal servers nemx9a.ne.ch / ne2mx9a.ne.ch on SWITCH AS559)
     "6404": {
         "domain": "ne.ch",
-        "provider": "sovereign",
+        "provider": "swiss-isp",
+        "gateway": "cantonal-ne",
         "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
         "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
     },  # Boudry
     "6408": {
         "domain": "ne.ch",
-        "provider": "sovereign",
+        "provider": "swiss-isp",
+        "gateway": "cantonal-ne",
         "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
         "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
     },  # Cortaillod
     "6413": {
         "domain": "ne.ch",
-        "provider": "sovereign",
+        "provider": "swiss-isp",
+        "gateway": "cantonal-ne",
         "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
         "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
     },  # Rochefort
     "6416": {
         "domain": "ne.ch",
-        "provider": "sovereign",
+        "provider": "swiss-isp",
+        "gateway": "cantonal-ne",
         "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
         "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
     },  # Milvignes
     "6417": {
         "domain": "ne.ch",
-        "provider": "sovereign",
+        "provider": "swiss-isp",
+        "gateway": "cantonal-ne",
         "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
         "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
     },  # La Grande Beroche
     "6432": {
         "domain": "ne.ch",
-        "provider": "sovereign",
+        "provider": "swiss-isp",
+        "gateway": "cantonal-ne",
         "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
         "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
     },  # La Brevine
     "6433": {
         "domain": "ne.ch",
-        "provider": "sovereign",
+        "provider": "swiss-isp",
+        "gateway": "cantonal-ne",
         "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
         "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
     },  # Brot-Plamboz
     "6434": {
         "domain": "ne.ch",
-        "provider": "sovereign",
+        "provider": "swiss-isp",
+        "gateway": "cantonal-ne",
         "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
         "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
     },  # Le Cerneux-Pequignot
     "6435": {
         "domain": "ne.ch",
-        "provider": "sovereign",
+        "provider": "swiss-isp",
+        "gateway": "cantonal-ne",
         "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
         "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
     },  # La Chaux-du-Milieu
     "6437": {
         "domain": "ne.ch",
-        "provider": "sovereign",
+        "provider": "swiss-isp",
+        "gateway": "cantonal-ne",
         "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
         "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
     },  # Les Ponts-de-Martel
     "6451": {
         "domain": "ne.ch",
-        "provider": "sovereign",
+        "provider": "swiss-isp",
+        "gateway": "cantonal-ne",
         "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
         "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
     },  # Cornaux
     "6455": {
         "domain": "ne.ch",
-        "provider": "sovereign",
+        "provider": "swiss-isp",
+        "gateway": "cantonal-ne",
         "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
         "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
     },  # Le Landeron
     "6456": {
         "domain": "ne.ch",
-        "provider": "sovereign",
+        "provider": "swiss-isp",
+        "gateway": "cantonal-ne",
         "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
         "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
     },  # Lignieres
     "6504": {
         "domain": "ne.ch",
-        "provider": "sovereign",
+        "provider": "swiss-isp",
+        "gateway": "cantonal-ne",
         "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
         "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
     },  # La Cote-aux-Fees
+    "6423": {
+        "domain": "ne.ch",
+        "provider": "swiss-isp",
+        "gateway": "cantonal-ne",
+        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
+        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
+    },  # La Sagne
+    "6458": {
+        "domain": "ne.ch",
+        "provider": "swiss-isp",
+        "gateway": "cantonal-ne",
+        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
+        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
+    },  # Neuchatel
+    "6487": {
+        "domain": "ne.ch",
+        "provider": "swiss-isp",
+        "gateway": "cantonal-ne",
+        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
+        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
+    },  # Val-de-Ruz
     # Other manual resolutions
     "261": {
         "domain": "zuerich.ch",
@@ -316,6 +351,8 @@ async def run(data_path: Path) -> None:
                 muni[bfs]["domain"] = override["domain"]
             if "provider" in override:
                 muni[bfs]["provider"] = override["provider"]
+            if "gateway" in override:
+                muni[bfs]["gateway"] = override["gateway"]
             if "mx" in override:
                 muni[bfs]["mx"] = override["mx"]
             if "spf" in override:

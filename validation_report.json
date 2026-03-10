@@ -125,14 +125,15 @@
     },
     "11": {
       "name": "Ottenbach",
-      "provider": "swiss-isp",
+      "provider": "microsoft",
       "domain": "ottenbach.ch",
-      "confidence": 85,
+      "confidence": 90,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
-        "provider_classified"
+        "provider_classified",
+        "autodiscover_confirms"
       ]
     },
     "12": {
@@ -189,7 +190,7 @@
     },
     "23": {
       "name": "Berg am Irchel",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "berg-am-irchel.ch",
       "confidence": 95,
       "flags": [
@@ -325,7 +326,7 @@
     },
     "37": {
       "name": "Ossingen",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "ossingen.ch",
       "confidence": 95,
       "flags": [
@@ -374,7 +375,7 @@
     },
     "41": {
       "name": "Truttikon",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "truttikon.ch",
       "confidence": 93,
       "flags": [
@@ -386,7 +387,7 @@
     },
     "43": {
       "name": "Volken",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "volken.ch",
       "confidence": 93,
       "flags": [
@@ -498,7 +499,7 @@
     },
     "59": {
       "name": "Hochfelden ZH",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "hochfelden.ch",
       "confidence": 90,
       "flags": [
@@ -509,7 +510,7 @@
     },
     "60": {
       "name": "Höri ZH",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "hoeri.ch",
       "confidence": 88,
       "flags": [
@@ -931,7 +932,7 @@
     },
     "111": {
       "name": "Bäretswil",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "baeretswil.ch",
       "confidence": 90,
       "flags": [
@@ -956,7 +957,7 @@
     },
     "113": {
       "name": "Dürnten",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "duernten.ch",
       "confidence": 90,
       "flags": [
@@ -967,7 +968,7 @@
     },
     "114": {
       "name": "Fischenthal",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "fischenthal.ch",
       "confidence": 80,
       "flags": [
@@ -1097,14 +1098,15 @@
     },
     "137": {
       "name": "Oberrieden",
-      "provider": "swiss-isp",
+      "provider": "microsoft",
       "domain": "oberrieden.ch",
-      "confidence": 85,
+      "confidence": 90,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
-        "provider_classified"
+        "provider_classified",
+        "autodiscover_confirms"
       ]
     },
     "138": {
@@ -1133,14 +1135,15 @@
     },
     "141": {
       "name": "Thalwil",
-      "provider": "swiss-isp",
+      "provider": "microsoft",
       "domain": "thalwil.ch",
-      "confidence": 85,
+      "confidence": 90,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
-        "provider_classified"
+        "provider_classified",
+        "autodiscover_confirms"
       ]
     },
     "151": {
@@ -1195,7 +1198,7 @@
     },
     "155": {
       "name": "Männedorf",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "maennedorf.ch",
       "confidence": 80,
       "flags": [
@@ -1308,7 +1311,7 @@
     },
     "176": {
       "name": "Lindau",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "lindau.ch",
       "confidence": 88,
       "flags": [
@@ -1342,7 +1345,7 @@
     },
     "180": {
       "name": "Weisslingen",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "weisslingen.ch",
       "confidence": 90,
       "flags": [
@@ -1401,7 +1404,7 @@
     },
     "193": {
       "name": "Fällanden",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "faellanden.ch",
       "confidence": 90,
       "flags": [
@@ -1412,7 +1415,7 @@
     },
     "194": {
       "name": "Greifensee",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "greifensee.ch",
       "confidence": 90,
       "flags": [
@@ -1498,7 +1501,7 @@
     },
     "211": {
       "name": "Altikon",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "altikon.ch",
       "confidence": 90,
       "flags": [
@@ -1547,7 +1550,7 @@
     },
     "216": {
       "name": "Dinhard",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "dinhard.ch",
       "confidence": 95,
       "flags": [
@@ -1768,7 +1771,7 @@
     },
     "246": {
       "name": "Oetwil an der Limmat",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "oetwil-limmat.ch",
       "confidence": 90,
       "flags": [
@@ -1900,14 +1903,15 @@
     },
     "295": {
       "name": "Horgen",
-      "provider": "swiss-isp",
+      "provider": "microsoft",
       "domain": "horgen.ch",
-      "confidence": 85,
+      "confidence": 90,
       "flags": [
         "multiple_mx",
         "spf_strict",
         "sovereign_mx_with_cloud_spf",
-        "provider_classified"
+        "provider_classified",
+        "autodiscover_confirms"
       ]
     },
     "296": {
@@ -1936,7 +1940,7 @@
     },
     "298": {
       "name": "Wiesendangen",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "wiesendangen.ch",
       "confidence": 88,
       "flags": [
@@ -1959,7 +1963,7 @@
     },
     "302": {
       "name": "Bargen",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "bargen-be.ch",
       "confidence": 93,
       "flags": [
@@ -2019,7 +2023,7 @@
     },
     "307": {
       "name": "Meikirch",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "meikirch.ch",
       "confidence": 90,
       "flags": [
@@ -2030,7 +2034,7 @@
     },
     "309": {
       "name": "Radelfingen",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "radelfingen.ch",
       "confidence": 95,
       "flags": [
@@ -2504,7 +2508,7 @@
     },
     "382": {
       "name": "Büetigen",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "bueetigen.ch",
       "confidence": 95,
       "flags": [
@@ -2683,7 +2687,7 @@
     },
     "404": {
       "name": "Burgdorf",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "burgdorf.ch",
       "confidence": 88,
       "flags": [
@@ -3123,7 +3127,7 @@
     },
     "494": {
       "name": "Gals",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "gals.ch",
       "confidence": 93,
       "flags": [
@@ -3159,7 +3163,7 @@
     },
     "497": {
       "name": "Lüscherz",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "luescherz.ch",
       "confidence": 95,
       "flags": [
@@ -3207,7 +3211,7 @@
     },
     "501": {
       "name": "Tschugg",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "tschugg.ch",
       "confidence": 95,
       "flags": [
@@ -3219,7 +3223,7 @@
     },
     "502": {
       "name": "Vinelz",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "vinelz.ch",
       "confidence": 95,
       "flags": [
@@ -3975,7 +3979,7 @@
     },
     "623": {
       "name": "Rubigen",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "rubigen.ch",
       "confidence": 85,
       "flags": [
@@ -4491,7 +4495,7 @@
     },
     "736": {
       "name": "Hagneck",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "hagneck.ch",
       "confidence": 95,
       "flags": [
@@ -4540,7 +4544,7 @@
     },
     "740": {
       "name": "Ligerz",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "ligerz.ch",
       "confidence": 95,
       "flags": [
@@ -4564,7 +4568,7 @@
     },
     "742": {
       "name": "Mörigen",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "moerigen.ch",
       "confidence": 95,
       "flags": [
@@ -4828,7 +4832,7 @@
     },
     "783": {
       "name": "Hasliberg",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "hasliberg.ch",
       "confidence": 95,
       "flags": [
@@ -5131,7 +5135,7 @@
     },
     "884": {
       "name": "Toffen",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "toffen.ch",
       "confidence": 95,
       "flags": [
@@ -5524,7 +5528,7 @@
     },
     "944": {
       "name": "Uetendorf",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "uetendorf.ch",
       "confidence": 90,
       "flags": [
@@ -5678,7 +5682,7 @@
     },
     "960": {
       "name": "Wyssachen",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "wyssachen.ch",
       "confidence": 95,
       "flags": [
@@ -5829,7 +5833,7 @@
     },
     "987": {
       "name": "Rumisberg",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "rumisberg.ch",
       "confidence": 95,
       "flags": [
@@ -5900,7 +5904,7 @@
     },
     "995": {
       "name": "Wiedlisbach",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "wiedlisbach.ch",
       "confidence": 95,
       "flags": [
@@ -6087,7 +6091,7 @@
     },
     "1032": {
       "name": "Hohenrain",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "hohenrain.ch",
       "confidence": 93,
       "flags": [
@@ -6122,7 +6126,7 @@
     },
     "1039": {
       "name": "Römerswil",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "roemerswil.ch",
       "confidence": 93,
       "flags": [
@@ -6285,7 +6289,7 @@
     },
     "1064": {
       "name": "Meierskappel",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "meierskappel.ch",
       "confidence": 90,
       "flags": [
@@ -6368,7 +6372,7 @@
     },
     "1082": {
       "name": "Büron",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "bueron.ch",
       "confidence": 90,
       "flags": [
@@ -6529,7 +6533,7 @@
     },
     "1100": {
       "name": "Schlierbach",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "schlierbach.ch",
       "confidence": 90,
       "flags": [
@@ -6669,7 +6673,7 @@
     },
     "1131": {
       "name": "Grossdietwil",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "grossdietwil.ch",
       "confidence": 93,
       "flags": [
@@ -8354,7 +8358,7 @@
     },
     "2138": {
       "name": "Jaun",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "jaun.ch",
       "confidence": 95,
       "flags": [
@@ -8881,7 +8885,7 @@
     },
     "2265": {
       "name": "Kerzers",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "kerzers.ch",
       "confidence": 95,
       "flags": [
@@ -8905,7 +8909,7 @@
     },
     "2271": {
       "name": "Merlach",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "merlach.ch",
       "confidence": 95,
       "flags": [
@@ -8942,7 +8946,7 @@
     },
     "2275": {
       "name": "Murten",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "murten-morat.ch",
       "confidence": 95,
       "flags": [
@@ -9026,7 +9030,7 @@
     },
     "2296": {
       "name": "Heitenried",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "heitenried.ch",
       "confidence": 95,
       "flags": [
@@ -9050,7 +9054,7 @@
     },
     "2300": {
       "name": "Plasselb",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "plasselb.ch",
       "confidence": 95,
       "flags": [
@@ -9492,7 +9496,7 @@
     },
     "2461": {
       "name": "Schnottwil",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "schnottwil.ch",
       "confidence": 95,
       "flags": [
@@ -9620,7 +9624,7 @@
     },
     "2478": {
       "name": "Nuglar-St. Pantaleon",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "nuglar.ch",
       "confidence": 95,
       "flags": [
@@ -9632,7 +9636,7 @@
     },
     "2479": {
       "name": "Rodersdorf",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "rodersdorf.ch",
       "confidence": 95,
       "flags": [
@@ -9843,7 +9847,7 @@
     },
     "2518": {
       "name": "Etziken",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "etziken.ch",
       "confidence": 95,
       "flags": [
@@ -9867,7 +9871,7 @@
     },
     "2523": {
       "name": "Horriwil",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "horriwil.ch",
       "confidence": 95,
       "flags": [
@@ -9950,7 +9954,7 @@
     },
     "2532": {
       "name": "Subingen",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "subingen.ch",
       "confidence": 95,
       "flags": [
@@ -10082,7 +10086,7 @@
     },
     "2549": {
       "name": "Kammersrohr",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "kammersrohr.ch",
       "confidence": 95,
       "flags": [
@@ -10382,7 +10386,7 @@
     },
     "2613": {
       "name": "Breitenbach",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "breitenbach.ch",
       "confidence": 95,
       "flags": [
@@ -13181,7 +13185,7 @@
     },
     "3542": {
       "name": "Albula/Alvra",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "albula-alvra.ch",
       "confidence": 95,
       "flags": [
@@ -13207,7 +13211,7 @@
     },
     "3544": {
       "name": "Bergün Filisur",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "berguenfilisur.ch",
       "confidence": 95,
       "flags": [
@@ -13243,7 +13247,7 @@
     },
     "3572": {
       "name": "Falera",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "falera.net",
       "confidence": 95,
       "flags": [
@@ -13303,7 +13307,7 @@
     },
     "3618": {
       "name": "Lumnezia",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "lumnezia.ch",
       "confidence": 95,
       "flags": [
@@ -13534,7 +13538,7 @@
     },
     "3714": {
       "name": "Rheinwald",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "rheinwald.ch",
       "confidence": 95,
       "flags": [
@@ -13630,7 +13634,7 @@
     },
     "3734": {
       "name": "Trin",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "trin.ch",
       "confidence": 85,
       "flags": [
@@ -13998,7 +14002,7 @@
     },
     "3861": {
       "name": "Fideris",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "fideris.ch",
       "confidence": 95,
       "flags": [
@@ -14045,7 +14049,7 @@
     },
     "3881": {
       "name": "Conters im Prättigau",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "conters.ch",
       "confidence": 95,
       "flags": [
@@ -14152,7 +14156,7 @@
     },
     "3951": {
       "name": "Fläsch",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "flaesch.ch",
       "confidence": 95,
       "flags": [
@@ -14188,7 +14192,7 @@
     },
     "3954": {
       "name": "Malans",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "malans.ch",
       "confidence": 95,
       "flags": [
@@ -14212,7 +14216,7 @@
     },
     "3961": {
       "name": "Grüsch",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "gruesch.ch",
       "confidence": 95,
       "flags": [
@@ -14236,7 +14240,7 @@
     },
     "3972": {
       "name": "Seewis im Prättigau",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "seewis.ch",
       "confidence": 95,
       "flags": [
@@ -14617,7 +14621,7 @@
     },
     "4034": {
       "name": "Neuenhof",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "neuenhof.ch",
       "confidence": 90,
       "flags": [
@@ -14699,7 +14703,7 @@
     },
     "4044": {
       "name": "Untersiggenthal",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "untersiggenthal.ch",
       "confidence": 88,
       "flags": [
@@ -14975,7 +14979,7 @@
     },
     "4080": {
       "name": "Villmergen",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "villmergen.ch",
       "confidence": 88,
       "flags": [
@@ -15095,7 +15099,7 @@
     },
     "4100": {
       "name": "Hausen",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "hausen.swiss",
       "confidence": 93,
       "flags": [
@@ -15988,7 +15992,7 @@
     },
     "4230": {
       "name": "Buttwil",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "buttwil.ch",
       "confidence": 95,
       "flags": [
@@ -16437,7 +16441,7 @@
     },
     "4286": {
       "name": "Uerkheim",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "uerkheim.ch",
       "confidence": 95,
       "flags": [
@@ -16461,7 +16465,7 @@
     },
     "4288": {
       "name": "Wiliberg",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "wiliberg.ch",
       "confidence": 90,
       "flags": [
@@ -16531,7 +16535,7 @@
     },
     "4307": {
       "name": "Full-Reuenthal",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "full-reuenthal.ch",
       "confidence": 95,
       "flags": [
@@ -16567,7 +16571,7 @@
     },
     "4311": {
       "name": "Leibstadt",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "leibstadt.ch",
       "confidence": 95,
       "flags": [
@@ -16995,7 +16999,7 @@
     },
     "4601": {
       "name": "Neunforn",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "neunforn.ch",
       "confidence": 95,
       "flags": [
@@ -17381,7 +17385,7 @@
     },
     "4791": {
       "name": "Wuppenau",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "wuppenau.ch",
       "confidence": 93,
       "flags": [
@@ -17439,7 +17443,7 @@
     },
     "4821": {
       "name": "Hüttwilen",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "huettwilen.ch",
       "confidence": 95,
       "flags": [
@@ -17451,7 +17455,7 @@
     },
     "4826": {
       "name": "Mammern",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "mammern.ch",
       "confidence": 95,
       "flags": [
@@ -18310,7 +18314,7 @@
     },
     "5210": {
       "name": "Paradiso",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "paradiso.ch",
       "confidence": 90,
       "flags": [
@@ -18334,7 +18338,7 @@
     },
     "5214": {
       "name": "Porza",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "ti.ch",
       "confidence": 85,
       "flags": [
@@ -19965,7 +19969,7 @@
     },
     "5571": {
       "name": "Tévenon",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "villars-burquin.ch",
       "confidence": 80,
       "flags": [
@@ -21703,13 +21707,14 @@
     },
     "5843": {
       "name": "Rougemont",
-      "provider": "swiss-isp",
+      "provider": "microsoft",
       "domain": "rougemont.ch",
-      "confidence": 90,
+      "confidence": 95,
       "flags": [
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "autodiscover_confirms"
       ]
     },
     "5851": {
@@ -23811,7 +23816,7 @@
     },
     "6404": {
       "name": "Boudry",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "ne.ch",
       "confidence": 88,
       "flags": [
@@ -23819,12 +23824,13 @@
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
+        "provider_via_gateway_spf",
         "manual_override"
       ]
     },
     "6408": {
       "name": "Cortaillod",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "ne.ch",
       "confidence": 88,
       "flags": [
@@ -23832,12 +23838,13 @@
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
+        "provider_via_gateway_spf",
         "manual_override"
       ]
     },
     "6413": {
       "name": "Rochefort",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "ne.ch",
       "confidence": 88,
       "flags": [
@@ -23845,12 +23852,13 @@
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
+        "provider_via_gateway_spf",
         "manual_override"
       ]
     },
     "6416": {
       "name": "Milvignes",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "ne.ch",
       "confidence": 88,
       "flags": [
@@ -23858,12 +23866,13 @@
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
+        "provider_via_gateway_spf",
         "manual_override"
       ]
     },
     "6417": {
       "name": "La Grande Béroche",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "ne.ch",
       "confidence": 88,
       "flags": [
@@ -23871,12 +23880,13 @@
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
+        "provider_via_gateway_spf",
         "manual_override"
       ]
     },
     "6421": {
       "name": "La Chaux-de-Fonds",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "chaux-de-fonds.ch",
       "confidence": 55,
       "flags": [
@@ -23899,19 +23909,7 @@
     },
     "6423": {
       "name": "La Sagne",
-      "provider": "sovereign",
-      "domain": "ne.ch",
-      "confidence": 85,
-      "flags": [
-        "multiple_mx",
-        "spf_strict",
-        "sovereign_mx_with_cloud_spf",
-        "provider_classified"
-      ]
-    },
-    "6432": {
-      "name": "La Brévine",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "ne.ch",
       "confidence": 88,
       "flags": [
@@ -23919,12 +23917,27 @@
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
+        "provider_via_gateway_spf",
+        "manual_override"
+      ]
+    },
+    "6432": {
+      "name": "La Brévine",
+      "provider": "swiss-isp",
+      "domain": "ne.ch",
+      "confidence": 88,
+      "flags": [
+        "multiple_mx",
+        "spf_softfail",
+        "sovereign_mx_with_cloud_spf",
+        "provider_classified",
+        "provider_via_gateway_spf",
         "manual_override"
       ]
     },
     "6433": {
       "name": "Brot-Plamboz",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "ne.ch",
       "confidence": 88,
       "flags": [
@@ -23932,12 +23945,13 @@
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
+        "provider_via_gateway_spf",
         "manual_override"
       ]
     },
     "6434": {
       "name": "Le Cerneux-Péquignot",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "ne.ch",
       "confidence": 88,
       "flags": [
@@ -23945,12 +23959,13 @@
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
+        "provider_via_gateway_spf",
         "manual_override"
       ]
     },
     "6435": {
       "name": "La Chaux-du-Milieu",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "ne.ch",
       "confidence": 88,
       "flags": [
@@ -23958,12 +23973,13 @@
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
+        "provider_via_gateway_spf",
         "manual_override"
       ]
     },
     "6436": {
       "name": "Le Locle",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "lelocle.ch",
       "confidence": 93,
       "flags": [
@@ -23975,7 +23991,7 @@
     },
     "6437": {
       "name": "Les Ponts-de-Martel",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "ne.ch",
       "confidence": 88,
       "flags": [
@@ -23983,12 +23999,13 @@
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
+        "provider_via_gateway_spf",
         "manual_override"
       ]
     },
     "6451": {
       "name": "Cornaux",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "ne.ch",
       "confidence": 88,
       "flags": [
@@ -23996,6 +24013,7 @@
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
+        "provider_via_gateway_spf",
         "manual_override"
       ]
     },
@@ -24012,7 +24030,7 @@
     },
     "6455": {
       "name": "Le Landeron",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "ne.ch",
       "confidence": 88,
       "flags": [
@@ -24020,12 +24038,13 @@
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
+        "provider_via_gateway_spf",
         "manual_override"
       ]
     },
     "6456": {
       "name": "Lignières",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "ne.ch",
       "confidence": 88,
       "flags": [
@@ -24033,35 +24052,13 @@
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
+        "provider_via_gateway_spf",
         "manual_override"
       ]
     },
     "6458": {
       "name": "Neuenburg",
-      "provider": "sovereign",
-      "domain": "neuchatelville.ch",
-      "confidence": 55,
-      "flags": [
-        "multiple_mx",
-        "no_spf",
-        "provider_classified"
-      ]
-    },
-    "6487": {
-      "name": "Val-de-Ruz",
-      "provider": "sovereign",
-      "domain": "ne.ch",
-      "confidence": 85,
-      "flags": [
-        "multiple_mx",
-        "spf_strict",
-        "sovereign_mx_with_cloud_spf",
-        "provider_classified"
-      ]
-    },
-    "6504": {
-      "name": "La Côte-aux-Fées",
-      "provider": "sovereign",
+      "provider": "swiss-isp",
       "domain": "ne.ch",
       "confidence": 88,
       "flags": [
@@ -24069,6 +24066,35 @@
         "spf_softfail",
         "sovereign_mx_with_cloud_spf",
         "provider_classified",
+        "provider_via_gateway_spf",
+        "manual_override"
+      ]
+    },
+    "6487": {
+      "name": "Val-de-Ruz",
+      "provider": "swiss-isp",
+      "domain": "ne.ch",
+      "confidence": 88,
+      "flags": [
+        "multiple_mx",
+        "spf_softfail",
+        "sovereign_mx_with_cloud_spf",
+        "provider_classified",
+        "provider_via_gateway_spf",
+        "manual_override"
+      ]
+    },
+    "6504": {
+      "name": "La Côte-aux-Fées",
+      "provider": "swiss-isp",
+      "domain": "ne.ch",
+      "confidence": 88,
+      "flags": [
+        "multiple_mx",
+        "spf_softfail",
+        "sovereign_mx_with_cloud_spf",
+        "provider_classified",
+        "provider_via_gateway_spf",
         "manual_override"
       ]
     },

@@ -109,11 +109,19 @@ GATEWAY_KEYWORDS = {
 }
 
 SWISS_ISP_ASNS: dict[int, str] = {
+    559: "SWITCH",
     3303: "Swisscom",
+    6730: "Sunrise UPC",
     6830: "Liberty Global (UPC/Sunrise)",
     12399: "Sunrise",
     13030: "Init7",
+    13213: "Cyberlink AG",
     15576: "NTS",
+    15600: "Quickline",
+    15796: "Netzone AG",
+    24889: "Datapark AG",
+    29691: "Hostpoint / Green.ch",
+    51786: "Infomaniak Network SA",
 }
 
 CONCURRENCY = 20

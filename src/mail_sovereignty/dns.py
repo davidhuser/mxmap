@@ -87,31 +87,39 @@ _SPF_REDIRECT_RE = re.compile(r"\bredirect=(\S+)", re.IGNORECASE)
 
 
 async def resolve_spf_includes(spf_record: str, max_lookups: int = 10) -> str:
-    """Resolve include: and redirect= directives in an SPF record (depth 1).
+    """Recursively resolve include: and redirect= directives in an SPF record.
 
     Returns the original SPF text concatenated with all resolved SPF texts.
-    Tracks visited domains for loop detection and enforces a lookup limit.
+    Uses BFS to follow nested includes. Tracks visited domains for loop
+    detection and enforces a lookup limit.
     """
     if not spf_record:
         return ""
 
-    domains = _SPF_INCLUDE_RE.findall(spf_record) + _SPF_REDIRECT_RE.findall(spf_record)
-    if not domains:
+    initial_domains = _SPF_INCLUDE_RE.findall(spf_record) + _SPF_REDIRECT_RE.findall(
+        spf_record
+    )
+    if not initial_domains:
         return spf_record
 
     visited: set[str] = set()
     parts = [spf_record]
+    queue = list(initial_domains)
     lookups = 0
 
-    for domain in domains:
-        domain = domain.lower().rstrip(".")
-        if domain in visited or lookups >= max_lookups:
+    while queue and lookups < max_lookups:
+        domain = queue.pop(0).lower().rstrip(".")
+        if domain in visited:
             continue
         visited.add(domain)
         lookups += 1
         resolved = await lookup_spf(domain)
         if resolved:
             parts.append(resolved)
+            nested = _SPF_INCLUDE_RE.findall(resolved) + _SPF_REDIRECT_RE.findall(
+                resolved
+            )
+            queue.extend(nested)
 
     return " ".join(parts)
 

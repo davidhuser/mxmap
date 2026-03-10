@@ -267,24 +267,38 @@ class TestLookupSpf:
 
 class TestResolveSpfIncludes:
     async def test_basic_include(self):
+        async def _lookup(domain):
+            if domain == "custom.ch":
+                return "v=spf1 include:spf.protection.outlook.com -all"
+            if domain == "spf.protection.outlook.com":
+                return "v=spf1 ip4:40.92.0.0/15 -all"
+            return ""
+
         with patch(
             "mail_sovereignty.dns.lookup_spf",
             new_callable=AsyncMock,
-            return_value="v=spf1 include:spf.protection.outlook.com -all",
+            side_effect=_lookup,
         ) as mock_spf:
             result = await resolve_spf_includes("v=spf1 include:custom.ch -all")
-        mock_spf.assert_called_once_with("custom.ch")
+        assert mock_spf.call_count == 2
         assert "spf.protection.outlook.com" in result
         assert "include:custom.ch" in result
 
     async def test_redirect(self):
+        async def _lookup(domain):
+            if domain == "hostpoint.ch":
+                return "v=spf1 include:spf.protection.outlook.com -all"
+            if domain == "spf.protection.outlook.com":
+                return "v=spf1 ip4:40.92.0.0/15 -all"
+            return ""
+
         with patch(
             "mail_sovereignty.dns.lookup_spf",
             new_callable=AsyncMock,
-            return_value="v=spf1 include:spf.protection.outlook.com -all",
+            side_effect=_lookup,
         ) as mock_spf:
             result = await resolve_spf_includes("v=spf1 redirect=hostpoint.ch")
-        mock_spf.assert_called_once_with("hostpoint.ch")
+        assert mock_spf.call_count == 2
         assert "spf.protection.outlook.com" in result
 
     async def test_loop_detection(self):
@@ -325,6 +339,63 @@ class TestResolveSpfIncludes:
             result = await resolve_spf_includes("v=spf1 include:nonexistent.ch -all")
         # Only original, no empty part appended
         assert result == "v=spf1 include:nonexistent.ch -all"
+
+    async def test_recursive_include_depth_2(self):
+        async def _lookup(domain):
+            if domain == "a.ch":
+                return "v=spf1 include:b.ch -all"
+            if domain == "b.ch":
+                return "v=spf1 include:spf.protection.outlook.com -all"
+            if domain == "spf.protection.outlook.com":
+                return "v=spf1 ip4:40.92.0.0/15 -all"
+            return ""
+
+        with patch(
+            "mail_sovereignty.dns.lookup_spf",
+            new_callable=AsyncMock,
+            side_effect=_lookup,
+        ) as mock_spf:
+            result = await resolve_spf_includes("v=spf1 include:a.ch -all")
+        assert mock_spf.call_count == 3
+        assert "spf.protection.outlook.com" in result
+
+    async def test_recursive_respects_max_lookups(self):
+        call_count = 0
+
+        async def _lookup(domain):
+            nonlocal call_count
+            call_count += 1
+            # Each resolved SPF includes the next domain in chain
+            idx = int(domain.replace("d", "").replace(".ch", ""))
+            return f"v=spf1 include:d{idx + 1}.ch -all"
+
+        with patch(
+            "mail_sovereignty.dns.lookup_spf",
+            new_callable=AsyncMock,
+            side_effect=_lookup,
+        ):
+            spf = "v=spf1 " + " ".join(f"include:d{i}.ch" for i in range(15)) + " -all"
+            await resolve_spf_includes(spf, max_lookups=3)
+        assert call_count == 3
+
+    async def test_recursive_loop_detection(self):
+        async def _lookup(domain):
+            if domain == "a.ch":
+                return "v=spf1 include:b.ch -all"
+            if domain == "b.ch":
+                return "v=spf1 include:a.ch -all"
+            return ""
+
+        with patch(
+            "mail_sovereignty.dns.lookup_spf",
+            new_callable=AsyncMock,
+            side_effect=_lookup,
+        ) as mock_spf:
+            result = await resolve_spf_includes("v=spf1 include:a.ch -all")
+        # a.ch and b.ch each looked up once, no infinite loop
+        assert mock_spf.call_count == 2
+        assert "include:a.ch" in result
+        assert "include:b.ch" in result
 
 
 class TestLookupCnameChain:

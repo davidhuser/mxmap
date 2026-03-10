@@ -169,11 +169,12 @@ class TestScoreEntry:
     def test_manual_override(self):
         result = score_entry(
             {
-                "provider": "sovereign",
+                "provider": "swiss-isp",
                 "domain": "ne.ch",
                 "mx": ["nemx9a.ne.ch"],
-                "spf": "v=spf1 include:spf1.ne.ch ~all",
+                "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
                 "bfs": "6404",
+                "gateway": "cantonal-ne",
             }
         )
         assert "manual_override" in result["flags"]
