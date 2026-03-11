@@ -1,12 +1,21 @@
 {
+<<<<<<< HEAD
   "generated":"2026-03-11T14:39:30Z",
+=======
+  "generated":"2026-03-11T05:19:23Z",
+>>>>>>> 68941a22b39a31e27a483060bafdc861a8df89bf
   "total":2115,
   "counts":{
     "aws":26,
     "google":4,
     "independent":602,
     "infomaniak":120,
+<<<<<<< HEAD
     "microsoft":1110,
+=======
+    "microsoft":1108,
+    "self-hosted":604,
+>>>>>>> 68941a22b39a31e27a483060bafdc861a8df89bf
     "swiss-isp":251,
     "unknown":2
   },
@@ -6278,7 +6287,11 @@
         "mailbackup.tankred.ch"
       ],
       "spf":"v=spf1 a include:_spf.talus.ch ~all",
+<<<<<<< HEAD
       "provider":"independent",
+=======
+      "provider":"self-hosted",
+>>>>>>> 68941a22b39a31e27a483060bafdc861a8df89bf
       "spf_resolved":"v=spf1 a include:_spf.talus.ch ~all v=spf1 ip4:194.56.218.0/24 ~all",
       "mx_asns":[
         202035
@@ -10407,7 +10420,11 @@
         "mail.hergiswil-lu.ch"
       ],
       "spf":"v=spf1 mx -all",
+<<<<<<< HEAD
       "provider":"independent",
+=======
+      "provider":"self-hosted",
+>>>>>>> 68941a22b39a31e27a483060bafdc861a8df89bf
       "mx_asns":[
         33965
       ],
@@ -12258,12 +12275,20 @@
         "mx2.spamvor.com"
       ],
       "spf":"",
+<<<<<<< HEAD
       "provider":"independent",
       "gateway":"spamvor",
       "mx_asns":[
         29222
       ],
       "smtp_banner":"220 20.mx.spamvor.com ESMTP"
+=======
+      "provider":"self-hosted",
+      "gateway":"spamvor",
+      "mx_asns":[
+        29222
+      ]
+>>>>>>> 68941a22b39a31e27a483060bafdc861a8df89bf
     },
     "2043":{
       "bfs":"2043",
@@ -16174,7 +16199,11 @@
       ],
       "spf":"v=spf1 include:spf.protection.outlook.com include:_spf.i-web.ch -all",
       "provider":"microsoft",
+<<<<<<< HEAD
       "spf_resolved":"v=spf1 include:spf.protection.outlook.com include:_spf.i-web.ch -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all v=spf1 ip4:195.65.10.12 ip4:195.65.10.13 -all",
+=======
+      "spf_resolved":"v=spf1 include:spf.protection.outlook.com include:_spf.i-web.ch -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all v=spf1 ip4:195.65.10.12 ip4:195.65.10.14 -all",
+>>>>>>> 68941a22b39a31e27a483060bafdc861a8df89bf
       "mx_asns":[
         8075
       ],
@@ -17240,7 +17269,11 @@
         "rrmx.imp.ch"
       ],
       "spf":"v=spf1 include:_mailspf.imp.ch include:spf1.egeko.ch -all",
+<<<<<<< HEAD
       "provider":"independent",
+=======
+      "provider":"self-hosted",
+>>>>>>> 68941a22b39a31e27a483060bafdc861a8df89bf
       "spf_resolved":"v=spf1 include:_mailspf.imp.ch include:spf1.egeko.ch -all v=spf1 ip6:2001:4060:1:1001::/64 ip4:157.161.12.0/22 v=spf1 ip4:159.144.38.58 ip4:159.144.36.112 ip4:159.144.218.138 -all",
       "mx_asns":[
         6772
@@ -22918,7 +22951,11 @@
       ],
       "spf":"v=spf1 ip4:83.144.243.114 include:_spf.i-web.ch include:spf.protection.outlook.com -all",
       "provider":"microsoft",
+<<<<<<< HEAD
       "spf_resolved":"v=spf1 ip4:83.144.243.114 include:_spf.i-web.ch include:spf.protection.outlook.com -all v=spf1 ip4:195.65.10.12 ip4:195.65.10.13 -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all",
+=======
+      "spf_resolved":"v=spf1 ip4:83.144.243.114 include:_spf.i-web.ch include:spf.protection.outlook.com -all v=spf1 ip4:195.65.10.12 ip4:195.65.10.14 -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all",
+>>>>>>> 68941a22b39a31e27a483060bafdc861a8df89bf
       "mx_asns":[
         8075
       ],
@@ -28174,7 +28211,7 @@
       ],
       "spf":"v=spf1 include:spf.protection.outlook.com include:cryms.com ip4:178.23.174.0/27 ip4:89.207.237.84 -all",
       "provider":"microsoft",
-      "spf_resolved":"v=spf1 include:spf.protection.outlook.com include:cryms.com ip4:178.23.174.0/27 ip4:89.207.237.84 -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all v=spf1 +ip4:185.181.207.136 +ip4:91.121.50.245 +ip4:149.202.24.251 +ip4:149.202.90.195 +ip4:91.121.63.178 +ip4:178.32.139.74 +ip4:94.130.69.119 +ip6:2a01:4f8:10b:32d3::3 +ip6:2001:41d0:1004:ac3::1  include:spf.protection.outlook.com include:143889994.spf04.hubspotemail.net include:sendgrid.net -all v=spf1 ip4:3.93.157.0/24 ip4:3.210.190.0/24 ip4:18.208.124.128/25 ip4:54.174.52.0/24 ip4:54.174.57.0/24 ip4:54.174.59.0/24 ip4:54.174.60.0/23 ip4:54.174.63.0/24 ip4:108.179.144.0/20 ip4:139.180.17.0/24 ip4:141.193.184.32/27 ip4:141.193.184.64/26 ip4:141.193.184.128/25 ip4:141.193.185.32/27 ip4:141.193.185.64/26 ip4:141.193.185.128/25 ip4:143.244.80.0/20 ip4:158.247.16.0/20 ip4:216.139.64.0/19 -all v=spf1 ip4:167.89.0.0/17 ip4:208.117.48.0/20 ip4:50.31.32.0/19 ip4:198.37.144.0/20 ip4:198.21.0.0/21 ip4:192.254.112.0/20 ip4:168.245.0.0/17 ip4:149.72.0.0/16 ip4:159.183.0.0/16 ip4:134.128.64.0/19 ip4:134.128.96.0/19 include:ab.sendgrid.net ~all v=spf1 ip4:223.165.113.0/24 ip4:223.165.115.0/24 ip4:223.165.118.0/23 ip4:223.165.120.0/23 ~all",
+      "spf_resolved":"v=spf1 include:spf.protection.outlook.com include:cryms.com ip4:178.23.174.0/27 ip4:89.207.237.84 -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all v=spf1 +ip4:185.181.207.136 +ip4:91.121.50.245 +ip4:149.202.24.251 +ip4:149.202.90.195 +ip4:91.121.63.178 +ip4:178.32.139.74 +ip4:94.130.69.119 +ip6:2a01:4f8:10b:32d3::3 +ip6:2001:41d0:1004:ac3::1 +ip4:185.181.207.136 include:spf.protection.outlook.com include:143889994.spf04.hubspotemail.net include:sendgrid.net -all v=spf1 ip4:3.93.157.0/24 ip4:3.210.190.0/24 ip4:18.208.124.128/25 ip4:54.174.52.0/24 ip4:54.174.57.0/24 ip4:54.174.59.0/24 ip4:54.174.60.0/23 ip4:54.174.63.0/24 ip4:108.179.144.0/20 ip4:139.180.17.0/24 ip4:141.193.184.32/27 ip4:141.193.184.64/26 ip4:141.193.184.128/25 ip4:141.193.185.32/27 ip4:141.193.185.64/26 ip4:141.193.185.128/25 ip4:143.244.80.0/20 ip4:158.247.16.0/20 ip4:216.139.64.0/19 -all v=spf1 ip4:167.89.0.0/17 ip4:208.117.48.0/20 ip4:50.31.32.0/19 ip4:198.37.144.0/20 ip4:198.21.0.0/21 ip4:192.254.112.0/20 ip4:168.245.0.0/17 ip4:149.72.0.0/16 ip4:159.183.0.0/16 ip4:134.128.64.0/19 ip4:134.128.96.0/19 include:ab.sendgrid.net ~all v=spf1 ip4:223.165.113.0/24 ip4:223.165.115.0/24 ip4:223.165.118.0/23 ip4:223.165.120.0/23 ~all",
       "mx_asns":[
         196810
       ],
@@ -29655,11 +29692,18 @@
         "marot.bettens.ch"
       ],
       "spf":"",
+<<<<<<< HEAD
       "provider":"independent",
       "mx_asns":[
         29222
       ],
       "smtp_banner":"220 marot.bettens.info ESMTP Postfix (Debian/GNU)"
+=======
+      "provider":"self-hosted",
+      "mx_asns":[
+        29222
+      ]
+>>>>>>> 68941a22b39a31e27a483060bafdc861a8df89bf
     },
     "5472":{
       "bfs":"5472",
@@ -30260,8 +30304,7 @@
       "provider":"independent",
       "spf_resolved":"v=spf1 include:spf1.ne.ch include:spf.mtaroutes.com include:spf.ganesh-hosting.ch ip4:185.214.154.116 -all v=spf1 ip4:148.196.30.0/24 -all v=spf1 include:spf.antispamcloud.com -all v=spf1 ip4:193.34.136.0/23 ip4:185.54.4.0/23 ip4:185.54.6.0/24 ip4:98.80.189.20 ip4:99.81.216.78 ip4:34.249.190.60 ip4:108.128.137.108 -all v=spf1 ip4:130.117.251.9 ip4:130.117.251.10 ip6:2001:978:2:6::20:10 ip6:2001:978:2:6::20:a ip4:94.75.244.176/27 ip4:94.75.192.139/27 ip4:95.211.2.195/26 ip4:95.211.2.198/26 ip4:95.211.2.199/26 ip4:95.211.2.201/26 ip4:95.211.2.202/26 ip4:95.211.2.204/26 ip4:94.75.244.183/27 ip4:94.75.244.184/27 ip6:2001:1af8:4400:a047:6::1 ip4:37.58.58.55/27 ip4:199.115.117.7/27 ip4:199.115.117.10/27 ip4:199.115.117.11/27 ip6:2604:9a00:2010:a024:21::1 ip4:185.201.16.0/22 ip4:192.69.18.0/24 ip4:208.70.90.0/24 ip4:45.91.121.0/24 ip4:45.93.148.0/24 ip4:45.131.180.0/24 ip4:45.140.132.0/24 ip4:193.41.32.0/24 ip4:185.225.27.0/24 ip4:80.91.219.0/24 ip4:188.190.113.0/24 ip4:45.147.95.0/24 ip4:46.229.240.0/24 ip4:87.236.163.0/24 ip4:188.190.112.0/24 ip4:192.69.19.0/24 ip4:208.70.91.0/24 ip4:185.209.51.0/24 ip4:185.218.226.0/24 -all",
       "mx_asns":[
-        16633,
-        43054
+        16633
       ],
       "autodiscover":{
         "autodiscover_cname":"owa.echallens.ch"
@@ -36744,10 +36787,15 @@
       "provider":"independent",
       "spf_resolved":"v=spf1 include:spf.antispamcloud.com ip4:217.196.176.0/20 a mx ~all v=spf1 ip4:130.117.251.9 ip4:130.117.251.10 ip6:2001:978:2:6::20:10 ip6:2001:978:2:6::20:a ip4:94.75.244.176/27 ip4:94.75.192.139/27 ip4:95.211.2.195/26 ip4:95.211.2.198/26 ip4:95.211.2.199/26 ip4:95.211.2.201/26 ip4:95.211.2.202/26 ip4:95.211.2.204/26 ip4:94.75.244.183/27 ip4:94.75.244.184/27 ip6:2001:1af8:4400:a047:6::1 ip4:37.58.58.55/27 ip4:199.115.117.7/27 ip4:199.115.117.10/27 ip4:199.115.117.11/27 ip6:2604:9a00:2010:a024:21::1 ip4:185.201.16.0/22 ip4:192.69.18.0/24 ip4:208.70.90.0/24 ip4:45.91.121.0/24 ip4:45.93.148.0/24 ip4:45.131.180.0/24 ip4:45.140.132.0/24 ip4:193.41.32.0/24 ip4:185.225.27.0/24 ip4:80.91.219.0/24 ip4:188.190.113.0/24 ip4:45.147.95.0/24 ip4:46.229.240.0/24 ip4:87.236.163.0/24 ip4:188.190.112.0/24 ip4:192.69.19.0/24 ip4:208.70.91.0/24 ip4:185.209.51.0/24 ip4:185.218.226.0/24 -all",
       "mx_asns":[
+<<<<<<< HEAD
         16633,
         43054
       ],
       "smtp_banner":"220 mx305.antispamcloud.com ESMTP Exim 20260303.1001 Wed, 11 Mar 2026 15:43:33 +0100"
+=======
+        16633
+      ]
+>>>>>>> 68941a22b39a31e27a483060bafdc861a8df89bf
     },
     "6423":{
       "bfs":"6423",
