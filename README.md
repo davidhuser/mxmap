@@ -14,7 +14,7 @@ An interactive map showing where Swiss municipalities host their email — wheth
 The data pipeline has three steps:
 
 1. **Preprocess** -- Fetches all ~2100 Swiss municipalities from Wikidata, performs MX and SPF DNS lookups on their official domains, and classifies each municipality's email provider.
-2. **Postprocess** -- Applies manual overrides for edge cases, retries DNS for unresolved domains, checks SMTP banners of self-hosted MX hosts for hidden providers, then scrapes websites of still-unclassified municipalities for email addresses.
+2. **Postprocess** -- Applies manual overrides for edge cases, retries DNS for unresolved domains, checks SMTP banners of independent MX hosts for hidden providers, then scrapes websites of still-unclassified municipalities for email addresses.
 3. **Validate** -- Cross-validates MX and SPF records, assigns a confidence score (0-100) to each entry, and generates a validation report.
 
 ```mermaid

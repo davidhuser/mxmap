@@ -109,7 +109,7 @@ class TestManualOverrides:
             assert "provider" in entry, f"BFS {bfs} missing 'provider'"
 
     def test_valid_providers(self):
-        valid = {"self-hosted", "infomaniak", "microsoft", "swiss-isp"}
+        valid = {"independent", "infomaniak", "microsoft", "swiss-isp"}
         for bfs, entry in MANUAL_OVERRIDES.items():
             assert entry["provider"] in valid, (
                 f"BFS {bfs}: unexpected provider {entry['provider']}"
@@ -175,7 +175,7 @@ class TestProcessUnknown:
         ):
             result = await process_unknown(client, sem, m)
 
-        assert result["provider"] == "self-hosted"
+        assert result["provider"] == "independent"
 
     async def test_no_email_domains_found(self):
         m = {"bfs": "999", "name": "Test", "domain": "test.ch", "provider": "unknown"}
@@ -282,11 +282,11 @@ class TestDnsRetryStep:
 
 
 class TestSmtpBannerStep:
-    async def test_reclassifies_self_hosted_via_smtp(self, tmp_path):
+    async def test_reclassifies_independent_via_smtp(self, tmp_path):
         data = {
             "generated": "2025-01-01",
             "total": 1,
-            "counts": {"self-hosted": 1},
+            "counts": {"independent": 1},
             "municipalities": {
                 "1000": {
                     "bfs": "1000",
@@ -295,7 +295,7 @@ class TestSmtpBannerStep:
                     "domain": "smtptown.ch",
                     "mx": ["mail.smtptown.ch"],
                     "spf": "",
-                    "provider": "self-hosted",
+                    "provider": "independent",
                 },
             },
         }
@@ -316,11 +316,11 @@ class TestSmtpBannerStep:
         assert result["municipalities"]["1000"]["provider"] == "microsoft"
         assert "smtp_banner" in result["municipalities"]["1000"]
 
-    async def test_leaves_self_hosted_when_banner_is_postfix(self, tmp_path):
+    async def test_leaves_independent_when_banner_is_postfix(self, tmp_path):
         data = {
             "generated": "2025-01-01",
             "total": 1,
-            "counts": {"self-hosted": 1},
+            "counts": {"independent": 1},
             "municipalities": {
                 "1001": {
                     "bfs": "1001",
@@ -329,7 +329,7 @@ class TestSmtpBannerStep:
                     "domain": "postfixtown.ch",
                     "mx": ["mail.postfixtown.ch"],
                     "spf": "",
-                    "provider": "self-hosted",
+                    "provider": "independent",
                 },
             },
         }
@@ -347,7 +347,7 @@ class TestSmtpBannerStep:
             await run(path)
 
         result = json.loads(path.read_text())
-        assert result["municipalities"]["1001"]["provider"] == "self-hosted"
+        assert result["municipalities"]["1001"]["provider"] == "independent"
         assert "smtp_banner" in result["municipalities"]["1001"]
 
     async def test_skips_already_classified(self, tmp_path):
@@ -381,7 +381,7 @@ class TestSmtpBannerStep:
         data = {
             "generated": "2025-01-01",
             "total": 2,
-            "counts": {"self-hosted": 2},
+            "counts": {"independent": 2},
             "municipalities": {
                 "2000": {
                     "bfs": "2000",
@@ -390,7 +390,7 @@ class TestSmtpBannerStep:
                     "domain": "town1.ch",
                     "mx": ["shared-mx.example.ch"],
                     "spf": "",
-                    "provider": "self-hosted",
+                    "provider": "independent",
                 },
                 "2001": {
                     "bfs": "2001",
@@ -399,7 +399,7 @@ class TestSmtpBannerStep:
                     "domain": "town2.ch",
                     "mx": ["shared-mx.example.ch"],
                     "spf": "",
-                    "provider": "self-hosted",
+                    "provider": "independent",
                 },
             },
         }
@@ -426,7 +426,7 @@ class TestSmtpBannerStep:
         data = {
             "generated": "2025-01-01",
             "total": 1,
-            "counts": {"self-hosted": 1},
+            "counts": {"independent": 1},
             "municipalities": {
                 "3000": {
                     "bfs": "3000",
@@ -435,7 +435,7 @@ class TestSmtpBannerStep:
                     "domain": "noconnect.ch",
                     "mx": ["mail.noconnect.ch"],
                     "spf": "",
-                    "provider": "self-hosted",
+                    "provider": "independent",
                 },
             },
         }
@@ -450,7 +450,7 @@ class TestSmtpBannerStep:
             await run(path)
 
         result = json.loads(path.read_text())
-        assert result["municipalities"]["3000"]["provider"] == "self-hosted"
+        assert result["municipalities"]["3000"]["provider"] == "independent"
         assert "smtp_banner" not in result["municipalities"]["3000"]
 
 

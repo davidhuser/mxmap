@@ -310,7 +310,7 @@ MANUAL_OVERRIDES = {
     # Other manual resolutions
     "261": {
         "domain": "zuerich.ch",
-        "provider": "self-hosted",
+        "provider": "independent",
     },  # Zürich (not gemeinde-zuerich.ch)
     "422": {
         "domain": "ruetibeilyssach.ch",
@@ -474,11 +474,11 @@ async def run(data_path: Path) -> None:
                     m["autodiscover"] = autodiscover
                 print(f"  RECOVERED {m['bfs']:>5} {m['name']:<30} -> {provider}")
 
-    # Step 2.5: SMTP banner check for self-hosted/unknown with MX records
+    # Step 2.5: SMTP banner check for independent/unknown with MX records
     smtp_candidates = [
         m
         for m in muni.values()
-        if m["provider"] in ("self-hosted", "unknown") and m.get("mx")
+        if m["provider"] in ("independent", "unknown") and m.get("mx")
     ]
     if smtp_candidates:
         # Deduplicate: map each unique MX host -> list of BFS numbers
@@ -511,7 +511,7 @@ async def run(data_path: Path) -> None:
             provider = classify_from_smtp_banner(banner, ehlo)
             for bfs in mx_host_to_bfs[mx_host]:
                 muni[bfs]["smtp_banner"] = banner
-                if provider and muni[bfs]["provider"] in ("self-hosted", "unknown"):
+                if provider and muni[bfs]["provider"] in ("independent", "unknown"):
                     old = muni[bfs]["provider"]
                     muni[bfs]["provider"] = provider
                     smtp_reclassified += 1

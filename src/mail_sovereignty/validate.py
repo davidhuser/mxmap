@@ -47,7 +47,7 @@ POTENTIAL_GATEWAY_THRESHOLD = 5
 def _detect_potential_gateways(
     scored_entries: list[dict[str, Any]],
 ) -> list[tuple[str, int, list[str]]]:
-    """Find MX domain suffixes shared by many self-hosted municipalities.
+    """Find MX domain suffixes shared by many independent municipalities.
 
     Returns a list of (suffix, municipality_count, sample_names) tuples
     sorted by count descending, for suffixes with count >= threshold.
@@ -61,7 +61,7 @@ def _detect_potential_gateways(
 
     suffix_municipalities: dict[str, list[str]] = {}
     for entry in scored_entries:
-        if entry.get("provider") != "self-hosted":
+        if entry.get("provider") != "independent":
             continue
         mx_raw = entry.get("mx_raw", [])
         if not mx_raw:
@@ -145,16 +145,16 @@ def score_entry(entry: dict[str, Any]) -> dict[str, Any]:
         if mx_provider == spf_provider:
             score += 20
             flags.append("mx_spf_match")
-        elif mx_provider == "self-hosted" and spf_provider:
+        elif mx_provider == "independent" and spf_provider:
             score += 10
-            flags.append("self_hosted_mx_with_cloud_spf")
+            flags.append("independent_mx_with_cloud_spf")
         elif mx_provider in spf_providers:
             score += 20
             flags.append("mx_spf_match")
         else:
             score -= 20
             flags.append("mx_spf_mismatch")
-    elif mx_provider == "self-hosted" and spf and not spf_provider:
+    elif mx_provider == "independent" and spf and not spf_provider:
         score += 20
         flags.append("mx_spf_match")
 
@@ -201,7 +201,7 @@ def score_entry(entry: dict[str, Any]) -> dict[str, Any]:
         if smtp_provider and smtp_provider == provider:
             score += 5
             flags.append("smtp_confirms")
-        elif smtp_provider and provider == "self-hosted":
+        elif smtp_provider and provider == "independent":
             flags.append(f"smtp_suggests:{smtp_provider}")
 
     # Autodiscover confirms or suggests provider
@@ -211,7 +211,7 @@ def score_entry(entry: dict[str, Any]) -> dict[str, Any]:
         if ad_provider and ad_provider == provider:
             score += 5
             flags.append("autodiscover_confirms")
-        elif ad_provider and provider == "self-hosted":
+        elif ad_provider and provider == "independent":
             flags.append(f"autodiscover_suggests:{ad_provider}")
 
     # Manual override (+5)

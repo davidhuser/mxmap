@@ -196,7 +196,7 @@ async def run(output_path: Path) -> None:
                 f"Infomaniak={counts.get('infomaniak', 0)}  "
                 f"AWS={counts.get('aws', 0)}  "
                 f"ISP={counts.get('swiss-isp', 0)}  "
-                f"Self={counts.get('self-hosted', 0)}  "
+                f"Indep={counts.get('independent', 0)}  "
                 f"?={counts.get('unknown', 0)}"
             )
 
@@ -211,7 +211,7 @@ async def run(output_path: Path) -> None:
     print(f"  Infomaniak      : {counts.get('infomaniak', 0):>5}")
     print(f"  AWS             : {counts.get('aws', 0):>5}")
     print(f"  Swiss ISP       : {counts.get('swiss-isp', 0):>5}")
-    print(f"  Self-hosted     : {counts.get('self-hosted', 0):>5}")
+    print(f"  Independent     : {counts.get('independent', 0):>5}")
     print(f"  Unknown/No MX   : {counts.get('unknown', 0):>5}")
     print(f"{'=' * 50}")
 

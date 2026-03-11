@@ -181,7 +181,7 @@ const COLORS = {
   aws:            '#FF7A5C',  // bright hot coral — US cloud
   infomaniak:     '#78FFD6',  // vivid bright mint — Swiss provider
   'swiss-isp':    '#2EDBA8',  // neon-ish seafoam — Swiss ISP
-  'self-hosted':  '#10B898',  // vivid bright teal — self-hosted
+  'independent':  '#10B898',  // vivid bright teal — independent
   unknown:        '#BFBFBF'   // neutral mid-gray with hatching
 };
 
@@ -191,7 +191,7 @@ const LABELS = {
   aws:            'Amazon Web Services',
   infomaniak:     'Infomaniak',
   'swiss-isp':    'Swiss ISP',
-  'self-hosted':  'Self-hosted',
+  'independent':  'Independent',
   unknown:        'Unknown'
 };
 
@@ -401,7 +401,7 @@ async function loadData() {
       '<div class="legend-content">' +
       '<strong>Email Provider</strong>' +
       legendGroupHtml('US-based', ['microsoft', 'aws', 'google'], dnsData.counts) +
-      legendGroupHtml('Swiss-based', ['self-hosted', 'swiss-isp', 'infomaniak'], dnsData.counts) +
+      legendGroupHtml('Swiss-based', ['independent', 'swiss-isp', 'infomaniak'], dnsData.counts) +
       '</div>';
     L.DomEvent.disableClickPropagation(div);
     return div;

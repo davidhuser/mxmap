@@ -33,10 +33,10 @@ class TestScoreEntry:
         assert "mx_spf_match" in result["flags"]
         assert "spf_strict" in result["flags"]
 
-    def test_self_hosted_with_matching_spf(self):
+    def test_independent_with_matching_spf(self):
         result = score_entry(
             {
-                "provider": "self-hosted",
+                "provider": "independent",
                 "domain": "ne.ch",
                 "mx": ["nemx9a.ne.ch"],
                 "spf": "v=spf1 include:spf1.ne.ch ~all",
@@ -46,17 +46,17 @@ class TestScoreEntry:
         assert result["score"] >= 70
         assert "mx_spf_match" in result["flags"]
 
-    def test_self_hosted_mx_with_cloud_spf(self):
+    def test_independent_mx_with_cloud_spf(self):
         result = score_entry(
             {
-                "provider": "self-hosted",
+                "provider": "independent",
                 "domain": "ne.ch",
                 "mx": ["nemx9a.ne.ch"],
                 "spf": "v=spf1 include:spf.protection.outlook.com ~all",
                 "bfs": "9000",
             }
         )
-        assert "self_hosted_mx_with_cloud_spf" in result["flags"]
+        assert "independent_mx_with_cloud_spf" in result["flags"]
 
     def test_mx_spf_mismatch(self):
         result = score_entry(
@@ -97,7 +97,7 @@ class TestScoreEntry:
     def test_no_spf(self):
         result = score_entry(
             {
-                "provider": "self-hosted",
+                "provider": "independent",
                 "domain": "test.ch",
                 "mx": ["mail.test.ch"],
                 "spf": "",
@@ -109,7 +109,7 @@ class TestScoreEntry:
     def test_multiple_mx(self):
         result = score_entry(
             {
-                "provider": "self-hosted",
+                "provider": "independent",
                 "domain": "test.ch",
                 "mx": ["mx1.test.ch", "mx2.test.ch"],
                 "spf": "",
@@ -205,10 +205,10 @@ class TestScoreEntry:
         )
         assert "autodiscover_confirms" in result["flags"]
 
-    def test_autodiscover_suggests_for_self_hosted(self):
+    def test_autodiscover_suggests_for_independent(self):
         result = score_entry(
             {
-                "provider": "self-hosted",
+                "provider": "independent",
                 "domain": "example.ch",
                 "mx": ["mail.example.ch"],
                 "spf": "",
@@ -231,10 +231,10 @@ class TestScoreEntry:
         )
         assert "smtp_confirms" in result["flags"]
 
-    def test_smtp_suggests_for_self_hosted(self):
+    def test_smtp_suggests_for_independent(self):
         result = score_entry(
             {
-                "provider": "self-hosted",
+                "provider": "independent",
                 "domain": "example.ch",
                 "mx": ["mail.example.ch"],
                 "spf": "",
@@ -247,7 +247,7 @@ class TestScoreEntry:
     def test_smtp_no_flag_when_unrecognized(self):
         result = score_entry(
             {
-                "provider": "self-hosted",
+                "provider": "independent",
                 "domain": "example.ch",
                 "mx": ["mail.example.ch"],
                 "spf": "",
@@ -282,7 +282,7 @@ class TestScoreEntry:
     def test_autodiscover_no_flag_when_unrecognized(self):
         result = score_entry(
             {
-                "provider": "self-hosted",
+                "provider": "independent",
                 "domain": "example.ch",
                 "mx": ["mail.example.ch"],
                 "spf": "",
@@ -309,7 +309,7 @@ class TestPrintReport:
             {
                 "bfs": "2",
                 "name": "B",
-                "provider": "self-hosted",
+                "provider": "independent",
                 "score": 70,
                 "flags": ["no_spf"],
             },
@@ -334,11 +334,11 @@ class TestPrintReport:
 # ── _detect_potential_gateways() ──────────────────────────────────────
 
 
-def _make_self_hosted_entry(name, domain, mx_raw):
+def _make_independent_entry(name, domain, mx_raw):
     return {
         "bfs": "0",
         "name": name,
-        "provider": "self-hosted",
+        "provider": "independent",
         "domain": domain,
         "score": 70,
         "flags": [],
@@ -350,7 +350,7 @@ def _make_self_hosted_entry(name, domain, mx_raw):
 class TestDetectPotentialGateways:
     def test_detects_shared_mx_suffix(self):
         entries = [
-            _make_self_hosted_entry(f"Town{i}", f"town{i}.ch", ["mx.gateway.com"])
+            _make_independent_entry(f"Town{i}", f"town{i}.ch", ["mx.gateway.com"])
             for i in range(6)
         ]
         result = _detect_potential_gateways(entries)
@@ -360,7 +360,7 @@ class TestDetectPotentialGateways:
 
     def test_ignores_own_domain(self):
         entries = [
-            _make_self_hosted_entry(f"Town{i}", "shared.ch", ["mail.shared.ch"])
+            _make_independent_entry(f"Town{i}", "shared.ch", ["mail.shared.ch"])
             for i in range(6)
         ]
         result = _detect_potential_gateways(entries)
@@ -368,7 +368,7 @@ class TestDetectPotentialGateways:
 
     def test_ignores_known_gateways(self):
         entries = [
-            _make_self_hosted_entry(f"Town{i}", f"town{i}.ch", ["mx.seppmail.cloud"])
+            _make_independent_entry(f"Town{i}", f"town{i}.ch", ["mx.seppmail.cloud"])
             for i in range(6)
         ]
         result = _detect_potential_gateways(entries)
@@ -376,13 +376,13 @@ class TestDetectPotentialGateways:
 
     def test_below_threshold_not_flagged(self):
         entries = [
-            _make_self_hosted_entry(f"Town{i}", f"town{i}.ch", ["mx.gateway.com"])
+            _make_independent_entry(f"Town{i}", f"town{i}.ch", ["mx.gateway.com"])
             for i in range(4)
         ]
         result = _detect_potential_gateways(entries)
         assert len(result) == 0
 
-    def test_non_self_hosted_ignored(self):
+    def test_non_independent_ignored(self):
         entries = [
             {
                 "bfs": "0",
@@ -401,7 +401,7 @@ class TestDetectPotentialGateways:
 
     def test_returns_sample_names(self):
         entries = [
-            _make_self_hosted_entry(f"Town{i}", f"town{i}.ch", ["mx.gateway.com"])
+            _make_independent_entry(f"Town{i}", f"town{i}.ch", ["mx.gateway.com"])
             for i in range(7)
         ]
         result = _detect_potential_gateways(entries)
@@ -411,7 +411,7 @@ class TestDetectPotentialGateways:
 
     def test_print_report_shows_gateway_warning(self, capsys):
         entries = [
-            _make_self_hosted_entry(f"Town{i}", f"town{i}.ch", ["mx.newgw.com"])
+            _make_independent_entry(f"Town{i}", f"town{i}.ch", ["mx.newgw.com"])
             for i in range(6)
         ]
         print_report(entries)
