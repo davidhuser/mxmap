@@ -1,13 +1,13 @@
 {
-  "generated":"2026-03-10T19:28:27Z",
+  "generated":"2026-03-11T05:19:23Z",
   "total":2115,
   "counts":{
-    "aws":25,
+    "aws":26,
     "google":4,
     "infomaniak":120,
-    "microsoft":1107,
-    "self-hosted":605,
-    "swiss-isp":252,
+    "microsoft":1108,
+    "self-hosted":604,
+    "swiss-isp":251,
     "unknown":2
   },
   "municipalities":{
@@ -298,8 +298,9 @@
         "mx1.rufcloud.ch",
         "mx2.rufcloud.ch"
       ],
-      "spf":"",
+      "spf":"v=SPF1 mx a:webcms.ruf.ch include:spf.customer.swiss-egov.cloud -all",
       "provider":"swiss-isp",
+      "spf_resolved":"v=SPF1 mx a:webcms.ruf.ch include:spf.customer.swiss-egov.cloud -all v=spf1 mx a:mx1.rufcloud.ch a:mx2.rufcloud.ch ip4:46.140.160.21 ip4:46.140.160.22 ip4:195.141.2.24 ip4:89.28.153.224/29 -all",
       "mx_asns":[
         6730
       ],
@@ -854,6 +855,9 @@
       "spf":"v=spf1 include:smtprelay.dialogcloud.ch include:spf.protection.outlook.com include:spf1.egeko.ch -all ",
       "provider":"microsoft",
       "spf_resolved":"v=spf1 include:smtprelay.dialogcloud.ch include:spf.protection.outlook.com include:spf1.egeko.ch -all  v=spf1 ip4:78.40.79.211 -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all v=spf1 ip4:159.144.38.58 ip4:159.144.36.112 ip4:159.144.218.138 -all",
+      "mx_asns":[
+        8075
+      ],
       "autodiscover":{
         "autodiscover_cname":"autodiscover.outlook.com"
       }
@@ -1679,6 +1683,9 @@
       "spf":"v=spf1 mx include:_spf.abxsec.com include:spf.protection.outlook.com include:spf.umantis.com a:mail.hope.myshare.ch ~all",
       "provider":"microsoft",
       "spf_resolved":"v=spf1 mx include:_spf.abxsec.com include:spf.protection.outlook.com include:spf.umantis.com a:mail.hope.myshare.ch ~all v=spf1 ip4:193.246.95.96/27 ip6:2A02:C382:0:8007::/64 ip4:193.246.95.252 -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all v=spf1 ip4:185.238.12.20 ip4:185.238.12.21 ip4:185.238.12.22 ip4:93.190.78.23 ip4:93.190.78.24 ip4:46.252.80.34 ip4:46.252.80.35 ip4:46.252.80.36 ip4:149.233.27.164 ip4:149.233.27.165 ~all",
+      "mx_asns":[
+        8075
+      ],
       "autodiscover":{
         "autodiscover_cname":"autodiscover.outlook.com"
       }
@@ -1714,6 +1721,9 @@
       "spf":"v=spf1 include:spf.protection.outlook.com include:spf.protection.cyon.net include:_spf.abxsec.com -all",
       "provider":"microsoft",
       "spf_resolved":"v=spf1 include:spf.protection.outlook.com include:spf.protection.cyon.net include:_spf.abxsec.com -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all v=spf1 +ip4:194.126.200.0/24 +ip4:149.126.0.0/21 -all v=spf1 ip4:193.246.95.96/27 ip6:2A02:C382:0:8007::/64 ip4:193.246.95.252 -all",
+      "mx_asns":[
+        8075
+      ],
       "autodiscover":{
         "autodiscover_cname":"autodiscover.outlook.com"
       }
@@ -3874,13 +3884,13 @@
       ],
       "spf":"v=spf1 include:spf.protection.outlook.com -all",
       "provider":"microsoft",
-      "autodiscover":{
-        "autodiscover_cname":"autodiscover.outlook.com"
-      },
       "spf_resolved":"v=spf1 include:spf.protection.outlook.com -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all",
       "mx_asns":[
         8075
-      ]
+      ],
+      "autodiscover":{
+        "autodiscover_cname":"autodiscover.outlook.com"
+      }
     },
     "389":{
       "bfs":"389",
@@ -5837,6 +5847,9 @@
       "spf":"v=spf1 include:smtprelay.dialogcloud.ch include:spf.protection.outlook.com -all",
       "provider":"microsoft",
       "spf_resolved":"v=spf1 include:smtprelay.dialogcloud.ch include:spf.protection.outlook.com -all v=spf1 ip4:78.40.79.211 -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all",
+      "mx_asns":[
+        8075
+      ],
       "autodiscover":{
         "autodiscover_cname":"autodiscover.outlook.com"
       }
@@ -6145,7 +6158,10 @@
       "spf_resolved":"v=spf1 include:spf.protection.outlook.com -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all",
       "mx_asns":[
         8075
-      ]
+      ],
+      "autodiscover":{
+        "autodiscover_cname":"autodiscover.outlook.com"
+      }
     },
     "632":{
       "bfs":"632",
@@ -6176,8 +6192,9 @@
         "mailbackup.format-ag.ch",
         "mailbackup.tankred.ch"
       ],
-      "spf":"",
+      "spf":"v=spf1 a include:_spf.talus.ch ~all",
       "provider":"self-hosted",
+      "spf_resolved":"v=spf1 a include:_spf.talus.ch ~all v=spf1 ip4:194.56.218.0/24 ~all",
       "mx_asns":[
         202035
       ],
@@ -8611,7 +8628,10 @@
       "spf_resolved":"v=spf1 include:smtprelay.dialogcloud.ch include:spf.protection.outlook.com -all v=spf1 ip4:78.40.79.211 -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all",
       "mx_asns":[
         8075
-      ]
+      ],
+      "autodiscover":{
+        "autodiscover_cname":"autodiscover.outlook.com"
+      }
     },
     "957":{
       "bfs":"957",
@@ -9729,6 +9749,9 @@
       "spf":"v=spf1 ip4:194.56.218.181 ip4:194.56.218.131 ip4:37.128.180.154 ip4:195.48.205.132  include:spf.protection.outlook.com include:spf.abacuscity.ch -all",
       "provider":"microsoft",
       "spf_resolved":"v=spf1 ip4:194.56.218.181 ip4:194.56.218.131 ip4:37.128.180.154 ip4:195.48.205.132  include:spf.protection.outlook.com include:spf.abacuscity.ch -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all v=spf1 ip4:46.227.226.102 ip4:46.227.226.108 ip4:46.227.226.21 ip4:46.227.228.154 ip4:46.227.228.228 ip4:46.227.228.28 ip6:2a02:cd8:2ee3:e200::15 ip6:2a02:cd8:2ee3:e200::65 ip6:2a02:cd8:2ee3:e200::7b ip6:2a02:cd8:2ee3:e400::1c ip6:2a02:cd8:2ee3:e400::293 ip6:2a02:cd8:2ee3:e400::446 ip4:62.106.93.27 -all",
+      "mx_asns":[
+        8075
+      ],
       "autodiscover":{
         "autodiscover_cname":"autodiscover.outlook.com"
       }
@@ -9741,8 +9764,9 @@
       "mx":[
         "mail100.rizag.ch"
       ],
-      "spf":"",
+      "spf":"v=spf1 include:_spfmx.rizag.ch mx -all",
       "provider":"swiss-isp",
+      "spf_resolved":"v=spf1 include:_spfmx.rizag.ch mx -all v=spf1 ip4:46.140.146.20 ip4:46.140.146.21 ip4:46.140.146.22 ip4:46.140.146.68 ip4:62.2.255.205 -all",
       "mx_asns":[
         6730
       ]
@@ -10223,6 +10247,9 @@
       ],
       "spf":"v=spf1 mx -all",
       "provider":"self-hosted",
+      "mx_asns":[
+        33965
+      ],
       "autodiscover":{
         "autodiscover_srv":"mail.gict.ch"
       }
@@ -10864,6 +10891,9 @@
       "spf":"v=spf1 a mx a:mail.ostendis.ch ip4:82.136.86.149 ip4:193.135.56.6 include:spf.protection.outlook.com include:spf.sz.ch -all",
       "provider":"microsoft",
       "spf_resolved":"v=spf1 a mx a:mail.ostendis.ch ip4:82.136.86.149 ip4:193.135.56.6 include:spf.protection.outlook.com include:spf.sz.ch -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all v=spf1 include:spf.privasphere.com ip4:193.247.107.56 ip4:193.247.111.57 ~all v=spf1 ip4:185.166.96.0/24 ip4:185.166.99.0/24 ip4:83.150.3.96/27 ip4:83.150.37.32/27 ip4:212.25.12.128/27 ip4:212.25.12.192/28 include:spf.iway.ch -all v=spf1 ip4:212.25.0.0/19 ip4:194.246.118.0/23 ip4:83.150.31.160/28 ip4:83.150.63.0/24 ip4:83.150.52.0/24 ip4:95.143.53.48/28 ip4:80.89.210.64/28 ip6:2001:8e0::/32 ip4:185.168.143.0/27 ~all",
+      "mx_asns":[
+        8075
+      ],
       "autodiscover":{
         "autodiscover_cname":"autodiscover.outlook.com"
       }
@@ -11908,6 +11938,9 @@
       "spf":"v=spf1 include:spf.protection.outlook.com ip4:212.71.120.144/28 -all",
       "provider":"microsoft",
       "spf_resolved":"v=spf1 include:spf.protection.outlook.com ip4:212.71.120.144/28 -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all",
+      "mx_asns":[
+        8075
+      ],
       "autodiscover":{
         "autodiscover_cname":"autodiscover.outlook.com"
       }
@@ -11986,19 +12019,17 @@
       "bfs":"2041",
       "name":"Saint-Aubin",
       "canton":"",
-      "domain":"saint-aubin.ch",
+      "domain":"st-aubin.ch",
       "mx":[
-        "mailfilter.evok.ch"
+        "mx1.spamvor.com",
+        "mx2.spamvor.com"
       ],
-      "spf":"v=spf1 a mx include:evok.ch include:_spf.ch-dns.net ip4:212.71.120.144/28 -all",
+      "spf":"",
       "provider":"self-hosted",
-      "spf_resolved":"v=spf1 a mx include:evok.ch include:_spf.ch-dns.net ip4:212.71.120.144/28 -all v=spf1 ip4:193.33.30.0/23 ip4:185.122.236.0/22 -all v=spf1 ip4:46.231.200.0/21 ip4:80.74.128.0/19 ip4:94.126.16.0/21 ip4:185.46.56.0/22 ip6:2a00:1128::/32 -all",
+      "gateway":"spamvor",
       "mx_asns":[
-        203882
-      ],
-      "autodiscover":{
-        "autodiscover_srv":"exchange.evok.ch"
-      }
+        29222
+      ]
     },
     "2043":{
       "bfs":"2043",
@@ -12429,6 +12460,9 @@
       "spf":"v=spf1 include:spf.protection.outlook.com include:_spf.ch-dns.net -all",
       "provider":"microsoft",
       "spf_resolved":"v=spf1 include:spf.protection.outlook.com include:_spf.ch-dns.net -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all v=spf1 ip4:46.231.200.0/21 ip4:80.74.128.0/19 ip4:94.126.16.0/21 ip4:185.46.56.0/22 ip6:2a00:1128::/32 -all",
+      "mx_asns":[
+        8075
+      ],
       "autodiscover":{
         "autodiscover_cname":"autodiscover.outlook.com"
       }
@@ -12480,6 +12514,9 @@
       "spf":"v=spf1 include:spf.protection.outlook.com include:ti-informatique.com -all",
       "provider":"microsoft",
       "spf_resolved":"v=spf1 include:spf.protection.outlook.com include:ti-informatique.com -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all v=spf1 mx a -all",
+      "mx_asns":[
+        8075
+      ],
       "autodiscover":{
         "autodiscover_cname":"autodiscover.outlook.com"
       }
@@ -12513,6 +12550,9 @@
       "spf":"v=spf1 include:spf.protection.outlook.com include:spf.infomaniak.ch ip4:212.71.120.144/28 -all",
       "provider":"microsoft",
       "spf_resolved":"v=spf1 include:spf.protection.outlook.com include:spf.infomaniak.ch ip4:212.71.120.144/28 -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all v=spf1 ip4:45.157.188.8/29 ip4:185.125.25.8/29 ip4:83.166.143.168/29 ip4:84.16.66.168/29 ip4:128.65.197.100 ip4:128.65.197.101 ip6:2001:1600:4:17::/64 ip6:2001:1600:7:10::/64 ip6:2001:1600:4:2d::c565 ip6:2001:1600:7:10::c564 ip4:185.125.25.16/29 ip4:45.157.188.16/29 ip4:84.16.66.176/29 ip4:83.166.143.176/29 ip6:2001:1600:19::/48 ip4:84.16.69.64/31 ip4:128.65.197.2/31 include:newsletter.infomaniak.com -all v=spf1 include:amazonses.com ?all v=spf1 ip4:199.255.192.0/22 ip4:199.127.232.0/22 ip4:54.240.0.0/18 ip4:69.169.224.0/20 ip4:23.249.208.0/20 ip4:23.251.224.0/19 ip4:76.223.176.0/20 ip4:54.240.64.0/18 ip4:76.223.128.0/19 ip4:216.221.160.0/19 ip4:206.55.144.0/20 ip4:24.110.64.0/18 -all",
+      "mx_asns":[
+        8075
+      ],
       "autodiscover":{
         "autodiscover_cname":"autodiscover.outlook.com"
       }
@@ -13418,13 +13458,13 @@
       ],
       "spf":"v=spf1 include:spf.protection.outlook.com -all",
       "provider":"microsoft",
-      "autodiscover":{
-        "autodiscover_cname":"autodiscover.outlook.com"
-      },
       "spf_resolved":"v=spf1 include:spf.protection.outlook.com -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all",
       "mx_asns":[
         8075
-      ]
+      ],
+      "autodiscover":{
+        "autodiscover_cname":"autodiscover.outlook.com"
+      }
     },
     "2261":{
       "bfs":"2261",
@@ -13550,6 +13590,9 @@
       "spf":"v=spf1 include:smtprelay.dialogcloud.ch include:spf.protection.outlook.com -all",
       "provider":"microsoft",
       "spf_resolved":"v=spf1 include:smtprelay.dialogcloud.ch include:spf.protection.outlook.com -all v=spf1 ip4:78.40.79.211 -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all",
+      "mx_asns":[
+        8075
+      ],
       "autodiscover":{
         "autodiscover_cname":"autodiscover.outlook.com"
       }
@@ -15152,8 +15195,9 @@
       "mx":[
         "dreihoefe-ch.mail.protection.outlook.com"
       ],
-      "spf":"",
+      "spf":"v=spf1 include:spf.protection.outlook.com include:_spf.sui-inter.net +mx +a ~all",
       "provider":"microsoft",
+      "spf_resolved":"v=spf1 include:spf.protection.outlook.com include:_spf.sui-inter.net +mx +a ~all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all v=spf1 ip4:46.231.200.0/21 ip4:80.74.128.0/19 ip4:94.126.16.0/21 ip4:185.46.56.0/22 ip4:81.173.80.0/20 ip4:81.173.83.179/32 ip4:81.173.83.181/32 ip4:81.173.83.182/32 ip4:81.173.83.183/32 ip4:81.173.83.184/32 ip4:81.173.83.185/32 ip6:2a00:1128::/32 -all",
       "mx_asns":[
         8075
       ],
@@ -15853,6 +15897,9 @@
       "spf":"v=spf1 include:spf.protection.outlook.com include:_spf.i-web.ch -all",
       "provider":"microsoft",
       "spf_resolved":"v=spf1 include:spf.protection.outlook.com include:_spf.i-web.ch -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all v=spf1 ip4:195.65.10.12 ip4:195.65.10.14 -all",
+      "mx_asns":[
+        8075
+      ],
       "autodiscover":{
         "autodiscover_cname":"autodiscover.outlook.com"
       }
@@ -15921,13 +15968,13 @@
       ],
       "spf":"v=spf1 include:spf.protection.outlook.com -all",
       "provider":"microsoft",
-      "autodiscover":{
-        "autodiscover_cname":"autodiscover.outlook.com"
-      },
       "spf_resolved":"v=spf1 include:spf.protection.outlook.com -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all",
       "mx_asns":[
         8075
-      ]
+      ],
+      "autodiscover":{
+        "autodiscover_cname":"autodiscover.outlook.com"
+      }
     },
     "2622":{
       "bfs":"2622",
@@ -16579,7 +16626,13 @@
       ],
       "spf":"v=spf1 include:spf.protection.outlook.com include:communication.backslash.ch +a:psm.knowbe4.com +a:de.knowbe4.com +A -all",
       "provider":"microsoft",
-      "spf_resolved":"v=spf1 include:spf.protection.outlook.com include:communication.backslash.ch +a:psm.knowbe4.com +a:de.knowbe4.com +A -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all v=spf1 a -all"
+      "spf_resolved":"v=spf1 include:spf.protection.outlook.com include:communication.backslash.ch +a:psm.knowbe4.com +a:de.knowbe4.com +A -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all v=spf1 a -all",
+      "mx_asns":[
+        8075
+      ],
+      "autodiscover":{
+        "autodiscover_cname":"autodiscover.outlook.com"
+      }
     },
     "2825":{
       "bfs":"2825",
@@ -16896,7 +16949,7 @@
       ],
       "spf":"v=spf1 include:_mailspf.imp.ch include:spf1.egeko.ch -all",
       "provider":"self-hosted",
-      "spf_resolved":"v=spf1 include:_mailspf.imp.ch include:spf1.egeko.ch -all v=spf1 ip4:159.144.38.58 ip4:159.144.36.112 ip4:159.144.218.138 -all",
+      "spf_resolved":"v=spf1 include:_mailspf.imp.ch include:spf1.egeko.ch -all v=spf1 ip6:2001:4060:1:1001::/64 ip4:157.161.12.0/22 v=spf1 ip4:159.144.38.58 ip4:159.144.36.112 ip4:159.144.218.138 -all",
       "mx_asns":[
         6772
       ]
@@ -16943,19 +16996,18 @@
       "bfs":"2851",
       "name":"Kilchberg",
       "canton":"",
-      "domain":"kilchberg.ch",
+      "domain":"kilchberg-bl.ch",
       "mx":[
-        "mx1.naveum.services",
-        "mx2.naveum.services"
+        "inbound-smtp.eu-west-1.amazonaws.com"
       ],
-      "spf":"v=spf1 mx a:mx1.naveum.services a:mx2.naveum.services a:mail01.axc.biz ip4:193.135.56.6 include:spf.abacuscity.ch include:spf.axc-cms.biz -all",
-      "provider":"self-hosted",
-      "spf_resolved":"v=spf1 mx a:mx1.naveum.services a:mx2.naveum.services a:mail01.axc.biz ip4:193.135.56.6 include:spf.abacuscity.ch include:spf.axc-cms.biz -all v=spf1 ip4:46.227.226.102 ip4:46.227.226.108 ip4:46.227.226.21 ip4:46.227.228.154 ip4:46.227.228.228 ip4:46.227.228.28 ip6:2a02:cd8:2ee3:e200::15 ip6:2a02:cd8:2ee3:e200::65 ip6:2a02:cd8:2ee3:e200::7b ip6:2a02:cd8:2ee3:e400::1c ip6:2a02:cd8:2ee3:e400::293 ip6:2a02:cd8:2ee3:e400::446 ip4:62.106.93.27 -all v=spf1 ip4:185.169.85.128/28 ip6:2a04:503:0:1028::/64 -all",
+      "spf":"v=spf1 mx a ip4:195.48.58.75 include:rzmail.hi-ag.ch -all",
+      "provider":"aws",
+      "spf_resolved":"v=spf1 mx a ip4:195.48.58.75 include:rzmail.hi-ag.ch -all v=spf1 ip4:195.48.58.75 -all",
       "mx_asns":[
-        205737
+        16509
       ],
       "autodiscover":{
-        "autodiscover_cname":"mail01.axc.biz"
+        "autodiscover_srv":"rzowa.hi-ag.ch"
       }
     },
     "2852":{
@@ -18386,7 +18438,7 @@
         "mg04.newday.ch",
         "mg05.newday.ch"
       ],
-      "spf":"",
+      "spf":"v=spf1 a a:mg02.newday.ch -all",
       "provider":"swiss-isp",
       "mx_asns":[
         15576
@@ -20619,14 +20671,14 @@
       ],
       "spf":"v=spf1 include:spf.protection.outlook.com -all",
       "provider":"microsoft",
-      "autodiscover":{
-        "autodiscover_cname":"autodiscover.outlook.com",
-        "autodiscover_srv":"mailadmin.exigo.ch"
-      },
       "spf_resolved":"v=spf1 include:spf.protection.outlook.com -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all",
       "mx_asns":[
         8075
-      ]
+      ],
+      "autodiscover":{
+        "autodiscover_cname":"autodiscover.outlook.com",
+        "autodiscover_srv":"mailadmin.exigo.ch"
+      }
     },
     "3731":{
       "bfs":"3731",
@@ -21104,13 +21156,13 @@
       ],
       "spf":"v=spf1 ip4:193.93.20.0/26 include:spf.protection.outlook.com -all",
       "provider":"microsoft",
-      "autodiscover":{
-        "autodiscover_cname":"autodiscover.outlook.com"
-      },
       "spf_resolved":"v=spf1 ip4:193.93.20.0/26 include:spf.protection.outlook.com -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all",
       "mx_asns":[
         8075
-      ]
+      ],
+      "autodiscover":{
+        "autodiscover_cname":"autodiscover.outlook.com"
+      }
     },
     "3831":{
       "bfs":"3831",
@@ -21764,7 +21816,10 @@
       ],
       "spf":"v=spf1 mx ip4:46.140.129.105 ip4:46.140.129.106 ip4:193.135.56.0/23 include:_spf.zimpel.de include:spf.abacuscity.ch include:spf.protection.outlook.com -all",
       "provider":"microsoft",
-      "spf_resolved":"v=spf1 mx ip4:46.140.129.105 ip4:46.140.129.106 ip4:193.135.56.0/23 include:_spf.zimpel.de include:spf.abacuscity.ch include:spf.protection.outlook.com -all v=spf1 ip4:193.201.168.38/32 ip4:193.201.168.170/31 v=spf1 ip4:46.227.226.102 ip4:46.227.226.108 ip4:46.227.226.21 ip4:46.227.228.154 ip4:46.227.228.228 ip4:46.227.228.28 ip6:2a02:cd8:2ee3:e200::15 ip6:2a02:cd8:2ee3:e200::65 ip6:2a02:cd8:2ee3:e200::7b ip6:2a02:cd8:2ee3:e400::1c ip6:2a02:cd8:2ee3:e400::293 ip6:2a02:cd8:2ee3:e400::446 ip4:62.106.93.27 -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all"
+      "spf_resolved":"v=spf1 mx ip4:46.140.129.105 ip4:46.140.129.106 ip4:193.135.56.0/23 include:_spf.zimpel.de include:spf.abacuscity.ch include:spf.protection.outlook.com -all v=spf1 ip4:193.201.168.38/32 ip4:193.201.168.170/31 v=spf1 ip4:46.227.226.102 ip4:46.227.226.108 ip4:46.227.226.21 ip4:46.227.228.154 ip4:46.227.228.228 ip4:46.227.228.28 ip6:2a02:cd8:2ee3:e200::15 ip6:2a02:cd8:2ee3:e200::65 ip6:2a02:cd8:2ee3:e200::7b ip6:2a02:cd8:2ee3:e400::1c ip6:2a02:cd8:2ee3:e400::293 ip6:2a02:cd8:2ee3:e400::446 ip4:62.106.93.27 -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all",
+      "mx_asns":[
+        8075
+      ]
     },
     "4002":{
       "bfs":"4002",
@@ -22464,6 +22519,9 @@
       "spf":"v=spf1 ip4:83.144.243.114 include:_spf.i-web.ch include:spf.protection.outlook.com -all",
       "provider":"microsoft",
       "spf_resolved":"v=spf1 ip4:83.144.243.114 include:_spf.i-web.ch include:spf.protection.outlook.com -all v=spf1 ip4:195.65.10.12 ip4:195.65.10.14 -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all",
+      "mx_asns":[
+        8075
+      ],
       "autodiscover":{
         "autodiscover_cname":"autodiscover.outlook.com"
       }
@@ -22479,6 +22537,9 @@
       "spf":"v=spf1 mx a include:rzmail.hi-ag.ch include:spf.protection.outlook.com -all",
       "provider":"microsoft",
       "spf_resolved":"v=spf1 mx a include:rzmail.hi-ag.ch include:spf.protection.outlook.com -all v=spf1 ip4:195.48.58.75 -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all",
+      "mx_asns":[
+        8075
+      ],
       "autodiscover":{
         "autodiscover_cname":"autodiscover.outlook.com"
       }
@@ -23036,7 +23097,13 @@
       ],
       "spf":"v=spf1 mx a include:rzmail.hi-ag.ch include:spf.protection.outlook.com -all",
       "provider":"microsoft",
-      "spf_resolved":"v=spf1 mx a include:rzmail.hi-ag.ch include:spf.protection.outlook.com -all v=spf1 ip4:195.48.58.75 -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all"
+      "spf_resolved":"v=spf1 mx a include:rzmail.hi-ag.ch include:spf.protection.outlook.com -all v=spf1 ip4:195.48.58.75 -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all",
+      "mx_asns":[
+        8075
+      ],
+      "autodiscover":{
+        "autodiscover_cname":"autodiscover.outlook.com"
+      }
     },
     "4117":{
       "bfs":"4117",
@@ -23078,18 +23145,18 @@
       "bfs":"4121",
       "name":"Villigen",
       "canton":"",
-      "domain":"gemeinde-villigen.ch",
+      "domain":"villigen.ch",
       "mx":[
-        "mx1.rufcloud.ch",
-        "mx2.rufcloud.ch"
+        "villigen-ch.mail.protection.outlook.com"
       ],
-      "spf":"v=spf1 mx a:mail.asp.ruf.ch a:mta1.asp.ruf.ch a:mta2.asp.ruf.ch a:mx1.rufcloud.ch a:mx2.rufcloud.ch -all",
-      "provider":"swiss-isp",
+      "spf":"v=spf1 a mx include:spf.protection.outlook.com include:_spf.sui-inter.net include:egeko.ch -all",
+      "provider":"microsoft",
+      "spf_resolved":"v=spf1 a mx include:spf.protection.outlook.com include:_spf.sui-inter.net include:egeko.ch -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all v=spf1 ip4:46.231.200.0/21 ip4:80.74.128.0/19 ip4:94.126.16.0/21 ip4:185.46.56.0/22 ip4:81.173.80.0/20 ip4:81.173.83.179/32 ip4:81.173.83.181/32 ip4:81.173.83.182/32 ip4:81.173.83.183/32 ip4:81.173.83.184/32 ip4:81.173.83.185/32 ip6:2a00:1128::/32 -all v=spf1 include:spf1.egeko.ch include:spfhelik.ategra.ch include:spf.privasphere.com mx -all v=spf1 ip4:159.144.38.58 ip4:159.144.36.112 ip4:159.144.218.138 -all v=spf1 ip4:49.13.159.203 ip4:80.254.182.95 -all v=spf1 ip4:185.166.96.0/24 ip4:185.166.99.0/24 ip4:83.150.3.96/27 ip4:83.150.37.32/27 ip4:212.25.12.128/27 ip4:212.25.12.192/28 include:spf.iway.ch -all v=spf1 ip4:212.25.0.0/19 ip4:194.246.118.0/23 ip4:83.150.31.160/28 ip4:83.150.63.0/24 ip4:83.150.52.0/24 ip4:95.143.53.48/28 ip4:80.89.210.64/28 ip6:2001:8e0::/32 ip4:185.168.143.0/27 ~all",
       "mx_asns":[
-        6730
+        8075
       ],
       "autodiscover":{
-        "autodiscover_srv":"owa.asp.ruf.ch"
+        "autodiscover_cname":"autodiscover.outlook.com"
       }
     },
     "4123":{
@@ -24175,6 +24242,9 @@
       "spf":"v=spf1 include:spf.protection.outlook.com include:spf1.egeko.ch -all",
       "provider":"microsoft",
       "spf_resolved":"v=spf1 include:spf.protection.outlook.com include:spf1.egeko.ch -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all v=spf1 ip4:159.144.38.58 ip4:159.144.36.112 ip4:159.144.218.138 -all",
+      "mx_asns":[
+        8075
+      ],
       "autodiscover":{
         "autodiscover_cname":"autodiscover.outlook.com"
       }
@@ -26463,12 +26533,12 @@
       ],
       "spf":"v=spf1 mx ip4:193.135.56.6 -all",
       "provider":"swiss-isp",
-      "autodiscover":{
-        "autodiscover_cname":"autodiscoverknd.tg.ch"
-      },
       "mx_asns":[
         3303
-      ]
+      ],
+      "autodiscover":{
+        "autodiscover_cname":"autodiscoverknd.tg.ch"
+      }
     },
     "4816":{
       "bfs":"4816",
@@ -27676,7 +27746,7 @@
       ],
       "spf":"v=spf1 include:spf.protection.outlook.com include:cryms.com ip4:178.23.174.0/27 ip4:89.207.237.84 -all",
       "provider":"microsoft",
-      "spf_resolved":"v=spf1 include:spf.protection.outlook.com include:cryms.com ip4:178.23.174.0/27 ip4:89.207.237.84 -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all v=spf1 +ip4:185.181.207.136 +ip4:91.121.50.245 +ip4:149.202.24.251 +ip4:149.202.90.195 +ip4:91.121.63.178 +ip4:178.32.139.74 +ip4:94.130.69.119 +ip6:2a01:4f8:10b:32d3::3 +ip6:2001:41d0:1004:ac3::1  include:spf.protection.outlook.com include:143889994.spf04.hubspotemail.net include:sendgrid.net -all v=spf1 ip4:3.93.157.0/24 ip4:3.210.190.0/24 ip4:18.208.124.128/25 ip4:54.174.52.0/24 ip4:54.174.57.0/24 ip4:54.174.59.0/24 ip4:54.174.60.0/23 ip4:54.174.63.0/24 ip4:108.179.144.0/20 ip4:139.180.17.0/24 ip4:141.193.184.32/27 ip4:141.193.184.64/26 ip4:141.193.184.128/25 ip4:141.193.185.32/27 ip4:141.193.185.64/26 ip4:141.193.185.128/25 ip4:143.244.80.0/20 ip4:158.247.16.0/20 ip4:216.139.64.0/19 -all v=spf1 ip4:167.89.0.0/17 ip4:208.117.48.0/20 ip4:50.31.32.0/19 ip4:198.37.144.0/20 ip4:198.21.0.0/21 ip4:192.254.112.0/20 ip4:168.245.0.0/17 ip4:149.72.0.0/16 ip4:159.183.0.0/16 ip4:134.128.64.0/19 ip4:134.128.96.0/19 include:ab.sendgrid.net ~all v=spf1 ip4:223.165.113.0/24 ip4:223.165.115.0/24 ip4:223.165.118.0/23 ip4:223.165.120.0/23 ~all",
+      "spf_resolved":"v=spf1 include:spf.protection.outlook.com include:cryms.com ip4:178.23.174.0/27 ip4:89.207.237.84 -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all v=spf1 +ip4:185.181.207.136 +ip4:91.121.50.245 +ip4:149.202.24.251 +ip4:149.202.90.195 +ip4:91.121.63.178 +ip4:178.32.139.74 +ip4:94.130.69.119 +ip6:2a01:4f8:10b:32d3::3 +ip6:2001:41d0:1004:ac3::1 +ip4:185.181.207.136 include:spf.protection.outlook.com include:143889994.spf04.hubspotemail.net include:sendgrid.net -all v=spf1 ip4:3.93.157.0/24 ip4:3.210.190.0/24 ip4:18.208.124.128/25 ip4:54.174.52.0/24 ip4:54.174.57.0/24 ip4:54.174.59.0/24 ip4:54.174.60.0/23 ip4:54.174.63.0/24 ip4:108.179.144.0/20 ip4:139.180.17.0/24 ip4:141.193.184.32/27 ip4:141.193.184.64/26 ip4:141.193.184.128/25 ip4:141.193.185.32/27 ip4:141.193.185.64/26 ip4:141.193.185.128/25 ip4:143.244.80.0/20 ip4:158.247.16.0/20 ip4:216.139.64.0/19 -all v=spf1 ip4:167.89.0.0/17 ip4:208.117.48.0/20 ip4:50.31.32.0/19 ip4:198.37.144.0/20 ip4:198.21.0.0/21 ip4:192.254.112.0/20 ip4:168.245.0.0/17 ip4:149.72.0.0/16 ip4:159.183.0.0/16 ip4:134.128.64.0/19 ip4:134.128.96.0/19 include:ab.sendgrid.net ~all v=spf1 ip4:223.165.113.0/24 ip4:223.165.115.0/24 ip4:223.165.118.0/23 ip4:223.165.120.0/23 ~all",
       "mx_asns":[
         196810
       ],
@@ -29133,20 +29203,15 @@
       "bfs":"5471",
       "name":"Bettens",
       "canton":"",
-      "domain":"bluewin.ch",
+      "domain":"bettens.ch",
       "mx":[
-        "mx01.p.bluenet.ch",
-        "mx02.p.bluenet.ch"
+        "marot.bettens.ch"
       ],
-      "spf":"v=spf1 redirect=_spf.bluewin.ch",
+      "spf":"",
       "provider":"self-hosted",
-      "spf_resolved":"v=spf1 redirect=_spf.bluewin.ch v=spf1 ip4:193.247.246.0/24 ip4:138.188.174.0/24 ip4:138.188.175.0/24 ~all",
       "mx_asns":[
-        16509
-      ],
-      "autodiscover":{
-        "autodiscover_cname":"client-configurator.scapp.swisscom.com"
-      }
+        29222
+      ]
     },
     "5472":{
       "bfs":"5472",
@@ -29634,7 +29699,10 @@
       "spf_resolved":"v=spf1 include:spf.infomaniak.ch include:spf.protection.outlook.com -all v=spf1 ip4:45.157.188.8/29 ip4:185.125.25.8/29 ip4:83.166.143.168/29 ip4:84.16.66.168/29 ip4:128.65.197.100 ip4:128.65.197.101 ip6:2001:1600:4:17::/64 ip6:2001:1600:7:10::/64 ip6:2001:1600:4:2d::c565 ip6:2001:1600:7:10::c564 ip4:185.125.25.16/29 ip4:45.157.188.16/29 ip4:84.16.66.176/29 ip4:83.166.143.176/29 ip6:2001:1600:19::/48 ip4:84.16.69.64/31 ip4:128.65.197.2/31 include:newsletter.infomaniak.com -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all v=spf1 include:amazonses.com ?all v=spf1 ip4:199.255.192.0/22 ip4:199.127.232.0/22 ip4:54.240.0.0/18 ip4:69.169.224.0/20 ip4:23.249.208.0/20 ip4:23.251.224.0/19 ip4:76.223.176.0/20 ip4:54.240.64.0/18 ip4:76.223.128.0/19 ip4:216.221.160.0/19 ip4:206.55.144.0/20 ip4:24.110.64.0/18 -all",
       "mx_asns":[
         8075
-      ]
+      ],
+      "autodiscover":{
+        "autodiscover_cname":"autodiscover.outlook.com"
+      }
     },
     "5511":{
       "bfs":"5511",
@@ -29741,8 +29809,7 @@
       "provider":"self-hosted",
       "spf_resolved":"v=spf1 include:spf1.ne.ch include:spf.mtaroutes.com include:spf.ganesh-hosting.ch ip4:185.214.154.116 -all v=spf1 ip4:148.196.30.0/24 -all v=spf1 include:spf.antispamcloud.com -all v=spf1 ip4:193.34.136.0/23 ip4:185.54.4.0/23 ip4:185.54.6.0/24 ip4:98.80.189.20 ip4:99.81.216.78 ip4:34.249.190.60 ip4:108.128.137.108 -all v=spf1 ip4:130.117.251.9 ip4:130.117.251.10 ip6:2001:978:2:6::20:10 ip6:2001:978:2:6::20:a ip4:94.75.244.176/27 ip4:94.75.192.139/27 ip4:95.211.2.195/26 ip4:95.211.2.198/26 ip4:95.211.2.199/26 ip4:95.211.2.201/26 ip4:95.211.2.202/26 ip4:95.211.2.204/26 ip4:94.75.244.183/27 ip4:94.75.244.184/27 ip6:2001:1af8:4400:a047:6::1 ip4:37.58.58.55/27 ip4:199.115.117.7/27 ip4:199.115.117.10/27 ip4:199.115.117.11/27 ip6:2604:9a00:2010:a024:21::1 ip4:185.201.16.0/22 ip4:192.69.18.0/24 ip4:208.70.90.0/24 ip4:45.91.121.0/24 ip4:45.93.148.0/24 ip4:45.131.180.0/24 ip4:45.140.132.0/24 ip4:193.41.32.0/24 ip4:185.225.27.0/24 ip4:80.91.219.0/24 ip4:188.190.113.0/24 ip4:45.147.95.0/24 ip4:46.229.240.0/24 ip4:87.236.163.0/24 ip4:188.190.112.0/24 ip4:192.69.19.0/24 ip4:208.70.91.0/24 ip4:185.209.51.0/24 ip4:185.218.226.0/24 -all",
       "mx_asns":[
-        16633,
-        43054
+        16633
       ],
       "autodiscover":{
         "autodiscover_cname":"owa.echallens.ch"
@@ -30742,6 +30809,9 @@
       "spf":"v=spf1 include:spf.protection.outlook.com include:spf-de.emailsignatures365.com ip4:212.71.120.144/28 ip4:185.25.192.92/32 -all",
       "provider":"microsoft",
       "spf_resolved":"v=spf1 include:spf.protection.outlook.com include:spf-de.emailsignatures365.com ip4:212.71.120.144/28 ip4:185.25.192.92/32 -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all v=spf1 ip4:20.79.220.33 ip4:20.79.222.204 ip4:13.94.95.171 ip4:137.116.240.241 -all",
+      "mx_asns":[
+        8075
+      ],
       "autodiscover":{
         "autodiscover_cname":"autodiscover.outlook.com"
       }
@@ -32462,7 +32532,10 @@
       "spf_resolved":"v=spf1 include:spf.protection.outlook.com -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all",
       "mx_asns":[
         8075
-      ]
+      ],
+      "autodiscover":{
+        "autodiscover_cname":"autodiscover.outlook.com"
+      }
     },
     "5766":{
       "bfs":"5766",
@@ -32477,7 +32550,10 @@
       "spf_resolved":"v=spf1 include:spf.protection.outlook.com -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all",
       "mx_asns":[
         8075
-      ]
+      ],
+      "autodiscover":{
+        "autodiscover_cname":"autodiscover.outlook.com"
+      }
     },
     "5785":{
       "bfs":"5785",
@@ -33291,6 +33367,9 @@
       "spf":"v=spf1 include:spf1.ne.ch ip4:185.54.6.105 include:spf.infomaniak.com include:spf.protection.outlook.com include:spf.villedevevey.ch -all",
       "provider":"microsoft",
       "spf_resolved":"v=spf1 include:spf1.ne.ch ip4:185.54.6.105 include:spf.infomaniak.com include:spf.protection.outlook.com include:spf.villedevevey.ch -all v=spf1 ip4:148.196.30.0/24 -all v=spf1 ip4:84.16.68.96 ip4:84.16.68.94 include:relay.mail.infomaniak.ch include:app.mail.infomaniak.ch include:newsletter.infomaniak.com -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all v=spf1 ip4:145.232.236.148 -all v=spf1 ip4:45.157.188.8/29 ip4:185.125.25.8/29 ip4:83.166.143.168/29 ip4:84.16.66.168/29 ip4:128.65.197.100 ip4:128.65.197.101 ip6:2001:1600:4:17::/64 ip6:2001:1600:7:10::/64 ip6:2001:1600:4:2d::c565 ip6:2001:1600:7:10::c564 ip4:128.65.197.2/31 ip4:84.16.69.64/31 ip6:2001:1600:19::/48 -all v=spf1 ip4:185.125.25.16/29 ip4:45.157.188.16/29 ip4:84.16.66.176/29 ip4:83.166.143.176/29 ip6:2001:1600:4:17::/64 ip6:2001:1600:7:10::/64 ip6:2001:1600:19::/48 -all v=spf1 include:amazonses.com ?all v=spf1 ip4:199.255.192.0/22 ip4:199.127.232.0/22 ip4:54.240.0.0/18 ip4:69.169.224.0/20 ip4:23.249.208.0/20 ip4:23.251.224.0/19 ip4:76.223.176.0/20 ip4:54.240.64.0/18 ip4:76.223.128.0/19 ip4:216.221.160.0/19 ip4:206.55.144.0/20 ip4:24.110.64.0/18 -all",
+      "mx_asns":[
+        8075
+      ],
       "autodiscover":{
         "autodiscover_cname":"email.vevey.ch"
       }
@@ -33936,6 +34015,9 @@
       "spf":"v=spf1 include:spf.protection.outlook.com -all",
       "provider":"microsoft",
       "spf_resolved":"v=spf1 include:spf.protection.outlook.com -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all",
+      "mx_asns":[
+        8075
+      ],
       "autodiscover":{
         "autodiscover_cname":"autodiscover.outlook.com"
       }
@@ -34576,7 +34658,10 @@
       "spf_resolved":"v=spf1 include:spf.protection.outlook.com -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all",
       "mx_asns":[
         8075
-      ]
+      ],
+      "autodiscover":{
+        "autodiscover_cname":"autodiscover.outlook.com"
+      }
     },
     "6117":{
       "bfs":"6117",
@@ -34640,8 +34725,9 @@
       "mx":[
         "bovernier-ch.mail.protection.outlook.com"
       ],
-      "spf":"",
+      "spf":"v=spf1 include:spf.protection.outlook.com include:spf.infomaniak.ch include:ti-informatique.com -all",
       "provider":"microsoft",
+      "spf_resolved":"v=spf1 include:spf.protection.outlook.com include:spf.infomaniak.ch include:ti-informatique.com -all v=spf1 ip4:40.92.0.0/15 ip4:40.107.0.0/16 ip4:52.100.0.0/15 ip4:52.102.0.0/16 ip4:52.103.0.0/17 ip4:104.47.0.0/17 ip6:2a01:111:f400::/48 ip6:2a01:111:f403::/49 ip6:2a01:111:f403:8000::/51 ip6:2a01:111:f403:c000::/51 ip6:2a01:111:f403:f000::/52 -all v=spf1 ip4:45.157.188.8/29 ip4:185.125.25.8/29 ip4:83.166.143.168/29 ip4:84.16.66.168/29 ip4:128.65.197.100 ip4:128.65.197.101 ip6:2001:1600:4:17::/64 ip6:2001:1600:7:10::/64 ip6:2001:1600:4:2d::c565 ip6:2001:1600:7:10::c564 ip4:185.125.25.16/29 ip4:45.157.188.16/29 ip4:84.16.66.176/29 ip4:83.166.143.176/29 ip6:2001:1600:19::/48 ip4:84.16.69.64/31 ip4:128.65.197.2/31 include:newsletter.infomaniak.com -all v=spf1 mx a -all v=spf1 include:amazonses.com ?all v=spf1 ip4:199.255.192.0/22 ip4:199.127.232.0/22 ip4:54.240.0.0/18 ip4:69.169.224.0/20 ip4:23.249.208.0/20 ip4:23.251.224.0/19 ip4:76.223.176.0/20 ip4:54.240.64.0/18 ip4:76.223.128.0/19 ip4:216.221.160.0/19 ip4:206.55.144.0/20 ip4:24.110.64.0/18 -all",
       "mx_asns":[
         8075
       ],
@@ -36132,8 +36218,7 @@
       "provider":"self-hosted",
       "spf_resolved":"v=spf1 include:spf.antispamcloud.com ip4:217.196.176.0/20 a mx ~all v=spf1 ip4:130.117.251.9 ip4:130.117.251.10 ip6:2001:978:2:6::20:10 ip6:2001:978:2:6::20:a ip4:94.75.244.176/27 ip4:94.75.192.139/27 ip4:95.211.2.195/26 ip4:95.211.2.198/26 ip4:95.211.2.199/26 ip4:95.211.2.201/26 ip4:95.211.2.202/26 ip4:95.211.2.204/26 ip4:94.75.244.183/27 ip4:94.75.244.184/27 ip6:2001:1af8:4400:a047:6::1 ip4:37.58.58.55/27 ip4:199.115.117.7/27 ip4:199.115.117.10/27 ip4:199.115.117.11/27 ip6:2604:9a00:2010:a024:21::1 ip4:185.201.16.0/22 ip4:192.69.18.0/24 ip4:208.70.90.0/24 ip4:45.91.121.0/24 ip4:45.93.148.0/24 ip4:45.131.180.0/24 ip4:45.140.132.0/24 ip4:193.41.32.0/24 ip4:185.225.27.0/24 ip4:80.91.219.0/24 ip4:188.190.113.0/24 ip4:45.147.95.0/24 ip4:46.229.240.0/24 ip4:87.236.163.0/24 ip4:188.190.112.0/24 ip4:192.69.19.0/24 ip4:208.70.91.0/24 ip4:185.209.51.0/24 ip4:185.218.226.0/24 -all",
       "mx_asns":[
-        16633,
-        43054
+        16633
       ]
     },
     "6423":{

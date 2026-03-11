@@ -1,7 +1,7 @@
 {
   "total": 2115,
-  "average_score": 91.0,
-  "high_confidence_pct": 96.3,
+  "average_score": 91.1,
+  "high_confidence_pct": 96.4,
   "quality_passed": true,
   "entries": {
     "1": {
@@ -192,10 +192,11 @@
       "name": "Berg am Irchel",
       "provider": "swiss-isp",
       "domain": "berg-am-irchel.ch",
-      "confidence": 55,
+      "confidence": 95,
       "flags": [
         "multiple_mx",
-        "no_spf",
+        "spf_strict",
+        "mx_spf_match",
         "provider_classified"
       ]
     },
@@ -4038,11 +4039,12 @@
       "name": "Allmendingen bei Bern",
       "provider": "microsoft",
       "domain": "allmendingen.ch",
-      "confidence": 90,
+      "confidence": 95,
       "flags": [
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "autodiscover_confirms"
       ]
     },
     "632": {
@@ -4061,10 +4063,11 @@
       "name": "Ferenbalm",
       "provider": "self-hosted",
       "domain": "ferenbalm.ch",
-      "confidence": 55,
+      "confidence": 93,
       "flags": [
         "multiple_mx",
-        "no_spf",
+        "spf_softfail",
+        "mx_spf_match",
         "provider_classified"
       ]
     },
@@ -5634,11 +5637,12 @@
       "name": "Rüegsau",
       "provider": "microsoft",
       "domain": "ruegsau.ch",
-      "confidence": 90,
+      "confidence": 95,
       "flags": [
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "autodiscover_confirms"
       ]
     },
     "957": {
@@ -6370,9 +6374,10 @@
       "name": "Büron",
       "provider": "swiss-isp",
       "domain": "bueron.ch",
-      "confidence": 50,
+      "confidence": 90,
       "flags": [
-        "no_spf",
+        "spf_strict",
+        "mx_spf_match",
         "provider_classified"
       ]
     },
@@ -7874,12 +7879,13 @@
     "2041": {
       "name": "Saint-Aubin",
       "provider": "self-hosted",
-      "domain": "saint-aubin.ch",
-      "confidence": 90,
+      "domain": "st-aubin.ch",
+      "confidence": 55,
       "flags": [
-        "spf_strict",
-        "mx_spf_match",
-        "provider_classified"
+        "multiple_mx",
+        "no_spf",
+        "provider_classified",
+        "provider_via_gateway_spf"
       ]
     },
     "2043": {
@@ -9974,9 +9980,10 @@
       "name": "Drei Höfe",
       "provider": "microsoft",
       "domain": "dreihoefe.ch",
-      "confidence": 55,
+      "confidence": 93,
       "flags": [
-        "no_spf",
+        "spf_softfail",
+        "mx_spf_match",
         "provider_classified",
         "autodiscover_confirms"
       ]
@@ -10905,11 +10912,12 @@
       "name": "Frenkendorf",
       "provider": "microsoft",
       "domain": "frenkendorf.ch",
-      "confidence": 90,
+      "confidence": 95,
       "flags": [
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "autodiscover_confirms"
       ]
     },
     "2825": {
@@ -11151,13 +11159,11 @@
     },
     "2851": {
       "name": "Kilchberg",
-      "provider": "self-hosted",
-      "domain": "kilchberg.ch",
-      "confidence": 95,
+      "provider": "aws",
+      "domain": "kilchberg-bl.ch",
+      "confidence": 70,
       "flags": [
-        "multiple_mx",
         "spf_strict",
-        "mx_spf_match",
         "provider_classified"
       ]
     },
@@ -12092,10 +12098,11 @@
       "name": "Gonten",
       "provider": "swiss-isp",
       "domain": "gonten.ch",
-      "confidence": 55,
+      "confidence": 95,
       "flags": [
         "multiple_mx",
-        "no_spf",
+        "spf_strict",
+        "mx_spf_match",
         "provider_classified"
       ]
     },
@@ -15176,11 +15183,12 @@
       "name": "Rüfenach",
       "provider": "microsoft",
       "domain": "ruefenach.ch",
-      "confidence": 90,
+      "confidence": 95,
       "flags": [
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "autodiscover_confirms"
       ]
     },
     "4117": {
@@ -15209,14 +15217,14 @@
     },
     "4121": {
       "name": "Villigen",
-      "provider": "swiss-isp",
-      "domain": "gemeinde-villigen.ch",
+      "provider": "microsoft",
+      "domain": "villigen.ch",
       "confidence": 95,
       "flags": [
-        "multiple_mx",
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "autodiscover_confirms"
       ]
     },
     "4123": {
@@ -19191,11 +19199,10 @@
     "5471": {
       "name": "Bettens",
       "provider": "self-hosted",
-      "domain": "bluewin.ch",
-      "confidence": 90,
+      "domain": "bettens.ch",
+      "confidence": 50,
       "flags": [
-        "multiple_mx",
-        "mx_spf_match",
+        "no_spf",
         "provider_classified"
       ]
     },
@@ -19519,12 +19526,13 @@
       "name": "Vufflens-la-Ville",
       "provider": "microsoft",
       "domain": "vufflens-la-ville.ch",
-      "confidence": 80,
+      "confidence": 85,
       "flags": [
         "spf_strict",
         "mx_spf_match",
         "multi_provider_spf:infomaniak+microsoft",
-        "provider_classified"
+        "provider_classified",
+        "autodiscover_confirms"
       ]
     },
     "5511": {
@@ -21417,22 +21425,24 @@
       "name": "Vaulion",
       "provider": "microsoft",
       "domain": "vaulion.ch",
-      "confidence": 90,
+      "confidence": 95,
       "flags": [
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "autodiscover_confirms"
       ]
     },
     "5766": {
       "name": "Vuiteboeuf",
       "provider": "microsoft",
       "domain": "vuiteboeuf.ch",
-      "confidence": 90,
+      "confidence": 95,
       "flags": [
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "autodiscover_confirms"
       ]
     },
     "5785": {
@@ -22820,11 +22830,12 @@
       "name": "Varen VS",
       "provider": "microsoft",
       "domain": "varen.ch",
-      "confidence": 90,
+      "confidence": 95,
       "flags": [
         "spf_strict",
         "mx_spf_match",
-        "provider_classified"
+        "provider_classified",
+        "autodiscover_confirms"
       ]
     },
     "6117": {
@@ -22867,9 +22878,11 @@
       "name": "Bovernier",
       "provider": "microsoft",
       "domain": "bovernier.ch",
-      "confidence": 55,
+      "confidence": 85,
       "flags": [
-        "no_spf",
+        "spf_strict",
+        "mx_spf_match",
+        "multi_provider_spf:infomaniak+microsoft",
         "provider_classified",
         "autodiscover_confirms"
       ]
