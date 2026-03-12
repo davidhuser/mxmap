@@ -127,6 +127,7 @@ SWISS_ISP_ASNS: dict[int, str] = {
 CONCURRENCY = 20
 CONCURRENCY_POSTPROCESS = 10
 CONCURRENCY_SMTP = 5
+CONCURRENCY_TENANT = 5
 
 DKIM_SELECTORS: dict[str, list[str]] = {
     "microsoft": ["selector1", "selector2"],

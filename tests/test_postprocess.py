@@ -106,13 +106,11 @@ class TestManualOverrides:
     def test_all_entries_have_required_keys(self):
         for bfs, entry in MANUAL_OVERRIDES.items():
             assert "domain" in entry, f"BFS {bfs} missing 'domain'"
-            assert "provider" in entry, f"BFS {bfs} missing 'provider'"
 
-    def test_valid_providers(self):
-        valid = {"independent", "infomaniak", "microsoft", "swiss-isp"}
+    def test_no_provider_in_overrides(self):
         for bfs, entry in MANUAL_OVERRIDES.items():
-            assert entry["provider"] in valid, (
-                f"BFS {bfs}: unexpected provider {entry['provider']}"
+            assert "provider" not in entry, (
+                f"BFS {bfs}: overrides should be domain-only, not force provider"
             )
 
 
@@ -454,8 +452,141 @@ class TestSmtpBannerStep:
         assert "smtp_banner" not in result["municipalities"]["3000"]
 
 
+class TestTenantCheckStep:
+    async def test_reclassifies_swiss_isp_to_microsoft(self, tmp_path):
+        data = {
+            "generated": "2025-01-01",
+            "total": 1,
+            "counts": {"swiss-isp": 1},
+            "municipalities": {
+                "1631": {
+                    "bfs": "1631",
+                    "name": "Glarus Süd",
+                    "canton": "Glarus",
+                    "domain": "glarussued.ch",
+                    "mx": ["ip17.gl.ch"],
+                    "spf": "v=spf1 ip4:1.2.3.4 ~all",
+                    "provider": "swiss-isp",
+                },
+            },
+        }
+        path = tmp_path / "data.json"
+        path.write_text(json.dumps(data))
+
+        with patch(
+            "mail_sovereignty.postprocess.check_microsoft_tenant",
+            new_callable=AsyncMock,
+            return_value="Managed",
+        ):
+            await run(path)
+
+        result = json.loads(path.read_text())
+        assert result["municipalities"]["1631"]["provider"] == "microsoft"
+        assert result["municipalities"]["1631"]["tenant_check"] == {
+            "microsoft": "Managed"
+        }
+
+    async def test_reclassifies_independent_to_microsoft(self, tmp_path):
+        data = {
+            "generated": "2025-01-01",
+            "total": 1,
+            "counts": {"independent": 1},
+            "municipalities": {
+                "5000": {
+                    "bfs": "5000",
+                    "name": "IndyTown",
+                    "canton": "Test",
+                    "domain": "indytown.ch",
+                    "mx": ["mail.indytown.ch"],
+                    "spf": "",
+                    "provider": "independent",
+                },
+            },
+        }
+        path = tmp_path / "data.json"
+        path.write_text(json.dumps(data))
+
+        with patch(
+            "mail_sovereignty.postprocess.check_microsoft_tenant",
+            new_callable=AsyncMock,
+            return_value="Federated",
+        ):
+            await run(path)
+
+        result = json.loads(path.read_text())
+        assert result["municipalities"]["5000"]["provider"] == "microsoft"
+        assert result["municipalities"]["5000"]["tenant_check"] == {
+            "microsoft": "Federated"
+        }
+
+    async def test_confirms_microsoft_via_tenant(self, tmp_path):
+        data = {
+            "generated": "2025-01-01",
+            "total": 1,
+            "counts": {"microsoft": 1},
+            "municipalities": {
+                "1002": {
+                    "bfs": "1002",
+                    "name": "SpfMicrosoft",
+                    "canton": "Test",
+                    "domain": "spftown.ch",
+                    "mx": ["mx.seppmail.cloud"],
+                    "spf": "v=spf1 include:spf.protection.outlook.com -all",
+                    "provider": "microsoft",
+                    "gateway": "seppmail",
+                },
+            },
+        }
+        path = tmp_path / "data.json"
+        path.write_text(json.dumps(data))
+
+        with patch(
+            "mail_sovereignty.postprocess.check_microsoft_tenant",
+            new_callable=AsyncMock,
+            return_value="Managed",
+        ):
+            await run(path)
+
+        result = json.loads(path.read_text())
+        assert result["municipalities"]["1002"]["provider"] == "microsoft"
+        assert result["municipalities"]["1002"]["tenant_check"] == {
+            "microsoft": "Managed"
+        }
+
+    async def test_no_tenant_no_change(self, tmp_path):
+        data = {
+            "generated": "2025-01-01",
+            "total": 1,
+            "counts": {"swiss-isp": 1},
+            "municipalities": {
+                "4000": {
+                    "bfs": "4000",
+                    "name": "NoTenant",
+                    "canton": "Test",
+                    "domain": "notenant.ch",
+                    "mx": ["mail.notenant.ch"],
+                    "spf": "",
+                    "provider": "swiss-isp",
+                },
+            },
+        }
+        path = tmp_path / "data.json"
+        path.write_text(json.dumps(data))
+
+        with patch(
+            "mail_sovereignty.postprocess.check_microsoft_tenant",
+            new_callable=AsyncMock,
+            return_value=None,
+        ):
+            await run(path)
+
+        result = json.loads(path.read_text())
+        assert result["municipalities"]["4000"]["provider"] == "swiss-isp"
+        assert "tenant_check" not in result["municipalities"]["4000"]
+
+
 class TestPostprocessRun:
-    async def test_applies_manual_overrides(self, tmp_path):
+    async def test_applies_manual_overrides_with_dns_relookup(self, tmp_path):
         data = {
             "generated": "2025-01-01",
             "total": 1,
@@ -475,7 +606,50 @@ class TestPostprocessRun:
         path = tmp_path / "data.json"
         path.write_text(json.dumps(data))
 
-        await run(path)
+        with (
+            patch(
+                "mail_sovereignty.postprocess.lookup_mx",
+                new_callable=AsyncMock,
+                return_value=["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
+            ),
+            patch(
+                "mail_sovereignty.postprocess.lookup_spf",
+                new_callable=AsyncMock,
+                return_value="v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
+            ),
+            patch(
+                "mail_sovereignty.postprocess.resolve_spf_includes",
+                new_callable=AsyncMock,
+                return_value="",
+            ),
+            patch(
+                "mail_sovereignty.postprocess.resolve_mx_cnames",
+                new_callable=AsyncMock,
+                return_value={},
+            ),
+            patch(
+                "mail_sovereignty.postprocess.resolve_mx_asns",
+                new_callable=AsyncMock,
+                return_value=set(),
+            ),
+            patch(
+                "mail_sovereignty.postprocess.lookup_autodiscover",
+                new_callable=AsyncMock,
+                return_value={},
+            ),
+            patch(
+                "mail_sovereignty.postprocess.lookup_dkim_selectors",
+                new_callable=AsyncMock,
+                return_value={},
+            ),
+            patch(
+                "mail_sovereignty.postprocess.check_microsoft_tenant",
+                new_callable=AsyncMock,
+                return_value="Managed",
+            ),
+        ):
+            await run(path)
 
         result = json.loads(path.read_text())
-        assert result["municipalities"]["6404"]["provider"] == "swiss-isp"
+        assert result["municipalities"]["6404"]["domain"] == "ne.ch"
+        assert result["municipalities"]["6404"]["provider"] == "microsoft"

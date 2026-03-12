@@ -38,7 +38,10 @@ MANUAL_OVERRIDE_BFS = {
     "6458",
     "6487",
     "6504",
+    "261",
     "422",
+    "2056",
+    "6172",
 }
 
 
@@ -224,6 +227,16 @@ def score_entry(entry: dict[str, Any]) -> dict[str, Any]:
             flags.append("dkim_confirms")
         elif dkim_provider and provider in ("independent", "swiss-isp"):
             flags.append(f"dkim_suggests:{dkim_provider}")
+
+    # Tenant check confirms or suggests provider
+    tenant_check = entry.get("tenant_check")
+    if tenant_check:
+        tc_provider = next(iter(tenant_check), None)
+        if tc_provider and tc_provider == provider:
+            score += 5
+            flags.append("tenant_confirms")
+        elif tc_provider and provider in ("independent", "swiss-isp"):
+            flags.append(f"tenant_suggests:{tc_provider}")
 
     # Manual override (+5)
     if bfs in MANUAL_OVERRIDE_BFS:

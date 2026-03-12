@@ -14,6 +14,7 @@ from mail_sovereignty.classify import (
 from mail_sovereignty.constants import (
     CONCURRENCY_POSTPROCESS,
     CONCURRENCY_SMTP,
+    CONCURRENCY_TENANT,
     EMAIL_RE,
     SKIP_DOMAINS,
     SUBPAGES,
@@ -29,6 +30,7 @@ from mail_sovereignty.dns import (
     resolve_spf_includes,
 )
 from mail_sovereignty.smtp import fetch_smtp_banner
+from mail_sovereignty.tenant import check_microsoft_tenant
 
 
 def decrypt_typo3(encoded: str, offset: int = 2) -> str:
@@ -193,146 +195,33 @@ async def process_unknown(
 
 
 MANUAL_OVERRIDES = {
-    # Neuchatel canton: all use @ne.ch (cantonal mail gateway operated by SIEN,
-    # MX points to cantonal servers nemx9a.ne.ch / ne2mx9a.ne.ch on SWITCH AS559)
-    "6404": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # Boudry
-    "6408": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # Cortaillod
-    "6413": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # Rochefort
-    "6416": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # Milvignes
-    "6417": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # La Grande Beroche
-    "6432": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # La Brevine
-    "6433": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # Brot-Plamboz
-    "6434": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # Le Cerneux-Pequignot
-    "6435": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # La Chaux-du-Milieu
-    "6437": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # Les Ponts-de-Martel
-    "6451": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # Cornaux
-    "6455": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # Le Landeron
-    "6456": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # Lignieres
-    "6504": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # La Cote-aux-Fees
-    "6423": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # La Sagne
-    "6458": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # Neuchatel
-    "6487": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # Val-de-Ruz
-    # Other manual resolutions
-    "261": {
-        "domain": "zuerich.ch",
-        "provider": "independent",
-    },  # Zürich (not gemeinde-zuerich.ch)
-    "422": {
-        "domain": "ruetibeilyssach.ch",
-        "provider": "infomaniak",
-    },  # Rueti bei Lyssach
+    # Neuchatel canton: all use @ne.ch (cantonal mail relay, DNS re-lookup classifies)
+    "6404": {"domain": "ne.ch"},  # Boudry
+    "6408": {"domain": "ne.ch"},  # Cortaillod
+    "6413": {"domain": "ne.ch"},  # Rochefort
+    "6416": {"domain": "ne.ch"},  # Milvignes
+    "6417": {"domain": "ne.ch"},  # La Grande Beroche
+    "6432": {"domain": "ne.ch"},  # La Brevine
+    "6433": {"domain": "ne.ch"},  # Brot-Plamboz
+    "6434": {"domain": "ne.ch"},  # Le Cerneux-Pequignot
+    "6435": {"domain": "ne.ch"},  # La Chaux-du-Milieu
+    "6437": {"domain": "ne.ch"},  # Les Ponts-de-Martel
+    "6451": {"domain": "ne.ch"},  # Cornaux
+    "6455": {"domain": "ne.ch"},  # Le Landeron
+    "6456": {"domain": "ne.ch"},  # Lignieres
+    "6504": {"domain": "ne.ch"},  # La Cote-aux-Fees
+    "6423": {"domain": "ne.ch"},  # La Sagne
+    "6458": {"domain": "ne.ch"},  # Neuchatel
+    "6487": {"domain": "ne.ch"},  # Val-de-Ruz
+    # Other manual resolutions (domain-only, let pipeline classify)
+    "261": {"domain": "zuerich.ch"},  # Zürich (not gemeinde-zuerich.ch)
+    "422": {"domain": "ruetibeilyssach.ch"},  # Rueti bei Lyssach
     "2056": {
         "name": "Fétigny-Ménières",
         "canton": "Kanton Freiburg",
         "domain": "fetigny-menieres.ch",
-        "provider": "microsoft",
     },  # Missing from Wikidata
-    "6172": {
-        "domain": "gemeinde-bister.ch",
-        "provider": "microsoft",
-    },  # Bister VS
+    "6172": {"domain": "gemeinde-bister.ch"},  # Bister VS
 }
 
 
@@ -546,6 +435,61 @@ async def run(data_path: Path) -> None:
                     )
 
         print(f"  SMTP reclassified: {smtp_reclassified}")
+
+    # Step 2.7: Microsoft tenant check
+    # - swiss-isp/independent: reclassify to microsoft if tenant found
+    # - microsoft (e.g. via SPF): confirm with tenant_check metadata
+    tenant_candidates = [
+        m
+        for m in muni.values()
+        if m["provider"] in ("swiss-isp", "independent", "microsoft")
+        and m.get("domain")
+    ]
+    if tenant_candidates:
+        domain_to_bfs: dict[str, list[str]] = {}
+        for m in tenant_candidates:
+            domain_to_bfs.setdefault(m["domain"], []).append(m["bfs"])
+
+        print(
+            f"\nTenant check: {len(tenant_candidates)} entries, "
+            f"{len(domain_to_bfs)} unique domains..."
+        )
+        tenant_semaphore = asyncio.Semaphore(CONCURRENCY_TENANT)
+
+        async def _check_tenant(
+            tc_client: httpx.AsyncClient, domain: str
+        ) -> tuple[str, str | None]:
+            async with tenant_semaphore:
+                result = await check_microsoft_tenant(tc_client, domain)
+                return domain, result
+
+        async with httpx.AsyncClient() as tenant_client:
+            tenant_results = await asyncio.gather(
+                *[_check_tenant(tenant_client, d) for d in domain_to_bfs]
+            )
+
+        tenant_reclassified = 0
+        tenant_confirmed = 0
+        for domain, ns_type in tenant_results:
+            if not ns_type:
+                continue
+            for bfs in domain_to_bfs[domain]:
+                muni[bfs]["tenant_check"] = {"microsoft": ns_type}
+                if muni[bfs]["provider"] == "microsoft":
+                    tenant_confirmed += 1
+                else:
+                    old = muni[bfs]["provider"]
+                    muni[bfs]["provider"] = "microsoft"
+                    tenant_reclassified += 1
+                    print(
+                        f"  TENANT   {bfs:>5} {muni[bfs]['name']:<30} "
+                        f"{old} -> microsoft ({ns_type})"
+                    )
+
+        print(
+            f"  Tenant reclassified: {tenant_reclassified}, "
+            f"confirmed: {tenant_confirmed}"
+        )
 
     # Step 3: Scrape remaining unknowns
     unknowns = [m for m in muni.values() if m["provider"] == "unknown"]

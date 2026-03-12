@@ -124,6 +124,12 @@ def classify(
             ad_provider = classify_from_autodiscover(autodiscover)
             if ad_provider:
                 return ad_provider
+            spf_blob = (spf_record or "").lower()
+            provider = _check_spf_for_provider(spf_blob)
+            if not provider and resolved_spf:
+                provider = _check_spf_for_provider(resolved_spf.lower())
+            if provider:
+                return provider
             return "swiss-isp"
         # Check DKIM/autodiscover for hyperscaler backend behind independent MX
         dkim_provider = classify_from_dkim(dkim)
@@ -132,6 +138,12 @@ def classify(
         ad_provider = classify_from_autodiscover(autodiscover)
         if ad_provider:
             return ad_provider
+        spf_blob = (spf_record or "").lower()
+        provider = _check_spf_for_provider(spf_blob)
+        if not provider and resolved_spf:
+            provider = _check_spf_for_provider(resolved_spf.lower())
+        if provider:
+            return provider
         return "independent"
 
     spf_blob = (spf_record or "").lower()

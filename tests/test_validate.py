@@ -169,12 +169,47 @@ class TestScoreEntry:
     def test_manual_override(self):
         result = score_entry(
             {
-                "provider": "swiss-isp",
+                "provider": "microsoft",
                 "domain": "ne.ch",
-                "mx": ["nemx9a.ne.ch"],
+                "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
                 "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
                 "bfs": "6404",
-                "gateway": "cantonal-ne",
+            }
+        )
+        assert "manual_override" in result["flags"]
+
+    def test_manual_override_zurich(self):
+        result = score_entry(
+            {
+                "provider": "microsoft",
+                "domain": "zuerich.ch",
+                "mx": ["mail.protection.outlook.com"],
+                "spf": "v=spf1 include:spf.protection.outlook.com -all",
+                "bfs": "261",
+            }
+        )
+        assert "manual_override" in result["flags"]
+
+    def test_manual_override_fetigny(self):
+        result = score_entry(
+            {
+                "provider": "microsoft",
+                "domain": "fetigny-menieres.ch",
+                "mx": ["mail.protection.outlook.com"],
+                "spf": "v=spf1 include:spf.protection.outlook.com -all",
+                "bfs": "2056",
+            }
+        )
+        assert "manual_override" in result["flags"]
+
+    def test_manual_override_bister(self):
+        result = score_entry(
+            {
+                "provider": "microsoft",
+                "domain": "gemeinde-bister.ch",
+                "mx": ["mail.protection.outlook.com"],
+                "spf": "v=spf1 include:spf.protection.outlook.com -all",
+                "bfs": "6172",
             }
         )
         assert "manual_override" in result["flags"]
@@ -359,6 +394,79 @@ class TestScoreEntry:
             }
         )
         assert not any(f.startswith("dkim_") for f in result["flags"])
+
+    def test_tenant_confirms(self):
+        result = score_entry(
+            {
+                "provider": "microsoft",
+                "domain": "glarussued.ch",
+                "mx": ["ip17.gl.ch"],
+                "spf": "v=spf1 ip4:1.2.3.4 ~all",
+                "bfs": "1631",
+                "tenant_check": {"microsoft": "Managed"},
+            }
+        )
+        assert "tenant_confirms" in result["flags"]
+
+    def test_tenant_confirms_adds_score(self):
+        with_tenant = score_entry(
+            {
+                "provider": "microsoft",
+                "domain": "glarussued.ch",
+                "mx": ["ip17.gl.ch"],
+                "spf": "v=spf1 ip4:1.2.3.4 ~all",
+                "bfs": "9000",
+                "tenant_check": {"microsoft": "Managed"},
+            }
+        )
+        without_tenant = score_entry(
+            {
+                "provider": "microsoft",
+                "domain": "glarussued.ch",
+                "mx": ["ip17.gl.ch"],
+                "spf": "v=spf1 ip4:1.2.3.4 ~all",
+                "bfs": "9000",
+            }
+        )
+        assert with_tenant["score"] == without_tenant["score"] + 5
+
+    def test_tenant_suggests_for_swiss_isp(self):
+        result = score_entry(
+            {
+                "provider": "swiss-isp",
+                "domain": "example.ch",
+                "mx": ["mail1.rzobt.ch"],
+                "spf": "",
+                "bfs": "9000",
+                "tenant_check": {"microsoft": "Managed"},
+            }
+        )
+        assert "tenant_suggests:microsoft" in result["flags"]
+
+    def test_tenant_suggests_for_independent(self):
+        result = score_entry(
+            {
+                "provider": "independent",
+                "domain": "example.ch",
+                "mx": ["mail.example.ch"],
+                "spf": "",
+                "bfs": "9000",
+                "tenant_check": {"microsoft": "Federated"},
+            }
+        )
+        assert "tenant_suggests:microsoft" in result["flags"]
+
+    def test_tenant_no_flag_when_absent(self):
+        result = score_entry(
+            {
+                "provider": "independent",
+                "domain": "example.ch",
+                "mx": ["mail.example.ch"],
+                "spf": "",
+                "bfs": "9000",
+            }
+        )
+        assert not any(f.startswith("tenant_") for f in result["flags"])
 
     def test_autodiscover_no_flag_when_unrecognized(self):
         result = score_entry(

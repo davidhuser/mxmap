@@ -40,12 +40,12 @@ class TestClassify:
     def test_no_mx_no_spf(self):
         assert classify([], "") == "unknown"
 
-    def test_mx_takes_precedence_over_spf(self):
+    def test_mx_with_microsoft_spf_classifies_as_microsoft(self):
         result = classify(
             ["mail.example.ch"],
             "v=spf1 include:spf.protection.outlook.com -all",
         )
-        assert result == "independent"
+        assert result == "microsoft"
 
     def test_cname_detects_microsoft(self):
         result = classify(
@@ -176,13 +176,13 @@ class TestClassify:
         )
         assert result == "google"
 
-    def test_non_gateway_independent_mx_ignores_spf(self):
-        """Self-hosted MX (not a gateway) should NOT be reclassified by SPF."""
+    def test_non_gateway_independent_mx_with_microsoft_spf(self):
+        """Independent MX with Microsoft SPF should be classified as microsoft."""
         result = classify(
             ["nemx9a.ne.ch"],
             "v=spf1 include:spf.protection.outlook.com -all",
         )
-        assert result == "independent"
+        assert result == "microsoft"
 
     def test_barracuda_gateway_with_microsoft_spf(self):
         result = classify(
@@ -368,6 +368,44 @@ class TestClassify:
             },
         )
         assert result == "microsoft"
+
+    # ── SPF reclassification for swiss-isp / independent ──
+
+    def test_swiss_isp_with_microsoft_direct_spf(self):
+        """Swiss ISP MX with Microsoft in direct SPF → microsoft."""
+        result = classify(
+            ["mail1.rzobt.ch"],
+            "v=spf1 include:spf.protection.outlook.com -all",
+            mx_asns={3303},
+        )
+        assert result == "microsoft"
+
+    def test_swiss_isp_with_microsoft_resolved_spf(self):
+        """Swiss ISP MX with Microsoft in resolved SPF only → microsoft."""
+        result = classify(
+            ["mail1.rzobt.ch"],
+            "v=spf1 include:custom.ch -all",
+            mx_asns={3303},
+            resolved_spf="v=spf1 include:custom.ch -all v=spf1 include:spf.protection.outlook.com -all",
+        )
+        assert result == "microsoft"
+
+    def test_independent_mx_with_microsoft_resolved_spf(self):
+        """Independent MX with Microsoft in resolved SPF → microsoft."""
+        result = classify(
+            ["mail.example.ch"],
+            "v=spf1 include:custom.ch -all",
+            resolved_spf="v=spf1 include:custom.ch -all v=spf1 include:spf.protection.outlook.com -all",
+        )
+        assert result == "microsoft"
+
+    def test_independent_mx_with_non_microsoft_spf_stays_independent(self):
+        """Independent MX with non-Microsoft SPF stays independent."""
+        result = classify(
+            ["mail.example.ch"],
+            "v=spf1 ip4:1.2.3.4 -all",
+        )
+        assert result == "independent"
 
     # ── SPF-only resolved fallback ──
 
