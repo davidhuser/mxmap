@@ -27,9 +27,9 @@ WEIGHTS: dict[SignalKind, float] = {
     SignalKind.DKIM: 0.15,
     SignalKind.SMTP: 0.10,
     SignalKind.TENANT: 0.10,
-    SignalKind.ASN: 0.08,
+    SignalKind.ASN: 0.05,
     SignalKind.TXT_VERIFICATION: 0.07,
-    SignalKind.AUTODISCOVER: 0.05,
+    SignalKind.AUTODISCOVER: 0.08,
     SignalKind.CNAME_CHAIN: 0.03,
     SignalKind.DMARC: 0.02,
 }

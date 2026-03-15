@@ -25,7 +25,7 @@ from .probes import (
 )
 
 # Primary signals that can stand on their own
-_PRIMARY_KINDS = frozenset({SignalKind.MX, SignalKind.SPF, SignalKind.DKIM})
+_PRIMARY_KINDS = frozenset({SignalKind.MX, SignalKind.SPF, SignalKind.DKIM, SignalKind.AUTODISCOVER})
 
 # Signals that can only confirm, not establish, a provider classification
 _CONFIRMATION_ONLY_KINDS = frozenset({SignalKind.TENANT, SignalKind.TXT_VERIFICATION})

@@ -196,11 +196,11 @@ const LABELS = {
   aws:            'Amazon Web Services',
   infomaniak:     'Infomaniak',
   'swiss-isp':    'Swiss ISP',
-  'independent':  'Independent',
+  'independent':  'Self-hosted / Other',
   unknown:        'Unknown'
 };
 
-const CONFIDENCE_THRESHOLD = 15; // 0-100 scale
+const CONFIDENCE_THRESHOLD = 10; // 0-100 scale
 
 function effectiveProvider(m) {
   if (!m || m.provider === 'unknown') return 'unknown';
@@ -421,9 +421,8 @@ async function loadData() {
       '<button class="legend-toggle" aria-label="Toggle legend" aria-expanded="' + (!isMobile) + '">' + (isMobile ? 'Legend \u25B8' : '') + '</button>' +
       '<div class="legend-content">' +
       '<strong>Email Provider</strong>' +
-      legendGroupHtml('US-based', ['microsoft', 'aws', 'google'], adjustedCounts) +
-      legendGroupHtml('Swiss-based', ['swiss-isp', 'infomaniak'], adjustedCounts) +
-      legendGroupHtml('', ['independent'], adjustedCounts) +
+      legendGroupHtml('US Cloud', ['microsoft', 'aws', 'google'], adjustedCounts) +
+      legendGroupHtml('Swiss-hosted', ['independent', 'swiss-isp', 'infomaniak'], adjustedCounts) +
       '</div>';
     L.DomEvent.disableClickPropagation(div);
     return div;
@@ -465,7 +464,7 @@ async function loadData() {
       const ep = effectiveProvider(m);
       const demoted = ep !== m.provider;
       const color = COLORS[ep] || COLORS.unknown;
-      const textColor = ['aws', 'google', 'infomaniak', 'swiss-isp', 'unknown'].includes(ep) ? '#333' : '#fff';
+      const textColor = ['aws', 'google', 'infomaniak', 'swiss-isp', 'independent', 'unknown'].includes(ep) ? '#333' : '#fff';
       const label = LABELS[ep] || ep;
 
       let mxSection = '';

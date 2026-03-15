@@ -254,8 +254,40 @@ class TestAggregate:
         ]
         result = _aggregate(evidence)
         assert result.provider == Provider.SWISS_ISP
+        # vote_share=1.0, depth=0.05/0.40=0.125
+        assert result.confidence == pytest.approx(0.125)
+
+    def test_autodiscover_is_primary_signal(self):
+        """Autodiscover alone establishes a provider (not INDEPENDENT)."""
+        evidence = [_ev(SignalKind.AUTODISCOVER, Provider.MS365)]
+        result = _aggregate(evidence)
+        assert result.provider == Provider.MS365
         # vote_share=1.0, depth=0.08/0.40=0.20
         assert result.confidence == pytest.approx(0.20)
+
+    def test_autodiscover_unlocks_tenant_confirmation(self):
+        """Autodiscover as primary signal unlocks tenant confirmation for the same provider."""
+        evidence = [
+            _ev(SignalKind.AUTODISCOVER, Provider.MS365),
+            _ev(SignalKind.TENANT, Provider.MS365),
+        ]
+        result = _aggregate(evidence)
+        assert result.provider == Provider.MS365
+        # vote_share=1.0, depth=(0.08+0.10)/0.40=0.45 → capped at 1.0? No, 0.45
+        assert result.confidence == pytest.approx(0.45)
+
+    def test_autodiscover_beats_asn(self):
+        """Zernez scenario: autodiscover(microsoft, 0.08) vs ASN(aws, 0.05) → microsoft wins."""
+        evidence = [
+            _ev(SignalKind.AUTODISCOVER, Provider.MS365),
+            _ev(SignalKind.ASN, Provider.AWS),
+        ]
+        result = _aggregate(evidence)
+        assert result.provider == Provider.MS365
+        # ms365 score=0.08, aws score=0.05, total=0.13
+        # vote_share=0.08/0.13≈0.615, depth=(0.08+0.05)/0.40=0.325
+        expected = (0.08 / 0.13) * (0.13 / 0.40)
+        assert result.confidence == pytest.approx(expected)
 
     def test_mx_hosts_passthrough(self):
         evidence = [_ev(SignalKind.MX, Provider.MS365)]
