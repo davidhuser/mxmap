@@ -94,6 +94,7 @@ GATEWAY_KEYWORDS: dict[str, list[str]] = {
     "mimecast": ["mimecast.com"],
     "spamvor": ["spamvor.com"],
     "abxsec": ["abxsec.com"],
+    "messagelabs": ["messagelabs.com"],
 }
 
 

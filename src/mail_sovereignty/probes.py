@@ -25,13 +25,14 @@ WEIGHTS: dict[SignalKind, float] = {
     SignalKind.MX: 0.20,
     SignalKind.SPF: 0.20,
     SignalKind.DKIM: 0.15,
-    SignalKind.SMTP: 0.10,
+    SignalKind.SMTP: 0.04,
     SignalKind.TENANT: 0.10,
-    SignalKind.ASN: 0.05,
+    SignalKind.ASN: 0.03,
     SignalKind.TXT_VERIFICATION: 0.07,
     SignalKind.AUTODISCOVER: 0.08,
     SignalKind.CNAME_CHAIN: 0.03,
     SignalKind.DMARC: 0.02,
+    SignalKind.SPF_IP: 0.08,
 }
 
 
@@ -53,6 +54,21 @@ async def lookup_mx_hosts(
     except (dns.exception.DNSException, Exception):
         return []
     return [str(rdata.exchange).rstrip(".").lower() for rdata in answer]
+
+
+async def lookup_spf_raw(
+    domain: str, resolver: dns.asyncresolver.Resolver
+) -> str:
+    """Return the raw SPF (v=spf1) TXT record for a domain, or empty string."""
+    try:
+        answer = await resolver.resolve(domain, "TXT")
+    except (dns.exception.DNSException, Exception):
+        return ""
+    for rdata in answer:
+        txt = b"".join(rdata.strings).decode("utf-8", errors="ignore")
+        if txt.lower().startswith("v=spf1"):
+            return txt
+    return ""
 
 
 async def probe_mx(domain: str, resolver: dns.asyncresolver.Resolver) -> list[Evidence]:
@@ -435,7 +451,7 @@ async def probe_txt_verification(
     except (dns.exception.DNSException, Exception):
         pass
 
-    # Query _amazonses.{domain} TXT for AWS SES verification
+    # Query _amazonses.{domain} TXT for AWS SES domain verification
     try:
         answer = await resolver.resolve(f"_amazonses.{domain}", "TXT")
         for rdata in answer:
@@ -452,5 +468,86 @@ async def probe_txt_verification(
                 )
     except (dns.exception.DNSException, Exception):
         pass
+
+    return results
+
+
+async def probe_spf_ip(
+    domain: str, resolver: dns.asyncresolver.Resolver
+) -> list[Evidence]:
+    """Parse SPF ip4: and a: entries, resolve IPs to ASN, match against providers + Swiss ISPs."""
+    results: list[Evidence] = []
+    try:
+        answer = await resolver.resolve(domain, "TXT")
+    except (dns.exception.DNSException, Exception):
+        return results
+
+    ips: list[str] = []
+    for rdata in answer:
+        txt = b"".join(rdata.strings).decode("utf-8", errors="ignore")
+        if not txt.lower().startswith("v=spf1"):
+            continue
+        for token in txt.split():
+            lower_token = token.lower()
+            if lower_token.startswith("ip4:"):
+                ip_part = token.split(":", 1)[1]
+                ip = ip_part.split("/")[0]  # strip CIDR notation
+                ips.append(ip)
+            elif lower_token.startswith("a:"):
+                hostname = token.split(":", 1)[1]
+                try:
+                    a_answer = await resolver.resolve(hostname, "A")
+                    for a_rdata in a_answer:
+                        ips.append(str(a_rdata))
+                except (dns.exception.DNSException, Exception):
+                    continue
+
+    seen_asns: set[int] = set()
+    for ip in ips:
+        reversed_ip = ".".join(reversed(ip.split(".")))
+        try:
+            asn_answer = await resolver.resolve(
+                f"{reversed_ip}.origin.asn.cymru.com", "TXT"
+            )
+        except (dns.exception.DNSException, Exception):
+            continue
+
+        for asn_rdata in asn_answer:
+            txt = b"".join(asn_rdata.strings).decode("utf-8", errors="ignore")
+            parts = txt.split("|")
+            if not parts:
+                continue
+            try:
+                asn_num = int(parts[0].strip())
+            except (ValueError, IndexError):
+                continue
+
+            if asn_num in seen_asns:
+                continue
+            seen_asns.add(asn_num)
+
+            for sig in SIGNATURES:
+                if asn_num in sig.asns:
+                    results.append(
+                        Evidence(
+                            kind=SignalKind.SPF_IP,
+                            provider=sig.provider,
+                            weight=WEIGHTS[SignalKind.SPF_IP],
+                            detail=f"SPF ip4/a ASN {asn_num} matches {sig.provider.value}",
+                            raw=f"{ip}:{asn_num}",
+                        )
+                    )
+
+            if asn_num in SWISS_ISP_ASNS:
+                isp_name = SWISS_ISP_ASNS[asn_num]
+                results.append(
+                    Evidence(
+                        kind=SignalKind.SPF_IP,
+                        provider=Provider.SWISS_ISP,
+                        weight=WEIGHTS[SignalKind.SPF_IP],
+                        detail=f"SPF ip4/a ASN {asn_num} is Swiss ISP: {isp_name}",
+                        raw=f"{ip}:{asn_num}",
+                    )
+                )
 
     return results

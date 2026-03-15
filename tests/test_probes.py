@@ -13,6 +13,7 @@ from mail_sovereignty.probes import (
     WEIGHTS,
     detect_gateway,
     lookup_mx_hosts,
+    lookup_spf_raw,
     probe_asn,
     probe_autodiscover,
     probe_cname_chain,
@@ -21,6 +22,7 @@ from mail_sovereignty.probes import (
     probe_mx,
     probe_smtp,
     probe_spf,
+    probe_spf_ip,
     probe_tenant,
     probe_txt_verification,
 )
@@ -99,6 +101,30 @@ class TestLookupMxHosts:
         resolver.resolve.side_effect = dns.exception.DNSException("NXDOMAIN")
         hosts = await lookup_mx_hosts("example.com", resolver)
         assert hosts == []
+
+
+class TestLookupSpfRaw:
+    async def test_returns_spf_record(self):
+        resolver = _mock_resolver()
+        resolver.resolve.return_value = [
+            _txt_rdata("v=spf1 include:spf.protection.outlook.com ~all")
+        ]
+        result = await lookup_spf_raw("example.com", resolver)
+        assert result == "v=spf1 include:spf.protection.outlook.com ~all"
+
+    async def test_no_spf_record(self):
+        resolver = _mock_resolver()
+        resolver.resolve.return_value = [
+            _txt_rdata("google-site-verification=abc123")
+        ]
+        result = await lookup_spf_raw("example.com", resolver)
+        assert result == ""
+
+    async def test_dns_error(self):
+        resolver = _mock_resolver()
+        resolver.resolve.side_effect = dns.exception.DNSException("NXDOMAIN")
+        result = await lookup_spf_raw("example.com", resolver)
+        assert result == ""
 
 
 class TestProbeMx:
@@ -344,6 +370,9 @@ class TestDetectGateway:
     def test_mimecast(self):
         assert detect_gateway(["eu.mimecast.com"]) == "mimecast"
 
+    def test_messagelabs(self):
+        assert detect_gateway(["cluster1.eu.messagelabs.com"]) == "messagelabs"
+
     def test_no_gateway(self):
         assert detect_gateway(["mail.protection.outlook.com"]) is None
 
@@ -491,9 +520,7 @@ class TestProbeTenant:
         assert results == []
 
     async def test_http_error(self):
-        mock_cm = self._mock_tenant_client(
-            side_effect=Exception("Connection error")
-        )
+        mock_cm = self._mock_tenant_client(side_effect=Exception("Connection error"))
         with patch("mail_sovereignty.probes.httpx.AsyncClient", return_value=mock_cm):
             results = await probe_tenant("example.com")
 
@@ -598,3 +625,116 @@ class TestProbeTxtVerification:
         resolver.resolve.side_effect = dns.exception.DNSException()
         results = await probe_txt_verification("example.com", resolver)
         assert results == []
+
+
+class TestProbeSpfIp:
+    async def test_ip4_swiss_isp(self):
+        """SPF ip4: entry resolving to Swiss ISP ASN produces SPF_IP evidence."""
+        resolver = _mock_resolver()
+
+        async def _resolve(qname, rdtype):
+            if qname == "example.com" and rdtype == "TXT":
+                return [_txt_rdata("v=spf1 ip4:195.186.1.1 ~all")]
+            if rdtype == "TXT" and "origin.asn.cymru.com" in qname:
+                return [_txt_rdata("3303 | 195.186.0.0/16 | CH | ripencc | 1999-01-01")]
+            raise dns.exception.DNSException()
+
+        resolver.resolve.side_effect = _resolve
+        results = await probe_spf_ip("example.com", resolver)
+        assert any(
+            e.provider == Provider.SWISS_ISP and e.kind == SignalKind.SPF_IP
+            for e in results
+        )
+        assert any("Swisscom" in e.detail for e in results)
+
+    async def test_ip4_with_cidr(self):
+        """ip4: with CIDR notation — uses first IP of the range for ASN lookup."""
+        resolver = _mock_resolver()
+
+        async def _resolve(qname, rdtype):
+            if qname == "example.com" and rdtype == "TXT":
+                return [_txt_rdata("v=spf1 ip4:195.186.1.0/24 ~all")]
+            if rdtype == "TXT" and "origin.asn.cymru.com" in qname:
+                return [_txt_rdata("3303 | 195.186.0.0/16 | CH | ripencc | 1999-01-01")]
+            raise dns.exception.DNSException()
+
+        resolver.resolve.side_effect = _resolve
+        results = await probe_spf_ip("example.com", resolver)
+        assert any(
+            e.provider == Provider.SWISS_ISP and e.kind == SignalKind.SPF_IP
+            for e in results
+        )
+
+    async def test_a_entry_resolution(self):
+        """SPF a: entry is resolved to IP, then to ASN."""
+        resolver = _mock_resolver()
+
+        async def _resolve(qname, rdtype):
+            if qname == "example.com" and rdtype == "TXT":
+                return [_txt_rdata("v=spf1 a:mail.example.ch ~all")]
+            if qname == "mail.example.ch" and rdtype == "A":
+                return [_a_rdata("195.186.1.1")]
+            if rdtype == "TXT" and "origin.asn.cymru.com" in qname:
+                return [_txt_rdata("3303 | 195.186.0.0/16 | CH | ripencc | 1999-01-01")]
+            raise dns.exception.DNSException()
+
+        resolver.resolve.side_effect = _resolve
+        results = await probe_spf_ip("example.com", resolver)
+        assert any(
+            e.provider == Provider.SWISS_ISP and e.kind == SignalKind.SPF_IP
+            for e in results
+        )
+
+    async def test_provider_asn_match(self):
+        """SPF ip4: matching a known provider ASN produces evidence."""
+        resolver = _mock_resolver()
+
+        async def _resolve(qname, rdtype):
+            if qname == "example.com" and rdtype == "TXT":
+                return [_txt_rdata("v=spf1 ip4:40.97.1.1 ~all")]
+            if rdtype == "TXT" and "origin.asn.cymru.com" in qname:
+                return [_txt_rdata("8075 | 40.96.0.0/12 | US | arin | 2015-01-01")]
+            raise dns.exception.DNSException()
+
+        resolver.resolve.side_effect = _resolve
+        results = await probe_spf_ip("example.com", resolver)
+        assert any(
+            e.provider == Provider.MS365 and e.kind == SignalKind.SPF_IP
+            for e in results
+        )
+
+    async def test_no_spf_record(self):
+        """No SPF record → no results."""
+        resolver = _mock_resolver()
+        resolver.resolve.side_effect = dns.exception.DNSException()
+        results = await probe_spf_ip("example.com", resolver)
+        assert results == []
+
+    async def test_no_ip4_entries(self):
+        """SPF with only include: entries → no results."""
+        resolver = _mock_resolver()
+
+        async def _resolve(qname, rdtype):
+            if qname == "example.com" and rdtype == "TXT":
+                return [_txt_rdata("v=spf1 include:spf.protection.outlook.com ~all")]
+            raise dns.exception.DNSException()
+
+        resolver.resolve.side_effect = _resolve
+        results = await probe_spf_ip("example.com", resolver)
+        assert results == []
+
+    async def test_deduplicates_asns(self):
+        """Multiple IPs on the same ASN produce only one evidence entry per ASN."""
+        resolver = _mock_resolver()
+
+        async def _resolve(qname, rdtype):
+            if qname == "example.com" and rdtype == "TXT":
+                return [_txt_rdata("v=spf1 ip4:195.186.1.1 ip4:195.186.2.2 ~all")]
+            if rdtype == "TXT" and "origin.asn.cymru.com" in qname:
+                return [_txt_rdata("3303 | 195.186.0.0/16 | CH | ripencc | 1999-01-01")]
+            raise dns.exception.DNSException()
+
+        resolver.resolve.side_effect = _resolve
+        results = await probe_spf_ip("example.com", resolver)
+        swiss_isp_results = [e for e in results if e.provider == Provider.SWISS_ISP]
+        assert len(swiss_isp_results) == 1

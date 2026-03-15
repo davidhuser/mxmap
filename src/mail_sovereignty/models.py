@@ -27,6 +27,7 @@ class SignalKind(str, enum.Enum):
     TENANT = "tenant"
     ASN = "asn"
     TXT_VERIFICATION = "txt_verification"
+    SPF_IP = "spf_ip"
 
 
 class Evidence(BaseModel):
@@ -47,3 +48,4 @@ class ClassificationResult(BaseModel):
     evidence: list[Evidence] = []
     gateway: str | None = None
     mx_hosts: list[str] = []
+    spf_raw: str = ""

@@ -12,6 +12,7 @@ from .probes import (
     _make_resolver,
     detect_gateway,
     lookup_mx_hosts,
+    lookup_spf_raw,
     probe_asn,
     probe_autodiscover,
     probe_cname_chain,
@@ -20,15 +21,20 @@ from .probes import (
     probe_mx,
     probe_smtp,
     probe_spf,
+    probe_spf_ip,
     probe_tenant,
     probe_txt_verification,
 )
 
 # Primary signals that can stand on their own
-_PRIMARY_KINDS = frozenset({SignalKind.MX, SignalKind.SPF, SignalKind.DKIM, SignalKind.AUTODISCOVER})
+_PRIMARY_KINDS = frozenset(
+    {SignalKind.MX, SignalKind.SPF, SignalKind.DKIM, SignalKind.AUTODISCOVER}
+)
 
 # Signals that can only confirm, not establish, a provider classification
-_CONFIRMATION_ONLY_KINDS = frozenset({SignalKind.TENANT, SignalKind.TXT_VERIFICATION})
+_CONFIRMATION_ONLY_KINDS = frozenset(
+    {SignalKind.TENANT, SignalKind.TXT_VERIFICATION, SignalKind.ASN}
+)
 
 
 def _aggregate(
@@ -36,6 +42,7 @@ def _aggregate(
     *,
     gateway: str | None = None,
     mx_hosts: list[str] | None = None,
+    spf_raw: str = "",
 ) -> ClassificationResult:
     """Score providers by weighted, deduplicated evidence signals."""
     _mx_hosts = mx_hosts or []
@@ -47,6 +54,7 @@ def _aggregate(
             evidence=[],
             gateway=gateway,
             mx_hosts=_mx_hosts,
+            spf_raw=spf_raw,
         )
 
     # Confirmation-only filtering: collect which providers have primary signals
@@ -62,7 +70,10 @@ def _aggregate(
         if e.provider == Provider.INDEPENDENT:
             continue
         # Confirmation-only signals: discard if provider has no primary signal
-        if e.kind in _CONFIRMATION_ONLY_KINDS and e.provider not in providers_with_primary:
+        if (
+            e.kind in _CONFIRMATION_ONLY_KINDS
+            and e.provider not in providers_with_primary
+        ):
             continue
         if e.kind not in by_provider[e.provider]:
             by_provider[e.provider][e.kind] = e
@@ -74,6 +85,7 @@ def _aggregate(
             evidence=list(evidence),
             gateway=gateway,
             mx_hosts=_mx_hosts,
+            spf_raw=spf_raw,
         )
 
     # Sum weights per provider
@@ -109,6 +121,7 @@ def _aggregate(
         evidence=all_deduped,
         gateway=gateway,
         mx_hosts=_mx_hosts,
+        spf_raw=spf_raw,
     )
 
 
@@ -134,6 +147,8 @@ async def classify(domain: str) -> ClassificationResult:
         tenant_ev,
         asn_ev,
         txt_ev,
+        spf_ip_ev,
+        spf_raw,
     ) = await asyncio.gather(
         probe_spf(domain, resolver),
         probe_dkim(domain, resolver),
@@ -144,6 +159,8 @@ async def classify(domain: str) -> ClassificationResult:
         probe_tenant(domain),
         probe_asn(all_mx_hosts, resolver),
         probe_txt_verification(domain, resolver),
+        probe_spf_ip(domain, resolver),
+        lookup_spf_raw(domain, resolver),
     )
 
     all_evidence = (
@@ -157,8 +174,9 @@ async def classify(domain: str) -> ClassificationResult:
         + tenant_ev
         + asn_ev
         + txt_ev
+        + spf_ip_ev
     )
-    return _aggregate(all_evidence, gateway=gateway, mx_hosts=all_mx_hosts)
+    return _aggregate(all_evidence, gateway=gateway, mx_hosts=all_mx_hosts, spf_raw=spf_raw)
 
 
 async def classify_many(

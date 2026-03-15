@@ -32,7 +32,7 @@ def _serialize_result(
         "canton": entry.get("canton", ""),
         "domain": entry.get("domain", ""),
         "mx": result.mx_hosts,
-        "spf": "",
+        "spf": result.spf_raw,
         "provider": provider,
         "classification_confidence": round(result.confidence * 100, 1),
         "classification_signals": [
@@ -47,12 +47,6 @@ def _serialize_result(
             for e in result.evidence
         ],
     }
-
-    # Extract SPF raw from evidence
-    for e in result.evidence:
-        if e.kind.value == "spf" and e.raw:
-            out["spf"] = e.raw
-            break
 
     if result.gateway:
         out["gateway"] = result.gateway

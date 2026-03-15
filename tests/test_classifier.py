@@ -34,13 +34,15 @@ def _patch_all_probes(**overrides):
         "probe_tenant",
         "probe_asn",
         "probe_txt_verification",
+        "probe_spf_ip",
     ]
     patches = {}
     for name in probe_names:
         patches[name] = overrides.get(name, [])
 
-    # Also handle detect_gateway
+    # Also handle detect_gateway and lookup_spf_raw
     gateway = overrides.get("detect_gateway", None)
+    spf_raw = overrides.get("lookup_spf_raw", "")
 
     # lookup_mx_hosts: default derives from probe_mx evidence raw values
     if "lookup_mx_hosts" in overrides:
@@ -108,7 +110,17 @@ def _patch_all_probes(**overrides):
                 new_callable=AsyncMock,
                 return_value=patches["probe_txt_verification"],
             ),
+            patch(
+                "mail_sovereignty.classifier.probe_spf_ip",
+                new_callable=AsyncMock,
+                return_value=patches["probe_spf_ip"],
+            ),
             patch("mail_sovereignty.classifier.detect_gateway", return_value=gateway),
+            patch(
+                "mail_sovereignty.classifier.lookup_spf_raw",
+                new_callable=AsyncMock,
+                return_value=spf_raw,
+            ),
         ):
             yield
 
@@ -237,7 +249,30 @@ class TestAggregate:
         result = _aggregate(evidence)
         assert result.provider == Provider.MS365
         # vote_share=1.0, depth=(0.20+0.07)/0.40=0.675
-        expected = min(1.0, (WEIGHTS[SignalKind.MX] + WEIGHTS[SignalKind.TXT_VERIFICATION]) / 0.40)
+        expected = min(
+            1.0, (WEIGHTS[SignalKind.MX] + WEIGHTS[SignalKind.TXT_VERIFICATION]) / 0.40
+        )
+        assert result.confidence == pytest.approx(expected)
+
+    def test_asn_confirmation_only_discarded(self):
+        """ASN-only evidence should be discarded (confirmation-only)."""
+        evidence = [
+            _ev(SignalKind.ASN, Provider.AWS),
+        ]
+        result = _aggregate(evidence)
+        assert result.provider == Provider.INDEPENDENT
+        assert result.confidence == 0.0
+
+    def test_asn_confirmation_with_primary(self):
+        """ASN evidence with primary signals should be counted."""
+        evidence = [
+            _ev(SignalKind.MX, Provider.MS365),
+            _ev(SignalKind.ASN, Provider.MS365),
+        ]
+        result = _aggregate(evidence)
+        assert result.provider == Provider.MS365
+        # vote_share=1.0, depth=(0.20+0.03)/0.40=0.575
+        expected = min(1.0, (WEIGHTS[SignalKind.MX] + WEIGHTS[SignalKind.ASN]) / 0.40)
         assert result.confidence == pytest.approx(expected)
 
     def test_infomaniak_classification(self):
@@ -250,12 +285,12 @@ class TestAggregate:
 
     def test_swiss_isp_classification(self):
         evidence = [
-            _ev(SignalKind.ASN, Provider.SWISS_ISP),
+            _ev(SignalKind.SPF_IP, Provider.SWISS_ISP),
         ]
         result = _aggregate(evidence)
         assert result.provider == Provider.SWISS_ISP
-        # vote_share=1.0, depth=0.05/0.40=0.125
-        assert result.confidence == pytest.approx(0.125)
+        # vote_share=1.0, depth=0.08/0.40=0.20
+        assert result.confidence == pytest.approx(0.20)
 
     def test_autodiscover_is_primary_signal(self):
         """Autodiscover alone establishes a provider (not INDEPENDENT)."""
@@ -277,17 +312,16 @@ class TestAggregate:
         assert result.confidence == pytest.approx(0.45)
 
     def test_autodiscover_beats_asn(self):
-        """Zernez scenario: autodiscover(microsoft, 0.08) vs ASN(aws, 0.05) → microsoft wins."""
+        """Zernez scenario: autodiscover(microsoft) + ASN(aws, confirmation-only, discarded) → microsoft."""
         evidence = [
             _ev(SignalKind.AUTODISCOVER, Provider.MS365),
             _ev(SignalKind.ASN, Provider.AWS),
         ]
         result = _aggregate(evidence)
         assert result.provider == Provider.MS365
-        # ms365 score=0.08, aws score=0.05, total=0.13
-        # vote_share=0.08/0.13≈0.615, depth=(0.08+0.05)/0.40=0.325
-        expected = (0.08 / 0.13) * (0.13 / 0.40)
-        assert result.confidence == pytest.approx(expected)
+        # ASN(AWS) discarded: confirmation-only, no primary for AWS
+        # Only autodiscover(MS365) remains: vote_share=1.0, depth=0.08/0.40=0.20
+        assert result.confidence == pytest.approx(0.20)
 
     def test_mx_hosts_passthrough(self):
         evidence = [_ev(SignalKind.MX, Provider.MS365)]
@@ -297,6 +331,15 @@ class TestAggregate:
     def test_mx_hosts_default_empty(self):
         result = _aggregate([])
         assert result.mx_hosts == []
+
+    def test_spf_raw_passthrough(self):
+        evidence = [_ev(SignalKind.MX, Provider.MS365)]
+        result = _aggregate(evidence, spf_raw="v=spf1 include:example.com ~all")
+        assert result.spf_raw == "v=spf1 include:example.com ~all"
+
+    def test_spf_raw_default_empty(self):
+        result = _aggregate([])
+        assert result.spf_raw == ""
 
 
 class TestClassify:
@@ -427,31 +470,31 @@ class TestClassify:
         assert result.provider == Provider.INFOMANIAK
 
     async def test_swiss_isp_scenario(self):
-        """Swiss ASN, no hyperscaler signals → SWISS_ISP."""
-        asn_ev = [
+        """Swiss ISP detected via SPF ip4 ASN → SWISS_ISP."""
+        spf_ip_ev = [
             Evidence(
-                kind=SignalKind.ASN,
+                kind=SignalKind.SPF_IP,
                 provider=Provider.SWISS_ISP,
-                weight=WEIGHTS[SignalKind.ASN],
-                detail="ASN 3303 is Swiss ISP: Swisscom",
-                raw="3303",
+                weight=WEIGHTS[SignalKind.SPF_IP],
+                detail="SPF ip4/a ASN 3303 is Swiss ISP: Swisscom",
+                raw="195.186.1.1:3303",
             )
         ]
 
-        with _patch_all_probes(probe_asn=asn_ev):
+        with _patch_all_probes(probe_spf_ip=spf_ip_ev):
             result = await classify("example.com")
 
         assert result.provider == Provider.SWISS_ISP
 
     async def test_tenant_confirmation_only_in_classify(self):
-        """Domain with Swiss ISP MX + positive M365 tenant → must NOT classify as MS365."""
-        asn_ev = [
+        """Domain with Swiss ISP SPF IPs + positive M365 tenant → must NOT classify as MS365."""
+        spf_ip_ev = [
             Evidence(
-                kind=SignalKind.ASN,
+                kind=SignalKind.SPF_IP,
                 provider=Provider.SWISS_ISP,
-                weight=WEIGHTS[SignalKind.ASN],
-                detail="ASN is Swiss ISP",
-                raw="3303",
+                weight=WEIGHTS[SignalKind.SPF_IP],
+                detail="SPF ip4/a ASN 3303 is Swiss ISP: Swisscom",
+                raw="195.186.1.1:3303",
             )
         ]
         tenant_ev = [
@@ -464,7 +507,7 @@ class TestClassify:
             )
         ]
 
-        with _patch_all_probes(probe_asn=asn_ev, probe_tenant=tenant_ev):
+        with _patch_all_probes(probe_spf_ip=spf_ip_ev, probe_tenant=tenant_ev):
             result = await classify("example.com")
 
         # Tenant evidence for MS365 should be discarded (no MS365 primary signals)
@@ -565,7 +608,17 @@ class TestClassify:
                 new_callable=AsyncMock,
                 return_value=[],
             ),
+            patch(
+                "mail_sovereignty.classifier.probe_spf_ip",
+                new_callable=AsyncMock,
+                return_value=[],
+            ),
             patch("mail_sovereignty.classifier.detect_gateway", return_value=None),
+            patch(
+                "mail_sovereignty.classifier.lookup_spf_raw",
+                new_callable=AsyncMock,
+                return_value="",
+            ),
         ):
             await classify("example.com")
 

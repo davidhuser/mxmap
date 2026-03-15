@@ -47,9 +47,10 @@ class TestSignalKind:
         assert SignalKind.TENANT == "tenant"
         assert SignalKind.ASN == "asn"
         assert SignalKind.TXT_VERIFICATION == "txt_verification"
+        assert SignalKind.SPF_IP == "spf_ip"
 
     def test_all_members(self):
-        assert len(SignalKind) == 10
+        assert len(SignalKind) == 11
 
 
 class TestEvidence:
@@ -108,6 +109,7 @@ class TestEvidence:
             SignalKind.TENANT,
             SignalKind.ASN,
             SignalKind.TXT_VERIFICATION,
+            SignalKind.SPF_IP,
         ):
             e = Evidence(kind=kind, provider=Provider.MS365, weight=0.10, detail="test")
             assert e.kind == kind
@@ -164,3 +166,16 @@ class TestClassificationResult:
     def test_mx_hosts_default_empty(self):
         r = ClassificationResult(provider=Provider.MS365, confidence=0.5, evidence=[])
         assert r.mx_hosts == []
+
+    def test_spf_raw_field(self):
+        r = ClassificationResult(
+            provider=Provider.MS365,
+            confidence=0.5,
+            evidence=[],
+            spf_raw="v=spf1 include:spf.protection.outlook.com ~all",
+        )
+        assert r.spf_raw == "v=spf1 include:spf.protection.outlook.com ~all"
+
+    def test_spf_raw_default_empty(self):
+        r = ClassificationResult(provider=Provider.MS365, confidence=0.5, evidence=[])
+        assert r.spf_raw == ""
