@@ -1,6 +1,7 @@
 """Tests for the classification pipeline."""
 
 import json
+import logging
 from unittest.mock import patch
 
 import pytest
@@ -358,3 +359,46 @@ class TestMinifyForFrontend:
         sig = entry["classification_signals"][0]
         assert sig["kind"] == "mx"
         assert sig["detail"] == "MX match"
+
+
+class TestPipelineLogging:
+    @pytest.fixture
+    def domains_json(self, tmp_path):
+        data = {
+            "municipalities": {
+                "351": {
+                    "bfs": "351",
+                    "name": "Bern",
+                    "canton": "Bern",
+                    "domain": "bern.ch",
+                },
+            }
+        }
+        path = tmp_path / "municipality_domains.json"
+        path.write_text(json.dumps(data), encoding="utf-8")
+        return path
+
+    async def test_logs_progress_messages(self, domains_json, tmp_path, caplog):
+        ms_result = ClassificationResult(
+            provider=Provider.MS365,
+            confidence=0.4,
+            evidence=[],
+            mx_hosts=[],
+        )
+
+        async def fake_classify_many(domains, max_concurrency=20):
+            for d in domains:
+                yield d, ms_result
+
+        output_path = tmp_path / "data.json"
+        with (
+            patch(
+                "mail_sovereignty.pipeline.classify_many",
+                side_effect=fake_classify_many,
+            ),
+            caplog.at_level(logging.INFO, logger="mail_sovereignty.pipeline"),
+        ):
+            await run(domains_json, output_path)
+
+        assert any("Classifying" in msg for msg in caplog.messages)
+        assert any("Written" in msg for msg in caplog.messages)

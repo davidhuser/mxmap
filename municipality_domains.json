@@ -1,5 +1,5 @@
 {
-  "generated": "2026-03-15T20:40:23Z",
+  "generated": "2026-03-16T01:31:24Z",
   "total": 2110,
   "municipalities": {
     "1": {
@@ -18990,17 +18990,12 @@
       "bfs": "2939",
       "name": "Schaffhausen",
       "canton": "Kanton Schaffhausen",
-      "domain": "stadt-schaffhausen.ch",
-      "source": "wikidata",
+      "domain": "stsh.ch",
+      "source": "override",
       "confidence": "high",
       "sources_detail": {
-        "scrape": [],
-        "wikidata": [
-          "stadt-schaffhausen.ch"
-        ],
-        "guess": [
-          "schaffhausen.ch",
-          "stadt-schaffhausen.ch"
+        "override": [
+          "stsh.ch"
         ]
       },
       "flags": []
@@ -28546,7 +28541,6 @@
           "tageo.ch",
           "tagesfamilien-motg.ch",
           "tbweinfelden.ch",
-          "tcberg.ch",
           "tertianum.ch",
           "tg.ch",
           "tg.prosenectute.ch",
@@ -30811,10 +30805,13 @@
       "name": "Ollon",
       "canton": "Kanton Waadt",
       "domain": "ollon.ch",
-      "source": "wikidata",
+      "source": "scrape",
       "confidence": "high",
       "sources_detail": {
-        "scrape": [],
+        "scrape": [
+          "ollon.ch",
+          "vd.ch"
+        ],
         "wikidata": [
           "ollon.ch"
         ],
@@ -37490,12 +37487,10 @@
       "name": "Troistorrents",
       "canton": "Kanton Wallis",
       "domain": "troistorrents.ch",
-      "source": "scrape",
+      "source": "wikidata",
       "confidence": "high",
       "sources_detail": {
-        "scrape": [
-          "troistorrents.ch"
-        ],
+        "scrape": [],
         "wikidata": [
           "troistorrents.ch"
         ],

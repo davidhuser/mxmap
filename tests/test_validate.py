@@ -1,4 +1,5 @@
 import json
+import logging
 
 import pytest
 
@@ -616,7 +617,7 @@ class TestScoreEntry:
 
 
 class TestPrintReport:
-    def test_runs_without_error(self, capsys):
+    def test_runs_without_error(self):
         entries = [
             {
                 "bfs": "1",
@@ -635,7 +636,7 @@ class TestPrintReport:
         ]
         print_report(entries)
 
-    def test_output_contains_header(self, capsys):
+    def test_output_contains_header(self, caplog):
         entries = [
             {
                 "bfs": "1",
@@ -645,9 +646,9 @@ class TestPrintReport:
                 "flags": ["mx_spf_match"],
             },
         ]
-        print_report(entries)
-        captured = capsys.readouterr()
-        assert "VALIDATION REPORT" in captured.out
+        with caplog.at_level(logging.INFO, logger="mail_sovereignty.validate"):
+            print_report(entries)
+        assert any("VALIDATION REPORT" in msg for msg in caplog.messages)
 
 
 # ── _detect_potential_gateways() ──────────────────────────────────────
@@ -728,15 +729,15 @@ class TestDetectPotentialGateways:
         assert len(result[0][2]) == 3
         assert result[0][2] == ["Town0", "Town1", "Town2"]
 
-    def test_print_report_shows_gateway_warning(self, capsys):
+    def test_print_report_shows_gateway_warning(self, caplog):
         entries = [
             _make_independent_entry(f"Town{i}", f"town{i}.ch", ["mx.newgw.com"])
             for i in range(6)
         ]
-        print_report(entries)
-        captured = capsys.readouterr()
-        assert "Potential undetected gateways" in captured.out
-        assert "newgw.com" in captured.out
+        with caplog.at_level(logging.INFO, logger="mail_sovereignty.validate"):
+            print_report(entries)
+        assert any("Potential undetected gateways" in msg for msg in caplog.messages)
+        assert any("newgw.com" in msg for msg in caplog.messages)
 
 
 # ── run() ────────────────────────────────────────────────────────────
@@ -769,10 +770,10 @@ class TestRun:
         # header + 3 municipalities
         assert len(lines) == 4
 
-    def test_console_output(self, sample_data_json, tmp_path, capsys):
-        run(sample_data_json, tmp_path)
-        captured = capsys.readouterr()
-        assert "VALIDATION REPORT" in captured.out
+    def test_console_output(self, sample_data_json, tmp_path, caplog):
+        with caplog.at_level(logging.INFO, logger="mail_sovereignty.validate"):
+            run(sample_data_json, tmp_path)
+        assert any("VALIDATION REPORT" in msg for msg in caplog.messages)
 
     def test_returns_true_when_quality_passes(
         self, sample_data_json, tmp_path, monkeypatch
@@ -825,6 +826,24 @@ class TestRun:
         assert "high_confidence_pct" in report
         assert "quality_passed" in report
         assert report["quality_passed"] is True
+
+    def test_logs_quality_gate_passed(
+        self, sample_data_json, tmp_path, monkeypatch, caplog
+    ):
+        monkeypatch.setattr("mail_sovereignty.validate.MIN_AVERAGE_SCORE", 10)
+        monkeypatch.setattr("mail_sovereignty.validate.MIN_HIGH_CONFIDENCE_PCT", 10)
+        with caplog.at_level(logging.INFO, logger="mail_sovereignty.validate"):
+            run(sample_data_json, tmp_path)
+        assert any("Quality gate PASSED" in msg for msg in caplog.messages)
+
+    def test_logs_quality_gate_failed(
+        self, sample_data_json, tmp_path, monkeypatch, caplog
+    ):
+        monkeypatch.setattr("mail_sovereignty.validate.MIN_AVERAGE_SCORE", 99)
+        monkeypatch.setattr("mail_sovereignty.validate.MIN_HIGH_CONFIDENCE_PCT", 10)
+        with caplog.at_level(logging.WARNING, logger="mail_sovereignty.validate"):
+            run(sample_data_json, tmp_path)
+        assert any("Quality gate FAILED" in msg for msg in caplog.messages)
 
 
 # ── Evidence-based scoring ────────────────────────────────────────

@@ -30,6 +30,12 @@ class TestMakeResolvers:
         # First resolver uses system defaults (no explicit nameservers set by us)
         assert resolvers[0] is not resolvers[1]
 
+    def test_resolvers_share_cache(self):
+        resolvers = make_resolvers()
+        assert resolvers[0].cache is resolvers[1].cache
+        assert resolvers[1].cache is resolvers[2].cache
+        assert resolvers[0].cache is not None
+
 
 class TestGetResolvers:
     def test_lazy_init(self):

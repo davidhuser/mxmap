@@ -6,11 +6,14 @@ import dns.asyncresolver
 import dns.exception
 import dns.name
 import dns.rdatatype
+import httpx
 import pytest
+import stamina
 
 from mail_sovereignty.models import Provider, SignalKind
 from mail_sovereignty.probes import (
     WEIGHTS,
+    _make_resolver,
     detect_gateway,
     lookup_mx_hosts,
     lookup_spf_raw,
@@ -114,9 +117,7 @@ class TestLookupSpfRaw:
 
     async def test_no_spf_record(self):
         resolver = _mock_resolver()
-        resolver.resolve.return_value = [
-            _txt_rdata("google-site-verification=abc123")
-        ]
+        resolver.resolve.return_value = [_txt_rdata("google-site-verification=abc123")]
         result = await lookup_spf_raw("example.com", resolver)
         assert result == ""
 
@@ -738,3 +739,62 @@ class TestProbeSpfIp:
         results = await probe_spf_ip("example.com", resolver)
         swiss_isp_results = [e for e in results if e.provider == Provider.SWISS_ISP]
         assert len(swiss_isp_results) == 1
+
+
+class TestMakeResolverCache:
+    def test_resolver_has_cache(self):
+        resolver = _make_resolver()
+        assert resolver.cache is not None
+
+    def test_resolvers_share_cache(self):
+        r1 = _make_resolver()
+        r2 = _make_resolver()
+        assert r1.cache is r2.cache
+
+
+class TestProbeTenantRetry:
+    async def test_retries_on_503_then_succeeds(self):
+        stamina.set_testing(False)
+        call_count = 0
+
+        async def _side_effect(*args, **kwargs):
+            nonlocal call_count
+            call_count += 1
+            if call_count == 1:
+                resp = MagicMock()
+                resp.raise_for_status.side_effect = httpx.HTTPStatusError(
+                    "503", request=MagicMock(), response=MagicMock(status_code=503)
+                )
+                return resp
+            resp = MagicMock()
+            resp.raise_for_status = MagicMock()
+            resp.json.return_value = {"NameSpaceType": "Managed"}
+            return resp
+
+        mock_client = MagicMock()
+        mock_client.get = AsyncMock(side_effect=_side_effect)
+        mock_cm = _FakeAsyncClient(mock_client)
+
+        with patch("mail_sovereignty.probes.httpx.AsyncClient", return_value=mock_cm):
+            results = await probe_tenant("example.com")
+
+        assert len(results) == 1
+        assert results[0].provider == Provider.MS365
+        assert call_count == 2
+
+    async def test_gives_up_after_max_retries(self):
+        stamina.set_testing(False)
+        mock_client = MagicMock()
+        resp = MagicMock()
+        resp.raise_for_status.side_effect = httpx.HTTPStatusError(
+            "503", request=MagicMock(), response=MagicMock(status_code=503)
+        )
+        mock_client.get = AsyncMock(return_value=resp)
+        mock_cm = _FakeAsyncClient(mock_client)
+
+        with patch("mail_sovereignty.probes.httpx.AsyncClient", return_value=mock_cm):
+            results = await probe_tenant("example.com")
+
+        # Should return empty (graceful degradation via outer try/except)
+        assert results == []
+        assert mock_client.get.call_count == 2

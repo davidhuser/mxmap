@@ -1,10 +1,25 @@
 import csv
 import io
+import logging
 import time
 
 import httpx
+import stamina
 
 from mail_sovereignty.constants import BFS_API_URL, CANTON_SHORT_TO_FULL
+
+logger = logging.getLogger(__name__)
+
+
+@stamina.retry(
+    on=(httpx.HTTPStatusError, httpx.ConnectError, httpx.TimeoutException),
+    attempts=3,
+    wait_initial=2.0,
+)
+async def _fetch(client: httpx.AsyncClient, url: str, params: dict) -> httpx.Response:
+    r = await client.get(url, params=params)
+    r.raise_for_status()
+    return r
 
 
 def _parse_csv_response(text: str) -> list[dict]:
@@ -37,11 +52,14 @@ async def fetch_bfs_municipalities(date: str | None = None) -> dict[str, dict]:
     if date is None:
         date = time.strftime("%d-%m-%Y")
 
-    print(f"Fetching BFS municipality list (date={date})...")
+    logger.info("Fetching BFS municipality list (date=%s)...", date)
 
     async with httpx.AsyncClient(timeout=60) as client:
-        r = await client.get(BFS_API_URL, params={"date": date})
-        r.raise_for_status()
+        t0 = time.monotonic()
+        r = await _fetch(client, BFS_API_URL, {"date": date})
+        logger.debug(
+            "BFS API response: %d bytes in %.1fs", len(r.text), time.monotonic() - t0
+        )
         entries = _parse_csv_response(r.text)
 
     # Build lookup by HistoricalCode for parent resolution
@@ -77,5 +95,5 @@ async def fetch_bfs_municipalities(date: str | None = None) -> dict[str, dict]:
             "canton": canton,
         }
 
-    print(f"  Found {len(municipalities)} municipalities from BFS API")
+    logger.info("  Found %d municipalities from BFS API", len(municipalities))
     return municipalities

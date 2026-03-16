@@ -8,7 +8,9 @@ import logging
 import dns.asyncresolver
 import dns.exception
 import dns.rdatatype
+import dns.resolver
 import httpx
+import stamina
 
 from .models import Evidence, Provider, SignalKind
 from .signatures import (
@@ -36,12 +38,16 @@ WEIGHTS: dict[SignalKind, float] = {
 }
 
 
+_shared_cache = dns.resolver.Cache()
+
+
 def _make_resolver() -> dns.asyncresolver.Resolver:
     """Create a resolver with sensible defaults."""
     resolver = dns.asyncresolver.Resolver()
     resolver.nameservers = list(resolver.nameservers) + ["8.8.8.8", "1.1.1.1"]
     resolver.timeout = 5.0
     resolver.lifetime = 10.0
+    resolver.cache = _shared_cache
     return resolver
 
 
@@ -56,9 +62,7 @@ async def lookup_mx_hosts(
     return [str(rdata.exchange).rstrip(".").lower() for rdata in answer]
 
 
-async def lookup_spf_raw(
-    domain: str, resolver: dns.asyncresolver.Resolver
-) -> str:
+async def lookup_spf_raw(domain: str, resolver: dns.asyncresolver.Resolver) -> str:
     """Return the raw SPF (v=spf1) TXT record for a domain, or empty string."""
     try:
         answer = await resolver.resolve(domain, "TXT")
@@ -337,6 +341,19 @@ async def probe_smtp(mx_hosts: list[str]) -> list[Evidence]:
     return results
 
 
+@stamina.retry(
+    on=(httpx.HTTPStatusError, httpx.ConnectError, httpx.TimeoutException),
+    attempts=2,
+    wait_initial=1.0,
+)
+async def _fetch_tenant(
+    client: httpx.AsyncClient, url: str, params: dict
+) -> httpx.Response:
+    r = await client.get(url, params=params, timeout=10)
+    r.raise_for_status()
+    return r
+
+
 async def probe_tenant(domain: str) -> list[Evidence]:
     """Query getuserrealm.srf to detect MS365 tenant."""
     results: list[Evidence] = []
@@ -344,8 +361,7 @@ async def probe_tenant(domain: str) -> list[Evidence]:
     params = {"login": f"user@{domain}", "json": "1"}
     try:
         async with httpx.AsyncClient() as client:
-            r = await client.get(url, params=params, timeout=10)
-            r.raise_for_status()
+            r = await _fetch_tenant(client, url, params)
             data = r.json()
             ns_type = data.get("NameSpaceType")
             if ns_type in ("Managed", "Federated"):

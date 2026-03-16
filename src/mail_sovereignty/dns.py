@@ -14,6 +14,7 @@ _RETRYABLE = (dns.exception.Timeout, dns.resolver.NoAnswer, dns.resolver.NoNames
 
 def make_resolvers() -> list[dns.asyncresolver.Resolver]:
     """Create a list of async resolvers pointing to different DNS servers."""
+    cache = dns.resolver.Cache()
     resolvers = []
     for nameservers in [None, ["8.8.8.8", "8.8.4.4"], ["1.1.1.1", "1.0.0.1"]]:
         r = dns.asyncresolver.Resolver()
@@ -21,6 +22,7 @@ def make_resolvers() -> list[dns.asyncresolver.Resolver]:
             r.nameservers = nameservers
         r.timeout = 10
         r.lifetime = 15
+        r.cache = cache
         resolvers.append(r)
     return resolvers
 

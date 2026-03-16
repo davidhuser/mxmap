@@ -12,6 +12,7 @@ dependencies = [
     "dnspython>=2.8.0",
     "httpx>=0.28.1",
     "pydantic>=2.0",
+    "stamina>=25.2.0",
 ]
 
 [project.scripts]

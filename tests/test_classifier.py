@@ -704,3 +704,36 @@ class TestClassifyMany:
             async for domain, result in classify_many(["a.com"], max_concurrency=1):
                 results.append((domain, result))
         assert len(results) == 1
+
+    async def test_error_isolation_skips_failing_domain(self):
+        """One failing domain should not crash the loop; others succeed."""
+        call_count = 0
+
+        async def _flaky_classify(domain):
+            nonlocal call_count
+            call_count += 1
+            if domain == "fail.com":
+                raise RuntimeError("boom")
+            from mail_sovereignty.models import ClassificationResult
+
+            return ClassificationResult(
+                provider=Provider.INDEPENDENT,
+                confidence=0.0,
+                evidence=[],
+                gateway=None,
+                mx_hosts=[],
+                spf_raw="",
+            )
+
+        with patch("mail_sovereignty.classifier.classify", side_effect=_flaky_classify):
+            results = []
+            async for domain, result in classify_many(
+                ["ok.com", "fail.com", "also-ok.com"]
+            ):
+                results.append((domain, result))
+
+        domains = {d for d, _ in results}
+        assert "ok.com" in domains
+        assert "also-ok.com" in domains
+        assert "fail.com" not in domains
+        assert len(results) == 2

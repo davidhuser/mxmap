@@ -1,5 +1,9 @@
+import logging
+
 import httpx
+import pytest
 import respx
+import stamina
 
 from mail_sovereignty.bfs_api import fetch_bfs_municipalities
 
@@ -92,3 +96,44 @@ class TestFetchBfsMunicipalities:
 
         result = await fetch_bfs_municipalities(date="01-01-2026")
         assert result == {}
+
+
+class TestBfsApiLogging:
+    @respx.mock
+    async def test_logs_info_messages(self, caplog):
+        respx.get("https://www.agvchapp.bfs.admin.ch/api/communes/snapshot").mock(
+            return_value=_csv_response(SAMPLE_BFS_CSV)
+        )
+        with caplog.at_level(logging.INFO, logger="mail_sovereignty.bfs_api"):
+            await fetch_bfs_municipalities(date="01-01-2026")
+        assert any("Fetching BFS" in msg for msg in caplog.messages)
+        assert any("Found 2 municipalities" in msg for msg in caplog.messages)
+
+
+class TestFetchRetry:
+    @respx.mock
+    async def test_retries_on_503_then_succeeds(self):
+        """503 on first call, 200 on second -> success with 2 calls."""
+        stamina.set_testing(False)
+        route = respx.get(
+            "https://www.agvchapp.bfs.admin.ch/api/communes/snapshot"
+        ).mock(
+            side_effect=[
+                httpx.Response(503),
+                _csv_response(SAMPLE_BFS_CSV),
+            ]
+        )
+        result = await fetch_bfs_municipalities(date="01-01-2026")
+        assert len(result) == 2
+        assert route.call_count == 2
+
+    @respx.mock
+    async def test_raises_after_all_retries_exhausted(self):
+        """Always 503 -> raises after 3 attempts."""
+        stamina.set_testing(False)
+        route = respx.get(
+            "https://www.agvchapp.bfs.admin.ch/api/communes/snapshot"
+        ).mock(return_value=httpx.Response(503))
+        with pytest.raises(httpx.HTTPStatusError):
+            await fetch_bfs_municipalities(date="01-01-2026")
+        assert route.call_count == 3

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import logging
 from collections import defaultdict
 from collections.abc import AsyncIterator
 
@@ -25,6 +26,8 @@ from .probes import (
     probe_tenant,
     probe_txt_verification,
 )
+
+logger = logging.getLogger(__name__)
 
 # Primary signals that can stand on their own
 _PRIMARY_KINDS = frozenset(
@@ -176,7 +179,17 @@ async def classify(domain: str) -> ClassificationResult:
         + txt_ev
         + spf_ip_ev
     )
-    return _aggregate(all_evidence, gateway=gateway, mx_hosts=all_mx_hosts, spf_raw=spf_raw)
+    result = _aggregate(
+        all_evidence, gateway=gateway, mx_hosts=all_mx_hosts, spf_raw=spf_raw
+    )
+    logger.debug(
+        "classify(%s): provider=%s confidence=%.2f signals=%d",
+        domain,
+        result.provider.value,
+        result.confidence,
+        len(result.evidence),
+    )
+    return result
 
 
 async def classify_many(
@@ -192,4 +205,8 @@ async def classify_many(
 
     tasks = [asyncio.create_task(_bounded(d)) for d in domains]
     for coro in asyncio.as_completed(tasks):
-        yield await coro
+        try:
+            yield await coro
+        except Exception:
+            logger.exception("Classification failed for a domain, skipping")
+            continue

@@ -1,8 +1,11 @@
 import json
+import logging
 from unittest.mock import AsyncMock, patch
 
 import httpx
+import pytest
 import respx
+import stamina
 
 from mail_sovereignty.resolve import (
     build_urls,
@@ -784,3 +787,142 @@ class TestResolveRun:
         entry = data["municipalities"]["351"]
         assert entry["name"] == "Bern"
         assert "sources_detail" in entry
+
+
+# ── Wikidata retry ────────────────────────────────────────────────
+
+WIKIDATA_JSON = {
+    "results": {
+        "bindings": [
+            {
+                "bfs": {"value": "351"},
+                "itemLabel": {"value": "Bern"},
+                "website": {"value": "https://www.bern.ch"},
+                "cantonLabel": {"value": "Bern"},
+            },
+        ]
+    }
+}
+
+
+class TestFetchWikidataRetry:
+    @respx.mock
+    async def test_retries_on_503_then_succeeds(self):
+        stamina.set_testing(False)
+        route = respx.post("https://query.wikidata.org/sparql").mock(
+            side_effect=[
+                httpx.Response(503),
+                httpx.Response(200, json=WIKIDATA_JSON),
+            ]
+        )
+        result = await fetch_wikidata()
+        assert "351" in result
+        assert route.call_count == 2
+
+    @respx.mock
+    async def test_raises_after_all_retries_exhausted(self):
+        stamina.set_testing(False)
+        route = respx.post("https://query.wikidata.org/sparql").mock(
+            return_value=httpx.Response(503)
+        )
+        with pytest.raises(httpx.HTTPStatusError):
+            await fetch_wikidata()
+        assert route.call_count == 3
+
+
+# ── Scrape error logging ─────────────────────────────────────────
+
+
+class TestScrapeErrorLogging:
+    async def test_logs_debug_on_exception(self, caplog):
+        client = AsyncMock()
+        client.get = AsyncMock(side_effect=ConnectionError("refused"))
+
+        with caplog.at_level(logging.DEBUG, logger="mail_sovereignty.resolve"):
+            result = await scrape_email_domains(client, "fail.ch")
+
+        assert result == set()
+        assert any("Scrape" in msg and "refused" in msg for msg in caplog.messages)
+
+
+# ── Error isolation in resolve run() ─────────────────────────────
+
+
+class TestResolveRunErrorIsolation:
+    @respx.mock
+    async def test_skips_failing_municipality(self, tmp_path):
+        """One failing resolution should not crash the whole run."""
+        # Two municipalities in BFS
+        csv_text = f"""{BFS_CSV_HEADER}
+1,1,12.09.1848,,1,,Bern,BE,,,,
+200,200,12.09.1848,,2,1,Amtsbezirk Bern,Bern,,,,
+351,351,12.09.1848,,3,200,Bern,Bern,,,,
+300,300,12.09.1848,,2,1,Amtsbezirk Thun,Thun,,,,
+942,942,12.09.1848,,3,300,Thun,Thun,,,,
+"""
+        respx.get("https://www.agvchapp.bfs.admin.ch/api/communes/snapshot").mock(
+            return_value=httpx.Response(200, text=csv_text)
+        )
+        respx.post("https://query.wikidata.org/sparql").mock(
+            return_value=httpx.Response(200, json={"results": {"bindings": []}})
+        )
+
+        call_count = 0
+
+        async def _flaky_resolve(m, overrides, client):
+            nonlocal call_count
+            call_count += 1
+            if m["bfs"] == "942":
+                raise RuntimeError("boom")
+            return {
+                "bfs": m["bfs"],
+                "name": m["name"],
+                "canton": m.get("canton", ""),
+                "domain": "test.ch",
+                "source": "guess",
+                "confidence": "low",
+                "sources_detail": {},
+                "flags": [],
+            }
+
+        with patch(
+            "mail_sovereignty.resolve.resolve_municipality_domain",
+            side_effect=_flaky_resolve,
+        ):
+            output = tmp_path / "municipality_domains.json"
+            overrides = tmp_path / "overrides.json"
+            overrides.write_text("{}")
+            await run(output, overrides, date="01-01-2026")
+
+        data = json.loads(output.read_text())
+        # Bern succeeded, Thun was skipped
+        assert "351" in data["municipalities"]
+        assert "942" not in data["municipalities"]
+
+
+class TestResolveRunLogging:
+    @respx.mock
+    async def test_logs_bfs_only_warning(self, tmp_path, caplog):
+        """BFS-only municipalities should produce a warning log."""
+        # BFS has Bern, Wikidata is empty -> Bern is BFS-only
+        respx.get("https://www.agvchapp.bfs.admin.ch/api/communes/snapshot").mock(
+            return_value=httpx.Response(200, text=SAMPLE_BFS_CSV)
+        )
+        respx.post("https://query.wikidata.org/sparql").mock(
+            return_value=httpx.Response(200, json={"results": {"bindings": []}})
+        )
+
+        with (
+            patch(
+                "mail_sovereignty.resolve.lookup_mx",
+                new_callable=AsyncMock,
+                return_value=[],
+            ),
+            caplog.at_level(logging.WARNING, logger="mail_sovereignty.resolve"),
+        ):
+            output = tmp_path / "municipality_domains.json"
+            overrides = tmp_path / "overrides.json"
+            overrides.write_text("{}")
+            await run(output, overrides, date="01-01-2026")
+
+        assert any("BFS-only" in msg for msg in caplog.messages)

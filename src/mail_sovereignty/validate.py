@@ -1,5 +1,6 @@
 import csv
 import json
+import logging
 import os
 import sys
 from pathlib import Path
@@ -12,6 +13,8 @@ from mail_sovereignty.signatures import (
     SIGNATURES,
     match_patterns,
 )
+
+logger = logging.getLogger(__name__)
 
 
 def _map_provider_name(provider_value: str) -> str:
@@ -540,9 +543,9 @@ def print_report(scored_entries: list[dict[str, Any]]) -> None:
     scores = [e["score"] for e in scored_entries]
     total = len(scores)
 
-    print(f"\n{'=' * 60}")
-    print(f"  VALIDATION REPORT  ({total} municipalities)")
-    print(f"{'=' * 60}")
+    logger.info("=" * 60)
+    logger.info("  VALIDATION REPORT  (%d municipalities)", total)
+    logger.info("=" * 60)
 
     buckets = {"90-100": 0, "70-89": 0, "50-69": 0, "30-49": 0, "0-29": 0}
     for s in scores:
@@ -557,24 +560,26 @@ def print_report(scored_entries: list[dict[str, Any]]) -> None:
         else:
             buckets["0-29"] += 1
 
-    print("\n  Score distribution:")
+    logger.info("  Score distribution:")
     max_bar = 40
     max_count = max(buckets.values()) if buckets.values() else 1
     for label, count in buckets.items():
         bar = "#" * int(count / max_count * max_bar)
-        print(f"    {label:>6}: {count:>5}  {bar}")
+        logger.info("    %6s: %5d  %s", label, count, bar)
 
     high = [e for e in scored_entries if e["score"] >= 80]
     medium = [e for e in scored_entries if 50 <= e["score"] < 80]
     low = [e for e in scored_entries if e["score"] < 50]
 
-    print("\n  Confidence tiers:")
-    print(f"    High   (>=80): {len(high):>5}  ({len(high) / total * 100:.1f}%)")
-    print(f"    Medium (50-79): {len(medium):>5}  ({len(medium) / total * 100:.1f}%)")
-    print(f"    Low    (<50):  {len(low):>5}  ({len(low) / total * 100:.1f}%)")
+    logger.info("  Confidence tiers:")
+    logger.info("    High   (>=80): %5d  (%.1f%%)", len(high), len(high) / total * 100)
+    logger.info(
+        "    Medium (50-79): %5d  (%.1f%%)", len(medium), len(medium) / total * 100
+    )
+    logger.info("    Low    (<50):  %5d  (%.1f%%)", len(low), len(low) / total * 100)
 
     avg = sum(scores) / total if total else 0
-    print(f"\n  Average score: {avg:.1f}")
+    logger.info("  Average score: %.1f", avg)
 
     flag_counts = {}
     for e in scored_entries:
@@ -582,41 +587,49 @@ def print_report(scored_entries: list[dict[str, Any]]) -> None:
             flag_name = f.split(":")[0]
             flag_counts[flag_name] = flag_counts.get(flag_name, 0) + 1
 
-    print("\n  Flag breakdown:")
+    logger.info("  Flag breakdown:")
     for flag, count in sorted(flag_counts.items(), key=lambda x: -x[1]):
-        print(f"    {flag:<35} {count:>5}")
+        logger.info("    %-35s %5d", flag, count)
 
     non_merged = [e for e in scored_entries if "merged_municipality" not in e["flags"]]
     lowest = sorted(non_merged, key=lambda x: x["score"])[:15]
 
-    print("\n  Lowest-confidence entries (for review):")
-    print(f"    {'BFS':>5}  {'Score':>5}  {'Provider':<12} {'Name':<30} Flags")
-    print(f"    {'-' * 5}  {'-' * 5}  {'-' * 12} {'-' * 30} {'-' * 20}")
+    logger.info("  Lowest-confidence entries (for review):")
+    logger.info("    %5s  %5s  %-12s %-30s Flags", "BFS", "Score", "Provider", "Name")
+    logger.info("    %s  %s  %s %s %s", "-" * 5, "-" * 5, "-" * 12, "-" * 30, "-" * 20)
     for e in lowest:
         flags_str = ", ".join(e["flags"])
-        print(
-            f"    {e['bfs']:>5}  {e['score']:>5}  {e['provider']:<12} "
-            f"{e['name']:<30} {flags_str}"
+        logger.info(
+            "    %5s  %5d  %-12s %-30s %s",
+            e["bfs"],
+            e["score"],
+            e["provider"],
+            e["name"],
+            flags_str,
         )
 
     mismatched = [e for e in scored_entries if "mx_spf_mismatch" in e["flags"]]
     if mismatched:
-        print(f"\n  MX/SPF mismatches ({len(mismatched)}):")
+        logger.info("  MX/SPF mismatches (%d):", len(mismatched))
         for e in sorted(mismatched, key=lambda x: x["score"]):
-            print(
-                f"    {e['bfs']:>5}  {e['name']:<30} "
-                f"mx_provider={_match_provider_from_mx(e.get('mx_raw', []))} "
-                f"spf_provider={_match_provider_from_spf(e.get('spf_raw', ''))}"
+            logger.info(
+                "    %5s  %-30s mx_provider=%s spf_provider=%s",
+                e["bfs"],
+                e["name"],
+                _match_provider_from_mx(e.get("mx_raw", [])),
+                _match_provider_from_spf(e.get("spf_raw", "")),
             )
 
     potential_gateways = _detect_potential_gateways(scored_entries)
     if potential_gateways:
-        print("\n  Potential undetected gateways:")
+        logger.info("  Potential undetected gateways:")
         for suffix, count, samples in potential_gateways:
             sample_str = ", ".join(samples)
-            print(f"    {suffix:<30} {count:>3} municipalities  (e.g. {sample_str})")
+            logger.info(
+                "    %-30s %3d municipalities  (e.g. %s)", suffix, count, sample_str
+            )
 
-    print(f"\n{'=' * 60}\n")
+    logger.info("=" * 60)
 
 
 def run(data_path: Path, output_dir: Path, quality_gate: bool = False) -> bool:
@@ -624,7 +637,7 @@ def run(data_path: Path, output_dir: Path, quality_gate: bool = False) -> bool:
         with open(data_path, encoding="utf-8") as f:
             data = json.load(f)
     except FileNotFoundError:
-        print("Error: data.json not found. Run preprocess first.")
+        logger.error("Error: data.json not found. Run preprocess first.")
         sys.exit(1)
 
     municipalities = data["municipalities"]
@@ -697,17 +710,22 @@ def run(data_path: Path, output_dir: Path, quality_gate: bool = False) -> bool:
                 ]
             )
 
-    print(f"Written {json_path} and {csv_path} ({len(scored)} entries)")
+    logger.info("Written %s and %s (%d entries)", json_path, csv_path, len(scored))
 
     # Quality gate
     if quality_passed:
-        print(
-            f"Quality gate PASSED (avg={avg_score}, high_conf={high_confidence_pct}%)"
+        logger.info(
+            "Quality gate PASSED (avg=%s, high_conf=%s%%)",
+            avg_score,
+            high_confidence_pct,
         )
     else:
-        print(
-            f"Quality gate FAILED (avg={avg_score} min={MIN_AVERAGE_SCORE}, "
-            f"high_conf={high_confidence_pct}% min={MIN_HIGH_CONFIDENCE_PCT}%)"
+        logger.warning(
+            "Quality gate FAILED (avg=%s min=%s, high_conf=%s%% min=%s%%)",
+            avg_score,
+            MIN_AVERAGE_SCORE,
+            high_confidence_pct,
+            MIN_HIGH_CONFIDENCE_PCT,
         )
         if quality_gate:
             sys.exit(1)

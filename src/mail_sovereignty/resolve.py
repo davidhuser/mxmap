@@ -1,5 +1,6 @@
 import asyncio
 import json
+import logging
 import re
 import time
 from pathlib import Path
@@ -7,6 +8,7 @@ from typing import Any
 from urllib.parse import urlparse
 
 import httpx
+import stamina
 
 from mail_sovereignty.bfs_api import fetch_bfs_municipalities
 from mail_sovereignty.constants import (
@@ -20,6 +22,8 @@ from mail_sovereignty.constants import (
     TYPO3_RE,
 )
 from mail_sovereignty.dns import lookup_mx
+
+logger = logging.getLogger(__name__)
 
 
 def url_to_domain(url: str | None) -> str | None:
@@ -284,20 +288,28 @@ def score_domain_sources(
     }
 
 
+@stamina.retry(
+    on=(httpx.HTTPStatusError, httpx.ConnectError, httpx.TimeoutException),
+    attempts=3,
+    wait_initial=2.0,
+)
+async def _fetch_sparql(
+    client: httpx.AsyncClient, url: str, data: dict, headers: dict
+) -> httpx.Response:
+    r = await client.post(url, data=data, headers=headers)
+    r.raise_for_status()
+    return r
+
+
 async def fetch_wikidata() -> dict[str, dict[str, str]]:
     """Query Wikidata for all Swiss municipalities."""
-    print("Querying Wikidata for Swiss municipalities...")
+    logger.info("Querying Wikidata for Swiss municipalities...")
     headers = {
         "Accept": "application/sparql-results+json",
         "User-Agent": "MXmap/1.0 (https://github.com/davidhuser/mxmap)",
     }
     async with httpx.AsyncClient(timeout=120) as client:
-        r = await client.post(
-            SPARQL_URL,
-            data={"query": SPARQL_QUERY},
-            headers=headers,
-        )
-        r.raise_for_status()
+        r = await _fetch_sparql(client, SPARQL_URL, {"query": SPARQL_QUERY}, headers)
         data = r.json()
 
     municipalities = {}
@@ -317,9 +329,10 @@ async def fetch_wikidata() -> dict[str, dict[str, str]]:
         elif not municipalities[bfs]["website"] and website:
             municipalities[bfs]["website"] = website
 
-    print(
-        f"  Found {len(municipalities)} municipalities, "
-        f"{sum(1 for m in municipalities.values() if m['website'])} with websites"
+    logger.info(
+        "  Found %d municipalities, %d with websites",
+        len(municipalities),
+        sum(1 for m in municipalities.values() if m["website"]),
     )
     return municipalities
 
@@ -423,7 +436,8 @@ async def scrape_email_domains(client: httpx.AsyncClient, domain: str) -> set[st
             all_domains |= domains
             if all_domains:
                 return all_domains
-        except Exception:
+        except Exception as exc:
+            logger.debug("Scrape %s failed: %s", url, exc)
             continue
 
     return all_domains
@@ -526,19 +540,21 @@ async def run(output_path: Path, overrides_path: Path, date: str | None = None) 
     # Log municipalities in BFS but missing from Wikidata
     bfs_only = set(bfs_municipalities) - set(wikidata)
     if bfs_only:
-        print(f"\n  BFS-only municipalities (not in Wikidata): {len(bfs_only)}")
+        logger.warning("BFS-only municipalities (not in Wikidata): %d", len(bfs_only))
         for bfs in sorted(bfs_only, key=int):
             m = bfs_municipalities[bfs]
-            print(f"    {bfs:>5}  {m['name']}")
+            logger.warning("    %5s  %s", bfs, m["name"])
             municipalities[bfs]["bfs_only"] = True
 
     # Log municipalities in Wikidata but not in BFS (potentially dissolved)
     wikidata_only = set(wikidata) - set(bfs_municipalities)
     if wikidata_only:
-        print(f"\n  Wikidata-only municipalities (not in BFS): {len(wikidata_only)}")
+        logger.warning(
+            "Wikidata-only municipalities (not in BFS): %d", len(wikidata_only)
+        )
         for bfs in sorted(wikidata_only, key=int):
             m = wikidata[bfs]
-            print(f"    {bfs:>5}  {m['name']}")
+            logger.warning("    %5s  %s", bfs, m["name"])
 
     # Add municipalities that are only in overrides (missing from both)
     for bfs, override in overrides.items():
@@ -549,10 +565,10 @@ async def run(output_path: Path, overrides_path: Path, date: str | None = None) 
                 "website": "",
                 "canton": override.get("canton", ""),
             }
-            print(f"  Added from overrides: {bfs} {override['name']}")
+            logger.info("  Added from overrides: %s %s", bfs, override["name"])
 
     total = len(municipalities)
-    print(f"\nResolving domains for {total} municipalities...")
+    logger.info("Resolving domains for %d municipalities...", total)
 
     # Use a shared client for scraping with limited concurrency
     scrape_semaphore = asyncio.Semaphore(CONCURRENCY_POSTPROCESS)
@@ -565,6 +581,7 @@ async def run(output_path: Path, overrides_path: Path, date: str | None = None) 
 
     results: dict[str, dict[str, Any]] = {}
     done = 0
+    skipped = 0
 
     async with httpx.AsyncClient(
         headers={"User-Agent": "mxmap.ch/1.0 (https://github.com/davidhuser/mxmap)"},
@@ -576,21 +593,39 @@ async def run(output_path: Path, overrides_path: Path, date: str | None = None) 
         ]
 
         for coro in asyncio.as_completed(tasks):
-            result = await coro
+            try:
+                result = await coro
+            except Exception:
+                logger.exception("Municipality resolution failed, skipping")
+                skipped += 1
+                continue
             results[result["bfs"]] = result
             done += 1
+            logger.debug(
+                "Resolved %s (%s): domain=%s source=%s confidence=%s",
+                result["name"],
+                result["bfs"],
+                result.get("domain", ""),
+                result.get("source", ""),
+                result.get("confidence", ""),
+            )
             if done % 50 == 0 or done == total:
                 counts: dict[str, int] = {}
                 for r in results.values():
                     counts[r["source"]] = counts.get(r["source"], 0) + 1
-                print(
-                    f"  [{done:4d}/{total}]  "
-                    f"override={counts.get('override', 0)}  "
-                    f"wikidata={counts.get('wikidata', 0)}  "
-                    f"scrape={counts.get('scrape', 0)}  "
-                    f"guess={counts.get('guess', 0)}  "
-                    f"none={counts.get('none', 0)}"
+                logger.info(
+                    "  [%4d/%d]  override=%d  wikidata=%d  scrape=%d  guess=%d  none=%d",
+                    done,
+                    total,
+                    counts.get("override", 0),
+                    counts.get("wikidata", 0),
+                    counts.get("scrape", 0),
+                    counts.get("guess", 0),
+                    counts.get("none", 0),
                 )
+
+    if skipped:
+        logger.warning("Skipped %d municipalities due to errors", skipped)
 
     # Print summary
     source_counts: dict[str, int] = {}
@@ -601,15 +636,15 @@ async def run(output_path: Path, overrides_path: Path, date: str | None = None) 
             confidence_counts.get(r["confidence"], 0) + 1
         )
 
-    print(f"\n{'=' * 50}")
-    print(f"DOMAIN RESOLUTION: {len(results)} municipalities")
-    print("  By source:")
+    logger.info("=" * 50)
+    logger.info("DOMAIN RESOLUTION: %d municipalities", len(results))
+    logger.info("  By source:")
     for source in ["override", "wikidata", "scrape", "guess", "none"]:
-        print(f"    {source:<12}: {source_counts.get(source, 0):>5}")
-    print("  By confidence:")
+        logger.info("    %-12s: %5d", source, source_counts.get(source, 0))
+    logger.info("  By confidence:")
     for conf in ["high", "medium", "low", "none"]:
-        print(f"    {conf:<12}: {confidence_counts.get(conf, 0):>5}")
-    print(f"{'=' * 50}")
+        logger.info("    %-12s: %5d", conf, confidence_counts.get(conf, 0))
+    logger.info("=" * 50)
 
     # Print flagged entries for review (skip overridden — already confirmed)
     unreviewed = {
@@ -618,29 +653,39 @@ async def run(output_path: Path, overrides_path: Path, date: str | None = None) 
 
     disagreements = [r for r in unreviewed.values() if "sources_disagree" in r["flags"]]
     if disagreements:
-        print(f"\nSources disagree ({len(disagreements)}):")
+        logger.warning("Sources disagree (%d):", len(disagreements))
         for r in sorted(disagreements, key=lambda x: int(x["bfs"])):
-            print(
-                f"  {r['bfs']:>5}  {r['name']:<30} {r['canton']:<20} "
-                f"domain={r['domain']}  sources={r.get('sources_detail', {})}"
+            logger.warning(
+                "  %5s  %-30s %-20s domain=%s  sources=%s",
+                r["bfs"],
+                r["name"],
+                r["canton"],
+                r["domain"],
+                r.get("sources_detail", {}),
             )
 
     mismatches = [r for r in unreviewed.values() if "website_mismatch" in r["flags"]]
     if mismatches:
-        print(f"\nWebsite mismatches ({len(mismatches)}):")
+        logger.warning("Website mismatches (%d):", len(mismatches))
         for r in sorted(mismatches, key=lambda x: int(x["bfs"])):
-            print(
-                f"  {r['bfs']:>5}  {r['name']:<30} {r['canton']:<20} "
-                f"domain={r['domain']}"
+            logger.warning(
+                "  %5s  %-30s %-20s domain=%s",
+                r["bfs"],
+                r["name"],
+                r["canton"],
+                r["domain"],
             )
 
     guess_only = [r for r in unreviewed.values() if "guess_only" in r["flags"]]
     if guess_only:
-        print(f"\nGuess-only entries ({len(guess_only)}):")
+        logger.warning("Guess-only entries (%d):", len(guess_only))
         for r in sorted(guess_only, key=lambda x: int(x["bfs"])):
-            print(
-                f"  {r['bfs']:>5}  {r['name']:<30} {r['canton']:<20} "
-                f"domain={r['domain']}"
+            logger.warning(
+                "  %5s  %-30s %-20s domain=%s",
+                r["bfs"],
+                r["name"],
+                r["canton"],
+                r["domain"],
             )
 
     # Print low confidence and unresolved entries for review
@@ -650,11 +695,15 @@ async def run(output_path: Path, overrides_path: Path, date: str | None = None) 
         if bfs not in overrides and r["confidence"] in ("low", "none")
     ]
     if low_entries:
-        print(f"\nEntries needing review ({len(low_entries)}):")
+        logger.warning("Entries needing review (%d):", len(low_entries))
         for r in sorted(low_entries, key=lambda x: int(x["bfs"])):
-            print(
-                f"  {r['bfs']:>5}  {r['name']:<30} {r['canton']:<20} "
-                f"domain={r['domain'] or '(none)'}  source={r['source']}"
+            logger.warning(
+                "  %5s  %-30s %-20s domain=%s  source=%s",
+                r["bfs"],
+                r["name"],
+                r["canton"],
+                r["domain"] or "(none)",
+                r["source"],
             )
 
     sorted_results = dict(sorted(results.items(), key=lambda kv: int(kv[0])))
@@ -669,4 +718,4 @@ async def run(output_path: Path, overrides_path: Path, date: str | None = None) 
         json.dump(output, f, ensure_ascii=False, indent=2)
 
     size_kb = len(json.dumps(output, ensure_ascii=False)) / 1024
-    print(f"\nWritten {output_path} ({size_kb:.0f} KB)")
+    logger.info("Written %s (%d KB)", output_path, size_kb)

@@ -1,6 +1,14 @@
 import json
 
 import pytest
+import stamina
+
+
+@pytest.fixture(autouse=True)
+def _disable_stamina_wait():
+    stamina.set_testing(True)
+    yield
+    stamina.set_testing(False)
 
 
 @pytest.fixture
