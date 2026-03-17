@@ -59,6 +59,7 @@ class TestSerializeResult:
 
         assert out["bfs"] == "351"
         assert out["provider"] == "microsoft"
+        assert out["category"] == "us-cloud"
         assert out["classification_confidence"] == 40.0
         assert out["mx"] == ["example.mail.protection.outlook.com"]
         assert out["spf"] == "v=spf1 include:spf.protection.outlook.com -all"
@@ -163,7 +164,9 @@ class TestPipelineRun:
         assert "351" in data["municipalities"]
         assert "9999" in data["municipalities"]
         assert data["municipalities"]["351"]["provider"] == "microsoft"
+        assert data["municipalities"]["351"]["category"] == "us-cloud"
         assert data["municipalities"]["9999"]["provider"] == "unknown"
+        assert data["municipalities"]["9999"]["category"] == "unknown"
         assert data["municipalities"]["9999"]["classification_confidence"] == 0.0
 
     async def test_run_no_domain_entry(self, domains_json, tmp_path):
@@ -306,6 +309,7 @@ class TestMinifyForFrontend:
                     "mx": ["bern-ch.mail.protection.outlook.com"],
                     "spf": "v=spf1 include:spf.protection.outlook.com -all",
                     "provider": "microsoft",
+                    "category": "us-cloud",
                     "classification_confidence": 40.0,
                     "classification_signals": [
                         {
@@ -352,6 +356,7 @@ class TestMinifyForFrontend:
         assert entry["mx"] == ["bern-ch.mail.protection.outlook.com"]
         assert entry["spf"] == "v=spf1 include:spf.protection.outlook.com -all"
         assert entry["provider"] == "microsoft"
+        assert entry["category"] == "us-cloud"
         assert entry["classification_confidence"] == 40.0
         assert entry["gateway"] == "seppmail"
 

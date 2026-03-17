@@ -33,10 +33,8 @@ _PRIMARY_KINDS = frozenset(
     {SignalKind.MX, SignalKind.SPF, SignalKind.DKIM, SignalKind.AUTODISCOVER}
 )
 
-# Signals that can only confirm, not establish, a provider classification
-_CONFIRMATION_ONLY_KINDS = frozenset(
-    {SignalKind.TENANT, SignalKind.TXT_VERIFICATION, SignalKind.ASN, SignalKind.SPF_IP}
-)
+# MX + SPF is sufficient for full confidence
+_FULL_CONFIDENCE = WEIGHTS[SignalKind.MX] + WEIGHTS[SignalKind.SPF]
 
 
 def _aggregate(
@@ -46,81 +44,48 @@ def _aggregate(
     mx_hosts: list[str] | None = None,
     spf_raw: str = "",
 ) -> ClassificationResult:
-    """Score providers by weighted, deduplicated evidence signals."""
+    """Classify provider by weighted primary vote; confidence = winner's signal strength."""
     _mx_hosts = mx_hosts or []
 
-    if not evidence:
-        return ClassificationResult(
-            provider=Provider.INDEPENDENT,
-            confidence=0.0,
-            evidence=[],
-            gateway=gateway,
-            mx_hosts=_mx_hosts,
-            spf_raw=spf_raw,
-        )
-
-    # Confirmation-only filtering: collect which providers have primary signals
-    providers_with_primary: set[Provider] = set()
-    for e in evidence:
-        if e.kind in _PRIMARY_KINDS and e.provider != Provider.INDEPENDENT:
-            providers_with_primary.add(e.provider)
-
-    # Group by provider, deduplicate by SignalKind (keep first per kind)
-    # Filter out confirmation-only evidence for providers without primary signals
-    by_provider: dict[Provider, dict[SignalKind, Evidence]] = defaultdict(dict)
+    # Deduplicate by (provider, kind) — each signal type counts once per provider
+    by_provider: dict[Provider, dict[SignalKind, float]] = defaultdict(dict)
     for e in evidence:
         if e.provider == Provider.INDEPENDENT:
             continue
-        # Confirmation-only signals: discard if provider has no primary signal
-        if (
-            e.kind in _CONFIRMATION_ONLY_KINDS
-            and e.provider not in providers_with_primary
-        ):
-            continue
         if e.kind not in by_provider[e.provider]:
-            by_provider[e.provider][e.kind] = e
+            by_provider[e.provider][e.kind] = e.weight
 
-    if not by_provider:
-        return ClassificationResult(
-            provider=Provider.INDEPENDENT,
-            confidence=0.0,
-            evidence=list(evidence),
-            gateway=gateway,
-            mx_hosts=_mx_hosts,
-            spf_raw=spf_raw,
-        )
-
-    # Sum weights per provider
-    scores: dict[Provider, float] = {}
+    # Winner = provider with highest sum of primary signal weights
+    primary_scores: dict[Provider, float] = {}
     for provider, signals in by_provider.items():
-        scores[provider] = sum(e.weight for e in signals.values())
+        score = sum(w for k, w in signals.items() if k in _PRIMARY_KINDS)
+        if score > 0:
+            primary_scores[provider] = score
 
-    winner = max(scores, key=lambda p: scores[p])
+    if primary_scores:
+        winner = max(primary_scores, key=primary_scores.get)
+    else:
+        winner = Provider.INDEPENDENT
 
-    # Factor 1: Vote share - what fraction of all evidence points to winner?
-    total_all_scores = sum(scores.values())
-    vote_share = scores[winner] / total_all_scores if total_all_scores > 0 else 0.0
-
-    # Factor 2: Depth - how much of the signal spectrum responded?
-    observed_kinds: set[SignalKind] = set()
-    for signals in by_provider.values():
-        observed_kinds.update(signals.keys())
-    observed_weight = sum(WEIGHTS[k] for k in observed_kinds)
-
-    _DEPTH_THRESHOLD = 0.40  # MX+SPF is enough for full depth
-    depth = min(1.0, observed_weight / _DEPTH_THRESHOLD)
-
-    confidence = min(1.0, vote_share * depth)
-
-    # Collect all deduplicated evidence for the result
-    all_deduped = []
-    for signals in by_provider.values():
-        all_deduped.extend(signals.values())
+    # Confidence
+    if winner == Provider.INDEPENDENT:
+        # No provider matched: how much of the signal spectrum did we observe?
+        observed: set[SignalKind] = {e.kind for e in evidence}
+        if _mx_hosts:
+            observed.add(SignalKind.MX)
+        if spf_raw:
+            observed.add(SignalKind.SPF)
+        confidence = min(
+            1.0, sum(WEIGHTS.get(k, 0) for k in observed) / _FULL_CONFIDENCE
+        )
+    else:
+        # Specific provider: sum of winner's signal weights (primary + secondary)
+        confidence = min(1.0, sum(by_provider[winner].values()) / _FULL_CONFIDENCE)
 
     return ClassificationResult(
         provider=winner,
         confidence=confidence,
-        evidence=all_deduped,
+        evidence=list(evidence),
         gateway=gateway,
         mx_hosts=_mx_hosts,
         spf_raw=spf_raw,

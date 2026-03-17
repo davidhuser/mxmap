@@ -180,15 +180,11 @@ document.addEventListener('DOMContentLoaded', function () {
 if (!CSS.supports('height', '100dvh')) {
   document.body.style.height = window.innerHeight + 'px';
 }
-const COLORS = {
-  microsoft:      '#E83838',  // punchy vivid red — US cloud
-  google:         '#FFAB96',  // bright warm peach — US cloud
-  aws:            '#FF7A5C',  // bright hot coral — US cloud
-  infomaniak:     '#78FFD6',  // vivid bright mint — Swiss provider
-  'swiss-isp':    '#2EDBA8',  // neon-ish seafoam — Swiss ISP
-  'independent':  '#10B898',  // vivid bright teal — independent
-  unknown:        '#BFBFBF'   // neutral mid-gray with hatching
+const CATEGORY_COLORS = {
+  'us-cloud':     { high: '#E83838', medium: '#F28A8A', low: '#FADADA' },
+  'swiss-based':  { high: '#10B898', medium: '#6DD4B8', low: '#C8EDE3' },
 };
+const GRAY = '#BFBFBF';
 
 const LABELS = {
   microsoft:      'Microsoft 365',
@@ -200,12 +196,24 @@ const LABELS = {
   unknown:        'Unknown'
 };
 
-const CONFIDENCE_THRESHOLD = 10; // 0-100 scale
+function effectiveCategory(m) {
+  if (!m || !m.category || m.category === 'unknown') return null;
+  return m.category;
+}
 
-function effectiveProvider(m) {
-  if (!m || m.provider === 'unknown') return 'unknown';
-  if (m.classification_confidence < CONFIDENCE_THRESHOLD) return 'independent';
-  return m.provider;
+function confidenceLevel(confidence) {
+  if (confidence >= 60) return 'high';
+  if (confidence >= 30) return 'medium';
+  if (confidence >= 10) return 'low';
+  return 'insufficient';
+}
+
+function getColor(m) {
+  const cat = effectiveCategory(m);
+  if (!cat) return GRAY;
+  const level = confidenceLevel(m.classification_confidence || 0);
+  if (level === 'insufficient') return GRAY;
+  return CATEGORY_COLORS[cat][level];
 }
 
 function escapeHtml(str) {
@@ -368,21 +376,13 @@ function toggleLegend() {
   btn.setAttribute('aria-expanded', String(!collapsed));
 }
 
-function legendItemHtml(key, counts) {
-  const hatchSvg = 'data:image/svg+xml,' +
-    encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect width="8" height="8" fill="#BFBFBF"/><path d="M-1,1 l2,-2 M0,8 l8,-8 M7,9 l2,-2" stroke="#000" stroke-width="1"/></svg>');
-  const bg = key === 'unknown'
-    ? "background-image:url('" + hatchSvg + "')"
-    : `background:${COLORS[key]}`;
-  return `<i style="${bg}"></i>${LABELS[key]} (${counts[key] || 0})`;
-}
-
-function legendGroupHtml(label, keys, counts) {
-  const heading = label
-    ? `<span class="legend-group-label">${label}</span>`
-    : '';
-  const items = keys.map(k => legendItemHtml(k, counts)).join('<br>');
-  return `<div class="legend-group">${heading}${items}</div>`;
+function legendCategoryHtml(label, colors, count) {
+  return `<div class="legend-group">` +
+    `<span class="legend-group-label">${label} (${count})</span>` +
+    `<i style="background:${colors.high}"></i>High confidence<br>` +
+    `<i style="background:${colors.medium}"></i>Medium<br>` +
+    `<i style="background:${colors.low}"></i>Low` +
+    `</div>`;
 }
 
 async function loadData() {
@@ -404,12 +404,21 @@ async function loadData() {
       'Updated ' + date.toLocaleString('de-CH', { dateStyle: 'medium', timeStyle: 'short' });
   }
 
-  // Recompute counts with confidence threshold applied
-  const adjustedCounts = {};
+  // Count by visual category (only counted if confidence >= 10%)
+  const catCounts = { 'us-cloud': 0, 'swiss-based': 0, 'insufficient': 0 };
   for (const bfs of Object.keys(muni)) {
-    const ep = effectiveProvider(muni[bfs]);
-    adjustedCounts[ep] = (adjustedCounts[ep] || 0) + 1;
+    const m = muni[bfs];
+    const cat = effectiveCategory(m);
+    const level = confidenceLevel(m ? (m.classification_confidence || 0) : 0);
+    if (cat && level !== 'insufficient') {
+      catCounts[cat]++;
+    } else {
+      catCounts['insufficient']++;
+    }
   }
+
+  const hatchSvg = 'data:image/svg+xml,' +
+    encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect width="8" height="8" fill="#BFBFBF"/><path d="M-1,1 l2,-2 M0,8 l8,-8 M7,9 l2,-2" stroke="#000" stroke-width="1"/></svg>');
 
   // Legend with counts
   const isMobile = window.innerWidth <= 600;
@@ -420,9 +429,10 @@ async function loadData() {
     div.innerHTML =
       '<button class="legend-toggle" aria-label="Toggle legend" aria-expanded="' + (!isMobile) + '">' + (isMobile ? 'Legend \u25B8' : '') + '</button>' +
       '<div class="legend-content">' +
-      '<strong>Email Provider</strong>' +
-      legendGroupHtml('US Cloud', ['microsoft', 'aws', 'google'], adjustedCounts) +
-      legendGroupHtml('Swiss-hosted', ['independent', 'swiss-isp', 'infomaniak'], adjustedCounts) +
+      '<strong>Email Jurisdiction</strong>' +
+      legendCategoryHtml('US Cloud', CATEGORY_COLORS['us-cloud'], catCounts['us-cloud']) +
+      legendCategoryHtml('Swiss Based', CATEGORY_COLORS['swiss-based'], catCounts['swiss-based']) +
+      '<div class="legend-group"><i style="background-image:url(\'' + hatchSvg + '\')"></i>Insufficient data (' + catCounts['insufficient'] + ')</div>' +
       '</div>';
     L.DomEvent.disableClickPropagation(div);
     return div;
@@ -446,9 +456,8 @@ async function loadData() {
     style: function (feature) {
       const bfs = String(feature.id);
       const m = muni[bfs];
-      const provider = effectiveProvider(m);
       return {
-        fillColor: COLORS[provider] || COLORS.unknown,
+        fillColor: getColor(m),
         weight: 0.5,
         color: '#666',
         fillOpacity: 0.75
@@ -461,11 +470,11 @@ async function loadData() {
         layer.bindPopup(`<div class="info-popup"><strong>BFS ${bfs}</strong><br>No data</div>`);
         return;
       }
-      const ep = effectiveProvider(m);
-      const demoted = ep !== m.provider;
-      const color = COLORS[ep] || COLORS.unknown;
-      const textColor = ['aws', 'google', 'infomaniak', 'swiss-isp', 'independent', 'unknown'].includes(ep) ? '#333' : '#fff';
-      const label = LABELS[ep] || ep;
+      const color = getColor(m);
+      const cat = effectiveCategory(m);
+      const level = confidenceLevel(m.classification_confidence || 0);
+      const textColor = (cat === 'us-cloud' && level === 'high') ? '#fff' : '#333';
+      const label = LABELS[m.provider] || m.provider;
 
       let mxSection = '';
       if (m.mx && m.mx.length > 0) {
@@ -486,8 +495,6 @@ async function loadData() {
 
       const confidence = m.classification_confidence != null ? m.classification_confidence : 0;
       const confPct = Math.round(confidence) + '%';
-      const demotedHint = demoted ? ` <span style="color:#999;font-size:11px">(classified as ${escapeHtml(LABELS[m.provider] || m.provider)})</span>` : '';
-
       let signalsSection = '';
       if (m.classification_signals && m.classification_signals.length > 0) {
         const signalRows = m.classification_signals.map(s =>
@@ -503,7 +510,7 @@ async function loadData() {
       const eLabel = escapeHtml(label);
       const confLine = `<br><span style="font-size:11px;color:#888">Confidence: ${confPct}</span>`;
       const gatewayLine = m.gateway ? `<br><span style="font-size:11px;color:#888">Gateway: ${escapeHtml(m.gateway)}</span>` : '';
-      const badge = `<span class="provider-badge" style="background:${color};color:${textColor}">${eLabel}</span>${demotedHint}`;
+      const badge = `<span class="provider-badge" style="background:${color};color:${textColor}">${eLabel}</span>`;
 
       layer.bindPopup(
         `<div class="info-popup">` +

@@ -17,6 +17,15 @@ PROVIDER_OUTPUT_NAMES: dict[str, str] = {
     "ms365": "microsoft",
 }
 
+_CATEGORY_MAP: dict[str, str] = {
+    "microsoft": "us-cloud",
+    "google": "us-cloud",
+    "aws": "us-cloud",
+    "infomaniak": "swiss-based",
+    "swiss-isp": "swiss-based",
+    "independent": "swiss-based",
+}
+
 
 _FRONTEND_FIELDS = {
     "name",
@@ -24,6 +33,7 @@ _FRONTEND_FIELDS = {
     "mx",
     "spf",
     "provider",
+    "category",
     "classification_confidence",
     "classification_signals",
     "gateway",
@@ -53,6 +63,7 @@ def _serialize_result(
 ) -> dict[str, Any]:
     """Serialize a ClassificationResult into a data.json municipality entry."""
     provider = _output_provider(result.provider)
+    category = _CATEGORY_MAP.get(provider, "unknown")
     out: dict[str, Any] = {
         "bfs": entry["bfs"],
         "name": entry["name"],
@@ -61,6 +72,7 @@ def _serialize_result(
         "mx": result.mx_hosts,
         "spf": result.spf_raw,
         "provider": provider,
+        "category": category,
         "classification_confidence": round(result.confidence * 100, 1),
         "classification_signals": [
             {
@@ -122,6 +134,7 @@ async def run(domains_path: Path, output_path: Path) -> None:
             "mx": [],
             "spf": "",
             "provider": "unknown",
+            "category": "unknown",
             "classification_confidence": 0.0,
             "classification_signals": [],
         }
@@ -137,43 +150,47 @@ async def run(domains_path: Path, output_path: Path) -> None:
             results[entry["bfs"]] = serialized
 
         done += len(domain_to_entries[domain])
-        counts: dict[str, int] = {}
+        cat_progress: dict[str, int] = {}
         for r in results.values():
-            counts[r["provider"]] = counts.get(r["provider"], 0) + 1
-        logger.debug(
-            "[{:>4}/{}] {}: provider={} confidence={:.2f} signals={}"
-            " | MS={} Google={} Infomaniak={} AWS={} ISP={} Indep={} ?={}",
+            cat = _CATEGORY_MAP.get(r["provider"], "unknown")
+            cat_progress[cat] = cat_progress.get(cat, 0) + 1
+        logger.info(
+            "[{:>4}/{}] {}: provider={} confidence={:.2f} signals={}",
             done,
             total,
             domain,
             classification.provider.value,
             classification.confidence,
-            len(classification.evidence),
-            counts.get("microsoft", 0),
-            counts.get("google", 0),
-            counts.get("infomaniak", 0),
-            counts.get("aws", 0),
-            counts.get("swiss-isp", 0),
-            counts.get("independent", 0),
-            counts.get("unknown", 0),
+            len(classification.evidence)
         )
 
     # Final counts
     counts = {}
+    cat_counts: dict[str, int] = {}
     for r in results.values():
         counts[r["provider"]] = counts.get(r["provider"], 0) + 1
+        cat = _CATEGORY_MAP.get(r["provider"], "unknown")
+        cat_counts[cat] = cat_counts.get(cat, 0) + 1
 
     elapsed = time.monotonic() - t0
     logger.info(
         "--- Classification: {} municipalities in {:.1f}s ---", len(results), elapsed
     )
-    logger.info("  Microsoft/Azure  {:>5}", counts.get("microsoft", 0))
-    logger.info("  Google/GCP       {:>5}", counts.get("google", 0))
-    logger.info("  Infomaniak       {:>5}", counts.get("infomaniak", 0))
-    logger.info("  AWS              {:>5}", counts.get("aws", 0))
-    logger.info("  Swiss ISP        {:>5}", counts.get("swiss-isp", 0))
-    logger.info("  Independent      {:>5}", counts.get("independent", 0))
-    logger.info("  Unknown/No MX    {:>5}", counts.get("unknown", 0))
+    logger.info(
+        "  US Cloud         {:>5}  (MS={} Google={} AWS={})",
+        cat_counts.get("us-cloud", 0),
+        counts.get("microsoft", 0),
+        counts.get("google", 0),
+        counts.get("aws", 0),
+    )
+    logger.info(
+        "  Swiss Based      {:>5}  (Infomaniak={} ISP={} Indep={})",
+        cat_counts.get("swiss-based", 0),
+        counts.get("infomaniak", 0),
+        counts.get("swiss-isp", 0),
+        counts.get("independent", 0),
+    )
+    logger.info("  Unknown/No MX    {:>5}", cat_counts.get("unknown", 0))
 
     sorted_counts = dict(sorted(counts.items()))
     sorted_munis = dict(sorted(results.items(), key=lambda kv: int(kv[0])))
