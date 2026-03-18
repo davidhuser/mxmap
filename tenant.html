@@ -33,95 +33,14 @@
 <meta name="twitter:description" content="Interactive map showing Microsoft 365 tenant detection across all ~2,100 Swiss municipalities.">
 <meta name="twitter:image" content="https://mxmap.ch/og-image.jpg">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='7' width='28' height='18' rx='2' fill='%231a1a2e'/%3E%3Cpath d='M2 9l14 9 14-9' fill='none' stroke='%2316a34a' stroke-width='2'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/shared.css">
+<link rel="stylesheet" href="css/map.css">
 <link rel="preload" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"></noscript>
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script defer src="https://unpkg.com/topojson-client@3/dist/topojson-client.min.js"></script>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; height: 100dvh; overflow: hidden; }
-  #header {
-    background: #1a1a2e; color: #fff; height: 44px; padding: 0 16px;
-    display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
-  }
-  .header-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
-  .brand { font-size: 17px; font-weight: 700; white-space: nowrap; margin: 0; }
-  .beta-badge {
-    font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
-    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
-    color: #f0c040; padding: 1px 6px; border-radius: 3px; vertical-align: middle;
-    cursor: default;
-  }
-  .separator { color: #555; font-size: 15px; }
-  .tagline { color: #a0a0b0; font-size: 13px; white-space: nowrap; }
-  .header-link { color: #a0a0b0; font-size: 12px; text-decoration: none; }
-  .header-link:hover { color: #fff; }
-  .header-link.active { color: #fff; font-weight: 600; }
-  .header-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-  .updated { font-size: 11px; color: #888; }
-  .toggle-info {
-    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
-    color: #ccc; font-size: 13px; font-weight: 500; padding: 5px 14px; border-radius: 4px; cursor: pointer;
-    white-space: nowrap;
-  }
-  .toggle-info:hover { background: rgba(255,255,255,0.25); color: #fff; }
-  #info-bar {
-    background: #f8f9fb; border-bottom: 1px solid #e2e4e8; overflow: hidden; flex-shrink: 0;
-    max-height: 600px;
-    padding: 16px 20px;
-  }
-  #info-bar.collapsed { max-height: 0; padding-top: 0; padding-bottom: 0; }
-  .info-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 14px;
-  }
-  .info-card h3 { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: #1a1a2e; }
-  .info-card p { font-size: 13px; color: #444; line-height: 1.5; margin: 0; }
-  .info-card a { color: #2563eb; text-decoration: none; }
-  .info-card a:hover { text-decoration: underline; }
-  #generated { font-size: 11px; color: #999; margin-top: 4px; }
-  .legend-toggle {
-    display: none; background: none; border: none; font-size: 13px;
-    font-weight: 600; cursor: pointer; padding: 0; color: #333;
-  }
-  .info-title { display: none; font-size: 16px; font-weight: 600; color: #1a1a2e; margin-bottom: 12px; }
-  @media (max-width: 600px) {
-    .separator, .tagline { display: none; }
-    .info-title { display: block; }
-    .info-grid { grid-template-columns: 1fr; }
-    .legend-toggle { display: block; }
-    .legend.legend-collapsed .legend-content { display: none; }
-    .legend.legend-collapsed { padding: 8px 12px; }
-    .header-link { font-size: 11px; }
-  }
-  #map { flex: 1; position: relative; width: 100%; will-change: transform; }
-  .legend {
-    background: white; padding: 10px 14px; border-radius: 6px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2); font-size: 13px; line-height: 1.8;
-  }
-  .legend i {
-    width: 14px; height: 14px; display: inline-block; margin-right: 6px;
-    border-radius: 3px; vertical-align: middle;
-  }
-  .info-popup { font-size: 13px; line-height: 1.6; }
-  .info-popup strong { font-size: 14px; }
-  .info-popup .tenant-badge {
-    display: inline-block; padding: 1px 8px; margin-left: 5px; border-radius: 3px;
-    color: #fff; font-size: 12px; font-weight: 600;
-  }
-  .popup-section { margin-top: 10px; }
-  .popup-section-title {
-    font-size: 11px; color: #999; text-transform: uppercase;
-    letter-spacing: 0.5px; margin-bottom: 2px; font-weight: 600;
-  }
-  .popup-section-hint { font-weight: 400; opacity: 0.7; }
-  .dns-table { border-collapse: collapse; }
-  .dns-table td { padding: 1px 8px 1px 0; vertical-align: baseline; font-size: 12px; white-space: nowrap; }
-  .dns-table .dn { font-weight: 600; }
-  .legend-group { margin-top: 8px; }
-  .legend-group:first-child { margin-top: 4px; }
-  .legend-group-label { font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 0.3px; font-weight: 600; display: block; margin-bottom: 2px; }
-</style>
+<script defer src="js/nav.js"></script>
+<script defer src="js/map-shared.js"></script>
 </head>
 <body>
 <header id="header">
@@ -132,10 +51,7 @@
     <span class="tagline">M365 Tenants of Swiss Municipalities</span>
   </div>
   <div class="header-right">
-    <a href="/" class="header-link">Email Map</a>
-    <a href="/tenant.html" class="header-link active">Tenant Map</a>
-    <a href="/impressum.html" class="header-link">Impressum</a>
-    <a href="/datenschutz.html" class="header-link">Datenschutz</a>
+    <nav id="nav"></nav>
     <button class="toggle-info" id="toggle-info" aria-expanded="true" aria-controls="info-bar">About &#9652;</button>
   </div>
 </header>
@@ -153,7 +69,7 @@
     </div>
     <div class="info-card">
       <h3>Methodology</h3>
-      <p>Each domain is queried against Microsoft's public <code>getuserrealm.srf</code> endpoint (unauthenticated). It returns: <strong>Managed</strong> (fully cloud-managed identity), <strong>Federated</strong> (hybrid, on-premises AD synced to cloud), or no result.</p>
+      <p>Each domain is queried against Microsoft's public <code>getuserrealm.srf</code> endpoint (unauthenticated). It returns: <i>Managed</i> (fully cloud-managed identity), <i>Federated</i> (hybrid, on-premises AD synced to cloud), or no result.</p>
       <p style="font-size:12px;color:#777;margin-top:6px;">Caveat: Tenant presence confirms domain registration, not specific service usage. Some tenants could be inactive.</p>
     </div>
     <div class="info-card">
@@ -170,15 +86,12 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-if (!CSS.supports('height', '100dvh')) {
-  document.body.style.height = window.innerHeight + 'px';
-}
 
 var TENANT_COLORS = {
   managed: '#6C70D0',
-  federated: '#A9A6D2',
-  none: '#EEEEF2',
-  lake: '#90BAD6',
+  federated: '#bbb2ff',
+  none: '#c3ffd0',
+  lake: '#afd7f5',
 };
 
 var LABELS = {
@@ -210,92 +123,19 @@ function getColor(m) {
   return TENANT_COLORS[getTenantStatus(m)];
 }
 
-function escapeHtml(str) {
-  var el = document.createElement('span');
-  el.textContent = str;
-  return el.innerHTML;
-}
-
-var map = L.map('map', {
-  center: [46.8, 8.2],
-  zoom: 8,
-  minZoom: 7,
-  maxZoom: 14,
-  renderer: L.canvas()
-});
-
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
-  subdomains: 'abcd',
-  maxZoom: 19
-}).addTo(map);
-
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
-  subdomains: 'abcd',
-  maxZoom: 19,
-  pane: 'shadowPane'
-}).addTo(map);
-
-var resizeTimer;
-window.addEventListener('resize', function () {
-  clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(function () {
-    map.invalidateSize({ animate: false });
-  }, 100);
-});
-
-function toggleInfo() {
-  var bar = document.getElementById('info-bar');
-  var btn = document.getElementById('toggle-info');
-  bar.classList.toggle('collapsed');
-  var collapsed = bar.classList.contains('collapsed');
-  btn.innerHTML = collapsed ? 'About \u25be' : 'About \u25b4';
-  btn.setAttribute('aria-expanded', String(!collapsed));
-}
-
-document.getElementById('toggle-info').addEventListener('click', function () {
-  toggleInfo();
-  map.invalidateSize({ animate: false });
-});
-
-if (window.innerWidth <= 600) {
-  document.getElementById('info-bar').classList.add('collapsed');
-  var btn = document.getElementById('toggle-info');
-  btn.innerHTML = 'About \u25be';
-  btn.setAttribute('aria-expanded', 'false');
-}
-
-function toggleLegend() {
-  var legend = document.querySelector('.legend');
-  var btn = legend.querySelector('.legend-toggle');
-  legend.classList.toggle('legend-collapsed');
-  var collapsed = legend.classList.contains('legend-collapsed');
-  btn.textContent = collapsed ? 'Legend \u25B8' : '\u2715';
-  btn.setAttribute('aria-expanded', String(!collapsed));
-}
+var map = initMap('map');
+setupInfoBar(map);
 
 var muni = {};
 var muniLayer;
 var lakeLayer;
 
-
-
 async function loadData() {
-  var [topoRes, dataRes] = await Promise.all([
-    fetch('https://cdn.jsdelivr.net/npm/swiss-maps@4.7.0/2026/ch-combined.json'),
-    fetch('data.min.json')
-  ]);
-
-  var topo = await topoRes.json();
-  var dnsData = await dataRes.json();
-
+  var data = await fetchMapData();
+  var topo = data.topo;
+  var dnsData = data.dnsData;
   muni = dnsData.municipalities;
-
-  if (dnsData.generated) {
-    var date = new Date(dnsData.generated);
-    document.getElementById('generated').textContent =
-      'Updated ' + date.toLocaleString('de-CH', { dateStyle: 'medium', timeStyle: 'short' });
-  }
+  showGenerated(dnsData);
 
   // Count by tenant status
   var counts = { managed: 0, federated: 0, none: 0 };
@@ -325,15 +165,8 @@ async function loadData() {
   legend.addTo(map);
   document.querySelector('.legend-toggle').addEventListener('click', toggleLegend);
 
-
   // Lakes
-  if (topo.objects.lakes) {
-    var lakes = topojson.feature(topo, topo.objects.lakes);
-    lakeLayer = L.geoJSON(lakes, {
-      interactive: false,
-      style: { fillColor: TENANT_COLORS.lake, fillOpacity: 1, weight: 0, color: 'transparent' }
-    }).addTo(map);
-  }
+  lakeLayer = addLakes(map, topo, TENANT_COLORS.lake);
 
   // Municipalities
   var geojson = topojson.feature(topo, topo.objects.municipalities);
@@ -379,19 +212,11 @@ async function loadData() {
     }
   }).addTo(map);
 
-  var loading = document.getElementById('map-loading');
-  if (loading) loading.remove();
+  removeLoading();
   map.invalidateSize({ animate: false });
 }
 
-loadData().catch(function (err) {
-  console.error('Failed to load data:', err);
-  var loading = document.getElementById('map-loading');
-  if (loading) {
-    loading.textContent = 'Failed to load map data. Please try again later.';
-    loading.style.color = '#dc2626';
-  }
-});
+loadData().catch(handleLoadError);
 });
 </script>
 </body>

@@ -1,0 +1,30 @@
+/* shared.css — reset, header, navigation (all pages) */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+
+#header {
+  background: #1a1a2e; color: #fff; height: 44px; padding: 0 16px;
+  display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+}
+.header-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.brand { font-size: 17px; font-weight: 700; white-space: nowrap; margin: 0; }
+.brand a { color: #fff; text-decoration: none; }
+.beta-badge {
+  font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+  background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+  color: #f0c040; padding: 1px 6px; border-radius: 3px; vertical-align: middle;
+  cursor: default;
+}
+.separator { color: #555; font-size: 15px; }
+.tagline { color: #a0a0b0; font-size: 13px; white-space: nowrap; }
+
+#nav { display: flex; align-items: center; gap: 12px; }
+.header-link { color: #a0a0b0; font-size: 12px; text-decoration: none; }
+.header-link:hover { color: #fff; }
+.header-link.active { color: #fff; font-weight: 600; }
+.header-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+
+@media (max-width: 600px) {
+  .separator, .tagline { display: none; }
+  .header-link { font-size: 11px; }
+}
