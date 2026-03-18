@@ -33,8 +33,54 @@ _PRIMARY_KINDS = frozenset(
     {SignalKind.MX, SignalKind.SPF, SignalKind.DKIM, SignalKind.AUTODISCOVER}
 )
 
-# MX + SPF is sufficient for full confidence
-_FULL_CONFIDENCE = WEIGHTS[SignalKind.MX] + WEIGHTS[SignalKind.SPF]
+# Boost per additional signal beyond the matched rule
+_BOOST_PER_SIGNAL = 0.02
+
+
+def _rule_confidence(
+    provider: Provider, signals: set[SignalKind], gateway: str | None
+) -> float:
+    """Rule-based confidence for a winning provider."""
+    has_mx = SignalKind.MX in signals
+    has_spf = SignalKind.SPF in signals
+    has_tenant = SignalKind.TENANT in signals and provider == Provider.MS365
+    has_gateway = gateway is not None
+
+    # Base confidence from rules (ordered by specificity)
+    if has_mx and has_spf and has_tenant:
+        base, used = 0.95, {SignalKind.MX, SignalKind.SPF, SignalKind.TENANT}
+    elif has_mx and has_spf:
+        base, used = 0.90, {SignalKind.MX, SignalKind.SPF}
+    elif has_spf and has_tenant and has_gateway:
+        base, used = 0.90, {SignalKind.SPF, SignalKind.TENANT}
+    elif has_spf and has_gateway:
+        base, used = 0.70, {SignalKind.SPF}
+    elif has_mx:
+        base, used = 0.60, {SignalKind.MX}
+    elif has_spf:
+        base, used = 0.50, {SignalKind.SPF}
+    else:
+        base, used = 0.40, set()
+
+    boost = len(signals - used) * _BOOST_PER_SIGNAL
+    return min(1.0, base + boost)
+
+
+def _independent_confidence(
+    mx_hosts: list[str], spf_raw: str, evidence: list[Evidence]
+) -> float:
+    """Rule-based confidence for INDEPENDENT classification."""
+    has_mx = bool(mx_hosts) or any(e.kind == SignalKind.MX for e in evidence)
+    has_spf = bool(spf_raw) or any(e.kind == SignalKind.SPF for e in evidence)
+
+    if has_mx and has_spf:
+        return 0.90
+    elif has_mx:
+        return 0.60
+    elif evidence:
+        return 0.50
+    else:
+        return 0.0
 
 
 def _aggregate(
@@ -44,43 +90,29 @@ def _aggregate(
     mx_hosts: list[str] | None = None,
     spf_raw: str = "",
 ) -> ClassificationResult:
-    """Classify provider by weighted primary vote; confidence = winner's signal strength."""
+    """Classify provider by weighted primary vote; confidence from rule-based tiers."""
     _mx_hosts = mx_hosts or []
 
     # Deduplicate by (provider, kind) — each signal type counts once per provider
-    by_provider: dict[Provider, dict[SignalKind, float]] = defaultdict(dict)
+    by_provider: dict[Provider, set[SignalKind]] = defaultdict(set)
     for e in evidence:
         if e.provider == Provider.INDEPENDENT:
             continue
-        if e.kind not in by_provider[e.provider]:
-            by_provider[e.provider][e.kind] = e.weight
+        by_provider[e.provider].add(e.kind)
 
     # Winner = provider with highest sum of primary signal weights
     primary_scores: dict[Provider, float] = {}
-    for provider, signals in by_provider.items():
-        score = sum(w for k, w in signals.items() if k in _PRIMARY_KINDS)
+    for provider, kinds in by_provider.items():
+        score = sum(WEIGHTS[k] for k in kinds if k in _PRIMARY_KINDS)
         if score > 0:
             primary_scores[provider] = score
 
     if primary_scores:
         winner = max(primary_scores, key=primary_scores.get)
+        confidence = _rule_confidence(winner, by_provider[winner], gateway)
     else:
         winner = Provider.INDEPENDENT
-
-    # Confidence
-    if winner == Provider.INDEPENDENT:
-        # No provider matched: how much of the signal spectrum did we observe?
-        observed: set[SignalKind] = {e.kind for e in evidence}
-        if _mx_hosts:
-            observed.add(SignalKind.MX)
-        if spf_raw:
-            observed.add(SignalKind.SPF)
-        confidence = min(
-            1.0, sum(WEIGHTS.get(k, 0) for k in observed) / _FULL_CONFIDENCE
-        )
-    else:
-        # Specific provider: sum of winner's signal weights (primary + secondary)
-        confidence = min(1.0, sum(by_provider[winner].values()) / _FULL_CONFIDENCE)
+        confidence = _independent_confidence(_mx_hosts, spf_raw, evidence)
 
     return ClassificationResult(
         provider=winner,

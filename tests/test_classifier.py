@@ -140,8 +140,8 @@ class TestAggregate:
         evidence = [_ev(SignalKind.MX, Provider.MS365)]
         result = _aggregate(evidence)
         assert result.provider == Provider.MS365
-        # depth=0.20/0.40=0.50
-        assert result.confidence == pytest.approx(0.50)
+        # MX-only rule → 0.60
+        assert result.confidence == pytest.approx(0.60)
 
     def test_multi_signal_same_provider(self):
         evidence = [
@@ -151,8 +151,8 @@ class TestAggregate:
         ]
         result = _aggregate(evidence)
         assert result.provider == Provider.MS365
-        # depth=(0.20+0.20+0.15)/0.40=1.375 → capped at 1.0
-        assert result.confidence == pytest.approx(1.0)
+        # MX+SPF rule (0.90) + DKIM boost (0.02) = 0.92
+        assert result.confidence == pytest.approx(0.92)
 
     def test_duplicate_kind_same_depth(self):
         evidence = [
@@ -161,8 +161,8 @@ class TestAggregate:
         ]
         result = _aggregate(evidence)
         assert result.provider == Provider.MS365
-        # depth=0.20/0.40=0.50 (duplicate MX doesn't increase depth)
-        assert result.confidence == pytest.approx(0.50)
+        # MX-only rule → 0.60 (duplicate MX doesn't change anything)
+        assert result.confidence == pytest.approx(0.60)
 
     def test_conflict_more_primary_signals_wins(self):
         evidence = [
@@ -173,8 +173,8 @@ class TestAggregate:
         result = _aggregate(evidence)
         # MS365 has 2 primary signals (MX, SPF) vs Google's 0 (DMARC not primary)
         assert result.provider == Provider.MS365
-        # depth=(0.20+0.20+0.02)/0.40=1.05 → capped at 1.0
-        assert result.confidence == pytest.approx(1.0)
+        # MX+SPF rule → 0.90 (DMARC is Google's, not MS365's)
+        assert result.confidence == pytest.approx(0.90)
 
     def test_confidence_capped_at_1(self):
         evidence = [_ev(kind, Provider.MS365) for kind in SignalKind]
@@ -185,8 +185,8 @@ class TestAggregate:
         evidence = [_ev(SignalKind.MX, Provider.INDEPENDENT)]
         result = _aggregate(evidence)
         assert result.provider == Provider.INDEPENDENT
-        # MX observed → depth=0.20/0.40=0.50
-        assert result.confidence == pytest.approx(0.50)
+        # MX evidence present → 0.60
+        assert result.confidence == pytest.approx(0.60)
 
     def test_gateway_passthrough(self):
         evidence = [_ev(SignalKind.MX, Provider.MS365)]
@@ -206,19 +206,19 @@ class TestAggregate:
         ]
         result = _aggregate(evidence)
         assert result.provider == Provider.INDEPENDENT
-        # TENANT observed → depth=0.10/0.40=0.25
-        assert result.confidence == pytest.approx(0.25)
+        # Evidence present but no MX → 0.50
+        assert result.confidence == pytest.approx(0.50)
 
     def test_tenant_with_primary(self):
-        """Tenant evidence with primary signals increases depth."""
+        """Tenant evidence with primary signals boosts confidence."""
         evidence = [
             _ev(SignalKind.MX, Provider.MS365),
             _ev(SignalKind.TENANT, Provider.MS365),
         ]
         result = _aggregate(evidence)
         assert result.provider == Provider.MS365
-        # depth=(0.20+0.10)/0.40=0.75
-        assert result.confidence == pytest.approx(0.75)
+        # MX-only rule (0.60) + TENANT boost (0.02) = 0.62
+        assert result.confidence == pytest.approx(0.62)
 
     def test_tenant_different_provider_no_effect_on_winner(self):
         """MS365 tenant can't pick winner; Google wins via MX primary signal."""
@@ -228,9 +228,8 @@ class TestAggregate:
         ]
         result = _aggregate(evidence)
         assert result.provider == Provider.GOOGLE
-        # Google's signals: MX(0.20) only. TENANT is MS365's → excluded.
-        # confidence = 0.20/0.40 = 0.50
-        assert result.confidence == pytest.approx(0.50)
+        # MX-only rule → 0.60 (TENANT is MS365's, not Google's)
+        assert result.confidence == pytest.approx(0.60)
 
     def test_txt_verification_alone_no_winner(self):
         """TXT_VERIFICATION alone cannot pick a winner (not primary)."""
@@ -239,22 +238,19 @@ class TestAggregate:
         ]
         result = _aggregate(evidence)
         assert result.provider == Provider.INDEPENDENT
-        # depth=0.07/0.40=0.175
-        assert result.confidence == pytest.approx(0.175)
+        # Evidence present but no MX → 0.50
+        assert result.confidence == pytest.approx(0.50)
 
     def test_txt_verification_with_primary(self):
-        """TXT_VERIFICATION with primary signals increases depth."""
+        """TXT_VERIFICATION with primary signals boosts confidence."""
         evidence = [
             _ev(SignalKind.MX, Provider.MS365),
             _ev(SignalKind.TXT_VERIFICATION, Provider.MS365),
         ]
         result = _aggregate(evidence)
         assert result.provider == Provider.MS365
-        # depth=(0.20+0.07)/0.40=0.675
-        expected = min(
-            1.0, (WEIGHTS[SignalKind.MX] + WEIGHTS[SignalKind.TXT_VERIFICATION]) / 0.40
-        )
-        assert result.confidence == pytest.approx(expected)
+        # MX-only rule (0.60) + TXT_VERIFICATION boost (0.02) = 0.62
+        assert result.confidence == pytest.approx(0.62)
 
     def test_asn_alone_no_winner(self):
         """ASN alone cannot pick a winner (not primary)."""
@@ -263,20 +259,19 @@ class TestAggregate:
         ]
         result = _aggregate(evidence)
         assert result.provider == Provider.INDEPENDENT
-        # depth=0.03/0.40=0.075
-        assert result.confidence == pytest.approx(0.075)
+        # Evidence present but no MX → 0.50
+        assert result.confidence == pytest.approx(0.50)
 
     def test_asn_with_primary(self):
-        """ASN evidence with primary signals increases depth."""
+        """ASN evidence with primary signals boosts confidence."""
         evidence = [
             _ev(SignalKind.MX, Provider.MS365),
             _ev(SignalKind.ASN, Provider.MS365),
         ]
         result = _aggregate(evidence)
         assert result.provider == Provider.MS365
-        # depth=(0.20+0.03)/0.40=0.575
-        expected = min(1.0, (WEIGHTS[SignalKind.MX] + WEIGHTS[SignalKind.ASN]) / 0.40)
-        assert result.confidence == pytest.approx(expected)
+        # MX-only rule (0.60) + ASN boost (0.02) = 0.62
+        assert result.confidence == pytest.approx(0.62)
 
     def test_infomaniak_classification(self):
         evidence = [
@@ -293,8 +288,8 @@ class TestAggregate:
         ]
         result = _aggregate(evidence)
         assert result.provider == Provider.INDEPENDENT
-        # depth=0.08/0.40=0.20
-        assert result.confidence == pytest.approx(0.20)
+        # Evidence present but no MX → 0.50
+        assert result.confidence == pytest.approx(0.50)
 
     def test_spf_ip_alone_no_winner(self):
         """SPF_IP(Google) alone → INDEPENDENT (regression test for zuerich.ch)."""
@@ -303,41 +298,38 @@ class TestAggregate:
         ]
         result = _aggregate(evidence)
         assert result.provider == Provider.INDEPENDENT
-        # depth=0.08/0.40=0.20
-        assert result.confidence == pytest.approx(0.20)
+        # Evidence present but no MX → 0.50
+        assert result.confidence == pytest.approx(0.50)
 
     def test_spf_ip_with_primary(self):
-        """MX(Google) + SPF_IP(Google) → Google with increased depth."""
+        """MX(Google) + SPF_IP(Google) → Google with boosted confidence."""
         evidence = [
             _ev(SignalKind.MX, Provider.GOOGLE),
             _ev(SignalKind.SPF_IP, Provider.GOOGLE),
         ]
         result = _aggregate(evidence)
         assert result.provider == Provider.GOOGLE
-        # depth=(0.20+0.08)/0.40=0.70
-        expected = min(
-            1.0, (WEIGHTS[SignalKind.MX] + WEIGHTS[SignalKind.SPF_IP]) / 0.40
-        )
-        assert result.confidence == pytest.approx(expected)
+        # MX-only rule (0.60) + SPF_IP boost (0.02) = 0.62
+        assert result.confidence == pytest.approx(0.62)
 
     def test_autodiscover_is_primary_signal(self):
         """Autodiscover alone establishes a provider (not INDEPENDENT)."""
         evidence = [_ev(SignalKind.AUTODISCOVER, Provider.MS365)]
         result = _aggregate(evidence)
         assert result.provider == Provider.MS365
-        # depth=0.08/0.40=0.20
-        assert result.confidence == pytest.approx(0.20)
+        # Fallback rule (0.40) + AUTODISCOVER boost (0.02) = 0.42
+        assert result.confidence == pytest.approx(0.42)
 
     def test_autodiscover_plus_tenant(self):
-        """Autodiscover as primary + tenant increases depth."""
+        """Autodiscover as primary + tenant boosts confidence."""
         evidence = [
             _ev(SignalKind.AUTODISCOVER, Provider.MS365),
             _ev(SignalKind.TENANT, Provider.MS365),
         ]
         result = _aggregate(evidence)
         assert result.provider == Provider.MS365
-        # depth=(0.08+0.10)/0.40=0.45
-        assert result.confidence == pytest.approx(0.45)
+        # Fallback rule (0.40) + AUTODISCOVER boost (0.02) + TENANT boost (0.02) = 0.44
+        assert result.confidence == pytest.approx(0.44)
 
     def test_autodiscover_beats_asn(self):
         """Zernez scenario: autodiscover(microsoft) + ASN(aws) → microsoft."""
@@ -347,25 +339,24 @@ class TestAggregate:
         ]
         result = _aggregate(evidence)
         assert result.provider == Provider.MS365
-        # MS365's signals: AUTODISCOVER(0.08) only. ASN is AWS's → excluded.
-        # confidence = 0.08/0.40 = 0.20
-        assert result.confidence == pytest.approx(0.20)
+        # Fallback rule (0.40) + AUTODISCOVER boost (0.02) = 0.42 (ASN is AWS's)
+        assert result.confidence == pytest.approx(0.42)
 
     def test_independent_with_mx_and_spf_full_confidence(self):
-        """Independent domain with MX + SPF → 100% confidence."""
+        """Independent domain with MX + SPF → 90% confidence."""
         result = _aggregate(
             [], mx_hosts=["mail.example.ch"], spf_raw="v=spf1 a mx ~all"
         )
         assert result.provider == Provider.INDEPENDENT
-        # MX + SPF from passthrough → depth=(0.20+0.20)/0.40=1.0
-        assert result.confidence == pytest.approx(1.0)
+        # MX + SPF present → 0.90
+        assert result.confidence == pytest.approx(0.90)
 
     def test_independent_with_mx_only_half_confidence(self):
-        """Independent domain with MX only → 50% confidence."""
+        """Independent domain with MX only → 60% confidence."""
         result = _aggregate([], mx_hosts=["mail.example.ch"])
         assert result.provider == Provider.INDEPENDENT
-        # MX from passthrough → depth=0.20/0.40=0.50
-        assert result.confidence == pytest.approx(0.50)
+        # MX present, no SPF → 0.60
+        assert result.confidence == pytest.approx(0.60)
 
     def test_mx_hosts_passthrough(self):
         evidence = [_ev(SignalKind.MX, Provider.MS365)]
@@ -375,6 +366,49 @@ class TestAggregate:
     def test_mx_hosts_default_empty(self):
         result = _aggregate([])
         assert result.mx_hosts == []
+
+    def test_mx_spf_tenant_ms365(self):
+        """Full cloud setup: MX + SPF + Tenant → 95%."""
+        evidence = [
+            _ev(SignalKind.MX, Provider.MS365),
+            _ev(SignalKind.SPF, Provider.MS365),
+            _ev(SignalKind.TENANT, Provider.MS365),
+        ]
+        result = _aggregate(evidence)
+        assert result.provider == Provider.MS365
+        # MX+SPF+Tenant rule → 0.95
+        assert result.confidence == pytest.approx(0.95)
+
+    def test_spf_tenant_gateway_ms365(self):
+        """MS365 behind security gateway: SPF + Tenant + Gateway → 90%."""
+        evidence = [
+            _ev(SignalKind.SPF, Provider.MS365),
+            _ev(SignalKind.TENANT, Provider.MS365),
+        ]
+        result = _aggregate(evidence, gateway="seppmail")
+        assert result.provider == Provider.MS365
+        # SPF+Tenant+Gateway rule → 0.90
+        assert result.confidence == pytest.approx(0.90)
+
+    def test_spf_gateway_no_tenant(self):
+        """SPF + Gateway without tenant → 70%."""
+        evidence = [
+            _ev(SignalKind.SPF, Provider.MS365),
+        ]
+        result = _aggregate(evidence, gateway="seppmail")
+        assert result.provider == Provider.MS365
+        # SPF+Gateway rule → 0.70
+        assert result.confidence == pytest.approx(0.70)
+
+    def test_spf_only_no_mx(self):
+        """SPF-only (no MX, no gateway) → 50%."""
+        evidence = [
+            _ev(SignalKind.SPF, Provider.MS365),
+        ]
+        result = _aggregate(evidence)
+        assert result.provider == Provider.MS365
+        # SPF-only rule → 0.50
+        assert result.confidence == pytest.approx(0.50)
 
     def test_spf_raw_passthrough(self):
         evidence = [_ev(SignalKind.MX, Provider.MS365)]
@@ -411,8 +445,8 @@ class TestClassify:
             result = await classify("example.com")
 
         assert result.provider == Provider.MS365
-        # depth=(0.20+0.20)/0.40=1.0
-        assert result.confidence == pytest.approx(1.0)
+        # MX+SPF rule → 0.90
+        assert result.confidence == pytest.approx(0.90)
 
     async def test_google_scenario(self):
         mx_ev = [
@@ -447,8 +481,8 @@ class TestClassify:
             result = await classify("example.com")
 
         assert result.provider == Provider.GOOGLE
-        # depth=(0.20+0.20+0.15)/0.40=1.375 → capped at 1.0
-        assert result.confidence == pytest.approx(1.0)
+        # MX+SPF rule (0.90) + DKIM boost (0.02) = 0.92
+        assert result.confidence == pytest.approx(0.92)
 
     async def test_independent_scenario(self):
         with _patch_all_probes():
@@ -582,8 +616,8 @@ class TestClassify:
             result = await classify("example.com")
 
         assert result.provider == Provider.MS365
-        # depth=(0.20+0.10)/0.40=0.75
-        assert result.confidence == pytest.approx(0.75)
+        # MX-only rule (0.60) + TENANT boost (0.02) = 0.62
+        assert result.confidence == pytest.approx(0.62)
 
     async def test_classify_passes_mx_hosts_to_cname_chain(self):
         """cname_chain should receive hosts from lookup_mx, not from MX evidence."""
