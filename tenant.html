@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://unpkg.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://a.basemaps.cartocdn.com" crossorigin>
+<link rel="preconnect" href="https://b.basemaps.cartocdn.com" crossorigin>
+<link rel="preconnect" href="https://c.basemaps.cartocdn.com" crossorigin>
+<link rel="preconnect" href="https://d.basemaps.cartocdn.com" crossorigin>
+<link rel="dns-prefetch" href="https://unpkg.com">
+<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+<link rel="dns-prefetch" href="https://a.basemaps.cartocdn.com">
+<link rel="dns-prefetch" href="https://b.basemaps.cartocdn.com">
+<link rel="dns-prefetch" href="https://c.basemaps.cartocdn.com">
+<link rel="dns-prefetch" href="https://d.basemaps.cartocdn.com">
+<title>MXmap — M365 Tenants of Swiss Municipalities</title>
+<meta name="description" content="Interactive map showing Microsoft 365 tenant adoption across all ~2,100 Swiss municipalities, detected via public Microsoft endpoint (getuserrealm.srf).">
+<meta name="keywords" content="Switzerland, municipalities, Microsoft 365, M365, tenant, Entra ID, Azure AD, digital sovereignty, OSINT, cloud adoption">
+<meta name="author" content="David Huser">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://mxmap.ch/tenant.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="MXmap — M365 Tenants of Swiss Municipalities">
+<meta property="og:description" content="Interactive map showing Microsoft 365 tenant detection across all ~2,100 Swiss municipalities via public OSINT endpoint.">
+<meta property="og:url" content="https://mxmap.ch/tenant.html">
+<meta property="og:locale" content="en_CH">
+<meta property="og:site_name" content="MXmap">
+<meta property="og:image" content="https://mxmap.ch/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MXmap — M365 Tenants of Swiss Municipalities">
+<meta name="twitter:description" content="Interactive map showing Microsoft 365 tenant detection across all ~2,100 Swiss municipalities.">
+<meta name="twitter:image" content="https://mxmap.ch/og-image.jpg">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='7' width='28' height='18' rx='2' fill='%231a1a2e'/%3E%3Cpath d='M2 9l14 9 14-9' fill='none' stroke='%2316a34a' stroke-width='2'/%3E%3C/svg%3E">
+<link rel="preload" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"></noscript>
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script defer src="https://unpkg.com/topojson-client@3/dist/topojson-client.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; height: 100dvh; overflow: hidden; }
+  #header {
+    background: #1a1a2e; color: #fff; height: 44px; padding: 0 16px;
+    display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+  }
+  .header-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .brand { font-size: 17px; font-weight: 700; white-space: nowrap; margin: 0; }
+  .beta-badge {
+    font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+    color: #f0c040; padding: 1px 6px; border-radius: 3px; vertical-align: middle;
+    cursor: default;
+  }
+  .separator { color: #555; font-size: 15px; }
+  .tagline { color: #a0a0b0; font-size: 13px; white-space: nowrap; }
+  .header-link { color: #a0a0b0; font-size: 12px; text-decoration: none; }
+  .header-link:hover { color: #fff; }
+  .header-link.active { color: #fff; font-weight: 600; }
+  .header-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+  .updated { font-size: 11px; color: #888; }
+  .toggle-info {
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+    color: #ccc; font-size: 13px; font-weight: 500; padding: 5px 14px; border-radius: 4px; cursor: pointer;
+    white-space: nowrap;
+  }
+  .toggle-info:hover { background: rgba(255,255,255,0.25); color: #fff; }
+  #info-bar {
+    background: #f8f9fb; border-bottom: 1px solid #e2e4e8; overflow: hidden; flex-shrink: 0;
+    max-height: 600px;
+    padding: 16px 20px;
+  }
+  #info-bar.collapsed { max-height: 0; padding-top: 0; padding-bottom: 0; }
+  .info-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+  }
+  .info-card h3 { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: #1a1a2e; }
+  .info-card p { font-size: 13px; color: #444; line-height: 1.5; margin: 0; }
+  .info-card a { color: #2563eb; text-decoration: none; }
+  .info-card a:hover { text-decoration: underline; }
+  #generated { font-size: 11px; color: #999; margin-top: 4px; }
+  .legend-toggle {
+    display: none; background: none; border: none; font-size: 13px;
+    font-weight: 600; cursor: pointer; padding: 0; color: #333;
+  }
+  .info-title { display: none; font-size: 16px; font-weight: 600; color: #1a1a2e; margin-bottom: 12px; }
+  @media (max-width: 600px) {
+    .separator, .tagline { display: none; }
+    .info-title { display: block; }
+    .info-grid { grid-template-columns: 1fr; }
+    .legend-toggle { display: block; }
+    .legend.legend-collapsed .legend-content { display: none; }
+    .legend.legend-collapsed { padding: 8px 12px; }
+    .header-link { font-size: 11px; }
+  }
+  #map { flex: 1; position: relative; width: 100%; will-change: transform; }
+  .legend {
+    background: white; padding: 10px 14px; border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2); font-size: 13px; line-height: 1.8;
+  }
+  .legend i {
+    width: 14px; height: 14px; display: inline-block; margin-right: 6px;
+    border-radius: 3px; vertical-align: middle;
+  }
+  .info-popup { font-size: 13px; line-height: 1.6; }
+  .info-popup strong { font-size: 14px; }
+  .info-popup .tenant-badge {
+    display: inline-block; padding: 1px 8px; margin-left: 5px; border-radius: 3px;
+    color: #fff; font-size: 12px; font-weight: 600;
+  }
+  .popup-section { margin-top: 10px; }
+  .popup-section-title {
+    font-size: 11px; color: #999; text-transform: uppercase;
+    letter-spacing: 0.5px; margin-bottom: 2px; font-weight: 600;
+  }
+  .popup-section-hint { font-weight: 400; opacity: 0.7; }
+  .dns-table { border-collapse: collapse; }
+  .dns-table td { padding: 1px 8px 1px 0; vertical-align: baseline; font-size: 12px; white-space: nowrap; }
+  .dns-table .dn { font-weight: 600; }
+  .legend-group { margin-top: 8px; }
+  .legend-group:first-child { margin-top: 4px; }
+  .legend-group-label { font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 0.3px; font-weight: 600; display: block; margin-bottom: 2px; }
+</style>
+</head>
+<body>
+<header id="header">
+  <div class="header-left">
+    <h1 class="brand">MXmap</h1>
+    <span class="beta-badge" title="Beta status, this website may contain errors">beta</span>
+    <span class="separator">|</span>
+    <span class="tagline">M365 Tenants of Swiss Municipalities</span>
+  </div>
+  <div class="header-right">
+    <a href="/" class="header-link">Email Map</a>
+    <a href="/tenant.html" class="header-link active">Tenant Map</a>
+    <a href="/impressum.html" class="header-link">Impressum</a>
+    <a href="/datenschutz.html" class="header-link">Datenschutz</a>
+    <button class="toggle-info" id="toggle-info" aria-expanded="true" aria-controls="info-bar">About &#9652;</button>
+  </div>
+</header>
+<section id="info-bar" aria-label="About this project">
+<script>if(window.innerWidth<=600)document.getElementById('info-bar').classList.add('collapsed');</script>
+  <h2 class="info-title">M365 Tenants of Swiss Municipalities</h2>
+  <div class="info-grid">
+    <div class="info-card">
+      <h3>What is this?</h3>
+      <p>A map of all ~2,100 Swiss municipalities showing whether their official domain is registered as a Microsoft 365 tenant &mdash; detected via a public Microsoft endpoint.</p>
+    </div>
+    <div class="info-card">
+      <h3>What does a tenant mean?</h3>
+      <p>A registered M365 tenant means the municipality's domain is in Microsoft Entra ID, implying (but not confirming) the use of M365 services such as Teams, SharePoint, or OneDrive &mdash; but <strong>not necessarily email</strong>. See the <a href="/">Email Map</a> for email hosting.</p>
+    </div>
+    <div class="info-card">
+      <h3>Methodology</h3>
+      <p>Each domain is queried against Microsoft's public <code>getuserrealm.srf</code> endpoint (unauthenticated). It returns: <strong>Managed</strong> (fully cloud-managed identity), <strong>Federated</strong> (hybrid, on-premises AD synced to cloud), or no result.</p>
+      <p style="font-size:12px;color:#777;margin-top:6px;">Caveat: Tenant presence confirms domain registration, not specific service usage. Some tenants could be inactive.</p>
+    </div>
+    <div class="info-card">
+      <h3>Open source &amp; open data</h3>
+      <p>The code and data are on <a href="https://github.com/davidhuser/mxmap" target="_blank">GitHub</a>.<br>
+      If you have noticed an error, please <a href="https://github.com/davidhuser/mxmap/issues" target="_blank">submit an issue</a>.</p>
+      <p id="generated"></p>
+    </div>
+  </div>
+</section>
+<main id="map" role="application" aria-label="Interactive map of Swiss municipality M365 tenant status">
+  <div id="map-loading" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:1000;background:rgba(255,255,255,0.85);font-size:15px;color:#555;">Loading map data&hellip;</div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+if (!CSS.supports('height', '100dvh')) {
+  document.body.style.height = window.innerHeight + 'px';
+}
+
+var TENANT_COLORS = {
+  managed: '#6C70D0',
+  federated: '#A9A6D2',
+  none: '#EEEEF2',
+  lake: '#90BAD6',
+};
+
+var LABELS = {
+  microsoft:     'Microsoft 365',
+  google:        'Google Workspace',
+  aws:           'Amazon Web Services',
+  infomaniak:    'Infomaniak',
+  'swiss-isp':   'Swiss ISP',
+  'independent': 'Self-hosted / Other',
+  unknown:       'Unknown'
+};
+
+function getTenantStatus(m) {
+  if (!m || !m.classification_signals) return 'none';
+  var sig = m.classification_signals.find(function (s) { return s.kind === 'tenant'; });
+  if (!sig) return 'none';
+  if (sig.detail.indexOf('Managed') !== -1) return 'managed';
+  if (sig.detail.indexOf('Federated') !== -1) return 'federated';
+  return 'none';
+}
+
+function getTenantLabel(status) {
+  if (status === 'managed') return 'Managed';
+  if (status === 'federated') return 'Federated';
+  return 'No tenant';
+}
+
+function getColor(m) {
+  return TENANT_COLORS[getTenantStatus(m)];
+}
+
+function escapeHtml(str) {
+  var el = document.createElement('span');
+  el.textContent = str;
+  return el.innerHTML;
+}
+
+var map = L.map('map', {
+  center: [46.8, 8.2],
+  zoom: 8,
+  minZoom: 7,
+  maxZoom: 14,
+  renderer: L.canvas()
+});
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
+  subdomains: 'abcd',
+  maxZoom: 19
+}).addTo(map);
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
+  subdomains: 'abcd',
+  maxZoom: 19,
+  pane: 'shadowPane'
+}).addTo(map);
+
+var resizeTimer;
+window.addEventListener('resize', function () {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(function () {
+    map.invalidateSize({ animate: false });
+  }, 100);
+});
+
+function toggleInfo() {
+  var bar = document.getElementById('info-bar');
+  var btn = document.getElementById('toggle-info');
+  bar.classList.toggle('collapsed');
+  var collapsed = bar.classList.contains('collapsed');
+  btn.innerHTML = collapsed ? 'About \u25be' : 'About \u25b4';
+  btn.setAttribute('aria-expanded', String(!collapsed));
+}
+
+document.getElementById('toggle-info').addEventListener('click', function () {
+  toggleInfo();
+  map.invalidateSize({ animate: false });
+});
+
+if (window.innerWidth <= 600) {
+  document.getElementById('info-bar').classList.add('collapsed');
+  var btn = document.getElementById('toggle-info');
+  btn.innerHTML = 'About \u25be';
+  btn.setAttribute('aria-expanded', 'false');
+}
+
+function toggleLegend() {
+  var legend = document.querySelector('.legend');
+  var btn = legend.querySelector('.legend-toggle');
+  legend.classList.toggle('legend-collapsed');
+  var collapsed = legend.classList.contains('legend-collapsed');
+  btn.textContent = collapsed ? 'Legend \u25B8' : '\u2715';
+  btn.setAttribute('aria-expanded', String(!collapsed));
+}
+
+var muni = {};
+var muniLayer;
+var lakeLayer;
+
+
+
+async function loadData() {
+  var [topoRes, dataRes] = await Promise.all([
+    fetch('https://cdn.jsdelivr.net/npm/swiss-maps@4.7.0/2026/ch-combined.json'),
+    fetch('data.min.json')
+  ]);
+
+  var topo = await topoRes.json();
+  var dnsData = await dataRes.json();
+
+  muni = dnsData.municipalities;
+
+  if (dnsData.generated) {
+    var date = new Date(dnsData.generated);
+    document.getElementById('generated').textContent =
+      'Updated ' + date.toLocaleString('de-CH', { dateStyle: 'medium', timeStyle: 'short' });
+  }
+
+  // Count by tenant status
+  var counts = { managed: 0, federated: 0, none: 0 };
+  for (var bfs of Object.keys(muni)) {
+    counts[getTenantStatus(muni[bfs])]++;
+  }
+
+  // Legend
+  var isMobile = window.innerWidth <= 600;
+  var legend = L.control({ position: isMobile ? 'topright' : 'bottomright' });
+  legend.onAdd = function () {
+    var div = L.DomUtil.create('div', 'legend');
+    if (isMobile) div.classList.add('legend-collapsed');
+    div.innerHTML =
+      '<button class="legend-toggle" aria-label="Toggle legend" aria-expanded="' + (!isMobile) + '">' + (isMobile ? 'Legend \u25B8' : '') + '</button>' +
+      '<div class="legend-content">' +
+      '<strong>M365 Tenant Status</strong>' +
+      '<div class="legend-group">' +
+      '<i class="legend-swatch" data-status="managed" style="background:' + TENANT_COLORS.managed + '"></i>Managed (' + counts.managed + ')<br>' +
+      '<i class="legend-swatch" data-status="federated" style="background:' + TENANT_COLORS.federated + '"></i>Federated (' + counts.federated + ')<br>' +
+      '<i class="legend-swatch" data-status="none" style="background:' + TENANT_COLORS.none + '"></i>No tenant detected (' + counts.none + ')' +
+      '</div>' +
+      '</div>';
+    L.DomEvent.disableClickPropagation(div);
+    return div;
+  };
+  legend.addTo(map);
+  document.querySelector('.legend-toggle').addEventListener('click', toggleLegend);
+
+
+  // Lakes
+  if (topo.objects.lakes) {
+    var lakes = topojson.feature(topo, topo.objects.lakes);
+    lakeLayer = L.geoJSON(lakes, {
+      interactive: false,
+      style: { fillColor: TENANT_COLORS.lake, fillOpacity: 1, weight: 0, color: 'transparent' }
+    }).addTo(map);
+  }
+
+  // Municipalities
+  var geojson = topojson.feature(topo, topo.objects.municipalities);
+
+  muniLayer = L.geoJSON(geojson, {
+    style: function (feature) {
+      var bfs = String(feature.id);
+      var m = muni[bfs];
+      return {
+        fillColor: getColor(m),
+        weight: 0.6,
+        color: '#666',
+        fillOpacity: 1
+      };
+    },
+    onEachFeature: function (feature, layer) {
+      var bfs = String(feature.id);
+      var m = muni[bfs];
+      if (!m) {
+        layer.bindPopup('<div class="info-popup"><strong>BFS ' + bfs + '</strong><br>No data</div>');
+        return;
+      }
+      var status = getTenantStatus(m);
+      var statusLabel = getTenantLabel(status);
+      var color = TENANT_COLORS[status];
+      var textColor = status === 'none' ? '#333' : '#fff';
+
+      var eName = escapeHtml(m.name);
+      var eDomain = escapeHtml(m.domain || 'unknown');
+
+      // Tenant badge
+      var badge = '<span class="tenant-badge" style="background:' + color + ';color:' + textColor + '">' + statusLabel + '</span>';
+
+      layer.bindPopup(
+        '<div class="info-popup">' +
+        '<strong>' + eName + '</strong><br>' +
+        eDomain + ' ' + badge +
+        '</div>',
+        { maxWidth: 350 }
+      );
+      layer.on('mouseover', function () { this.setStyle({ weight: 2, color: '#333' }); });
+      layer.on('mouseout', function () { this.setStyle({ weight: 0.5, color: '#666' }); });
+    }
+  }).addTo(map);
+
+  var loading = document.getElementById('map-loading');
+  if (loading) loading.remove();
+  map.invalidateSize({ animate: false });
+}
+
+loadData().catch(function (err) {
+  console.error('Failed to load data:', err);
+  var loading = document.getElementById('map-loading');
+  if (loading) {
+    loading.textContent = 'Failed to load map data. Please try again later.';
+    loading.style.color = '#dc2626';
+  }
+});
+});
+</script>
+</body>
+</html>
