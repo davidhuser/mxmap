@@ -57,7 +57,7 @@
   <div class="info-grid">
     <div class="info-card">
       <h3>What is this?</h3>
-      <p>A map of all ~2,100 Swiss municipalities showing which provider handles their official email — grouped by jurisdiction — based on public DNS records.</p>
+      <p>A map of all ~2,100 Swiss municipalities showing which provider handles their official email — grouped by jurisdiction — based on public DNS records and other public network signals.</p>
     </div>
     <div class="info-card">
       <h3>Context</h3>
@@ -65,7 +65,7 @@
     </div>
     <div class="info-card">
       <h3>How does it work?</h3>
-      <p>Each municipality's official domain is checked via multiple DNS signals (MX, SPF, DKIM, SMTP banner, etc.) and classified by provider type with confidence scoring.</p>
+      <p>Each municipality's official domain is checked via 11 signals from DNS records, SMTP banners, ASN lookups, and a public Microsoft API endpoint, then classified by provider type with confidence scoring.</p>
       <p style="font-size:12px;color:#777;margin-top:6px;">Disclaimer: DNS records indicate mail routing and authorized senders, not necessarily where data is stored.</p>
     </div>
     <div class="info-card">
