@@ -92,6 +92,18 @@ var TENANT_COLORS = {
   lake: '#afd7f5',
 };
 
+var CANTON_CODES = {
+  'Kanton Zürich': 'ZH', 'Kanton Bern': 'BE', 'Kanton Luzern': 'LU',
+  'Kanton Uri': 'UR', 'Kanton Schwyz': 'SZ', 'Kanton Obwalden': 'OW',
+  'Kanton Nidwalden': 'NW', 'Kanton Glarus': 'GL', 'Kanton Zug': 'ZG',
+  'Kanton Freiburg': 'FR', 'Kanton Solothurn': 'SO', 'Kanton Basel-Stadt': 'BS',
+  'Kanton Basel-Landschaft': 'BL', 'Kanton Schaffhausen': 'SH',
+  'Kanton Appenzell Ausserrhoden': 'AR', 'Kanton Appenzell Innerrhoden': 'AI',
+  'Kanton St. Gallen': 'SG', 'Kanton Graubünden': 'GR', 'Kanton Aargau': 'AG',
+  'Kanton Thurgau': 'TG', 'Kanton Tessin': 'TI', 'Kanton Waadt': 'VD',
+  'Kanton Wallis': 'VS', 'Kanton Neuenburg': 'NE', 'Kanton Genf': 'GE',
+  'Kanton Jura': 'JU'
+};
 var LABELS = {
   microsoft:     'Microsoft 365',
   google:        'Google Workspace',
@@ -193,6 +205,8 @@ async function loadData() {
       var textColor = status === 'none' ? '#333' : '#fff';
 
       var eName = escapeHtml(m.name);
+      var cantonCode = CANTON_CODES[m.canton] || '';
+      var nameDisplay = cantonCode ? eName + ' (' + cantonCode + ')' : eName;
       var eDomain = escapeHtml(m.domain || 'unknown');
 
       // Tenant badge
@@ -200,7 +214,7 @@ async function loadData() {
 
       layer.bindPopup(
         '<div class="info-popup">' +
-        '<strong>' + eName + '</strong><br>' +
+        '<strong>' + nameDisplay + '</strong><br>' +
         eDomain + ' ' + badge +
         '</div>',
         { maxWidth: 350 }

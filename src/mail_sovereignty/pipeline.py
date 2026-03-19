@@ -30,6 +30,7 @@ _CATEGORY_MAP: dict[str, str] = {
 _FRONTEND_FIELDS = {
     "name",
     "domain",
+    "canton",
     "mx",
     "spf",
     "provider",
