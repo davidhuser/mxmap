@@ -297,6 +297,42 @@ class TestScoreDomainSources:
         result = score_domain_sources(sources, "Test", "winner.ch")
         assert result["domain"] == "winner.ch"
 
+    def test_redirect_source_counted(self):
+        """Redirect source counts toward agreement."""
+        sources = {
+            "scrape": {"3908.ch"},
+            "redirect": {"3908.ch"},
+            "wikidata": set(),
+            "guess": set(),
+        }
+        result = score_domain_sources(sources, "Saas-Balen", "gemeinde-saas-balen.ch")
+        assert result["domain"] == "3908.ch"
+        assert result["confidence"] == "high"  # 2 sources agree
+
+    def test_redirect_only_medium_confidence(self):
+        """Redirect as sole source gives medium confidence."""
+        sources = {
+            "scrape": set(),
+            "redirect": {"3908.ch"},
+            "wikidata": set(),
+            "guess": set(),
+        }
+        result = score_domain_sources(sources, "Saas-Balen", "gemeinde-saas-balen.ch")
+        assert result["domain"] == "3908.ch"
+        assert result["confidence"] == "medium"
+        assert result["source"] == "redirect"
+
+    def test_redirect_priority_between_scrape_and_wikidata(self):
+        """When redirect and wikidata both find the same domain, source is redirect."""
+        sources = {
+            "scrape": set(),
+            "redirect": {"3908.ch"},
+            "wikidata": {"3908.ch"},
+            "guess": set(),
+        }
+        result = score_domain_sources(sources, "Saas-Balen", "gemeinde-saas-balen.ch")
+        assert result["source"] == "redirect"
+
 
 # ── fetch_wikidata() ─────────────────────────────────────────────────
 
@@ -457,19 +493,54 @@ class TestBuildUrls:
 
 class TestScrapeEmailDomains:
     async def test_empty_domain(self):
-        result = await scrape_email_domains(None, "")
+        result, redirect = await scrape_email_domains(None, "")
         assert result == set()
+        assert redirect is None
 
     async def test_with_emails_found(self):
         class FakeResponse:
             status_code = 200
             text = "Contact us at info@gemeinde.ch"
+            url = httpx.URL("https://www.gemeinde.ch/")
 
         client = AsyncMock()
         client.get = AsyncMock(return_value=FakeResponse())
 
-        result = await scrape_email_domains(client, "gemeinde.ch")
+        result, redirect = await scrape_email_domains(client, "gemeinde.ch")
         assert "gemeinde.ch" in result
+        assert redirect is None
+
+    async def test_cross_domain_redirect_detected(self):
+        """When website redirects to a different domain, redirect_domain is returned."""
+
+        class FakeResponse:
+            status_code = 200
+            text = "Contact us at gemeinde@3908.ch"
+            url = httpx.URL("https://www.3908.ch/")
+
+        client = AsyncMock()
+        client.get = AsyncMock(return_value=FakeResponse())
+
+        result, redirect = await scrape_email_domains(
+            client, "gemeinde-saas-balen.ch"
+        )
+        assert "3908.ch" in result
+        assert redirect == "3908.ch"
+
+    async def test_www_redirect_not_flagged(self):
+        """Redirect from mygemeinde.ch to www.mygemeinde.ch is NOT a cross-domain redirect."""
+
+        class FakeResponse:
+            status_code = 200
+            text = "Contact us at info@mygemeinde.ch"
+            url = httpx.URL("https://www.mygemeinde.ch/")
+
+        client = AsyncMock()
+        client.get = AsyncMock(return_value=FakeResponse())
+
+        result, redirect = await scrape_email_domains(client, "mygemeinde.ch")
+        assert "mygemeinde.ch" in result
+        assert redirect is None
 
 
 # ── resolve_municipality_domain() ────────────────────────────────────
@@ -512,6 +583,7 @@ class TestResolveMunicipalityDomain:
         class FakeResponse:
             status_code = 200
             text = "Contact us at info@test.ch"
+            url = httpx.URL("https://www.test.ch/")
 
         client = AsyncMock()
         client.get = AsyncMock(return_value=FakeResponse())
@@ -542,6 +614,7 @@ class TestResolveMunicipalityDomain:
         class FakeResponse:
             status_code = 200
             text = "Contact us at info@email-test.ch"
+            url = httpx.URL("https://www.test.ch/")
 
         client = AsyncMock()
         client.get = AsyncMock(return_value=FakeResponse())
@@ -570,6 +643,7 @@ class TestResolveMunicipalityDomain:
         class FakeResponse:
             status_code = 200
             text = '<a href="mailto:gemeinde@teufen.ar.ch">Email</a>'
+            url = httpx.URL("https://www.teufen.ch/")
 
         client = AsyncMock()
         client.get = AsyncMock(return_value=FakeResponse())
@@ -650,6 +724,37 @@ class TestResolveMunicipalityDomain:
             result = await resolve_municipality_domain(m, overrides, client)
 
         assert "bfs_only" in result["flags"]
+
+    async def test_redirect_domain_used_as_source(self):
+        """Saas-Balen case: website redirects to postal code domain."""
+        m = {
+            "bfs": "6289",
+            "name": "Saas-Balen",
+            "canton": "Kanton Wallis",
+            "website": "https://www.gemeinde-saas-balen.ch",
+        }
+        overrides = {}
+
+        class FakeResponse:
+            status_code = 200
+            text = "Contact us at gemeinde@3908.ch"
+            url = httpx.URL("https://www.3908.ch/")
+
+        client = AsyncMock()
+        client.get = AsyncMock(return_value=FakeResponse())
+
+        async def fake_lookup_mx(domain):
+            if domain == "3908.ch":
+                return ["mail.3908.ch"]
+            return []
+
+        with patch("mail_sovereignty.resolve.lookup_mx", side_effect=fake_lookup_mx):
+            result = await resolve_municipality_domain(m, overrides, client)
+
+        assert result["domain"] == "3908.ch"
+        assert "3908.ch" in result["sources_detail"]["scrape"]
+        assert "3908.ch" in result["sources_detail"]["redirect"]
+        assert result["confidence"] == "high"  # scrape + redirect agree
 
 
 # ── run() ────────────────────────────────────────────────────────────
@@ -837,9 +942,10 @@ class TestScrapeErrorLogging:
         client = AsyncMock()
         client.get = AsyncMock(side_effect=ConnectionError("refused"))
 
-        result = await scrape_email_domains(client, "fail.ch")
+        result, redirect = await scrape_email_domains(client, "fail.ch")
 
         assert result == set()
+        assert redirect is None
         assert any("Scrape" in msg and "refused" in msg for msg in caplog.messages)
 
 

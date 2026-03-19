@@ -245,7 +245,7 @@ def score_domain_sources(
     source_count = len(best_sources)
 
     # Determine primary source (in priority order)
-    source_priority = ["scrape", "wikidata", "guess"]
+    source_priority = ["scrape", "redirect", "wikidata", "guess"]
     source = next((s for s in source_priority if s in best_sources), best_sources[0])
 
     flags: list[str] = []
@@ -262,7 +262,7 @@ def score_domain_sources(
     # Check for disagreement: only flag when a primary source found domains
     # but none match the best domain. Extra domains from guess or within scrape
     # don't count as disagreement.
-    primary_sources = ["scrape", "wikidata"]
+    primary_sources = ["scrape", "redirect", "wikidata"]
     for src in primary_sources:
         src_domains = sources.get(src, set())
         if src_domains and best_domain not in src_domains:
@@ -417,12 +417,21 @@ def build_urls(domain: str) -> list[str]:
     return urls
 
 
-async def scrape_email_domains(client: httpx.AsyncClient, domain: str) -> set[str]:
-    """Scrape a municipality website for email domains."""
+async def scrape_email_domains(
+    client: httpx.AsyncClient, domain: str
+) -> tuple[set[str], str | None]:
+    """Scrape a municipality website for email domains.
+
+    Returns:
+        Tuple of (email_domains_found, redirect_target_domain_or_None).
+        redirect_target_domain is set when the website redirects to a
+        different domain (ignoring www prefix differences).
+    """
     if not domain:
-        return set()
+        return set(), None
 
     all_domains = set()
+    redirect_domain: str | None = None
     urls = build_urls(domain)
 
     for url in urls:
@@ -430,15 +439,23 @@ async def scrape_email_domains(client: httpx.AsyncClient, domain: str) -> set[st
             r = await client.get(url, follow_redirects=True, timeout=15)
             if r.status_code != 200:
                 continue
+
+            # Detect cross-domain redirect (only from first successful response)
+            if redirect_domain is None:
+                final_domain = url_to_domain(str(r.url))
+                if final_domain and final_domain != domain:
+                    redirect_domain = final_domain
+                    logger.info("Redirect detected: {} -> {}", domain, redirect_domain)
+
             domains = extract_email_domains(r.text)
             all_domains |= domains
             if all_domains:
-                return all_domains
+                return all_domains, redirect_domain
         except Exception as exc:
             logger.debug("Scrape {} failed: {}", url, exc)
             continue
 
-    return all_domains
+    return all_domains, redirect_domain
 
 
 async def resolve_municipality_domain(
@@ -478,17 +495,26 @@ async def resolve_municipality_domain(
     website_domain = url_to_domain(m.get("website", ""))
     sources: dict[str, set[str]] = {
         "scrape": set(),
+        "redirect": set(),
         "wikidata": set(),
         "guess": set(),
     }
 
     # Scrape website for email addresses
     if website_domain:
-        email_domains = await scrape_email_domains(client, website_domain)
+        email_domains, redirect_domain = await scrape_email_domains(
+            client, website_domain
+        )
         for email_domain in email_domains:
             mx = await lookup_mx(email_domain)
             if mx:
                 sources["scrape"].add(email_domain)
+
+        # Add redirect target as a source (if it has MX records)
+        if redirect_domain:
+            mx = await lookup_mx(redirect_domain)
+            if mx:
+                sources["redirect"].add(redirect_domain)
 
     # Wikidata website domain
     if website_domain:
@@ -633,7 +659,7 @@ async def run(output_path: Path, overrides_path: Path, date: str | None = None) 
 
     logger.info("--- Domain resolution: {} municipalities ---", len(results))
     logger.info("By source:")
-    for source in ["override", "wikidata", "scrape", "guess", "none"]:
+    for source in ["override", "wikidata", "scrape", "redirect", "guess", "none"]:
         logger.info("  {:<12} {:>5}", source, source_counts.get(source, 0))
     logger.info("By confidence:")
     for conf in ["high", "medium", "low", "none"]:
