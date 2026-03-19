@@ -119,6 +119,11 @@ class TestProbeMx:
         assert len(results) == 1
         assert results[0].provider == Provider.INFOMANIAK
 
+    def test_infomaniak_mta_gw_hit(self):
+        results = probe_mx(["mta-gw.infomaniak.ch"])
+        assert len(results) == 1
+        assert results[0].provider == Provider.INFOMANIAK
+
     def test_smtp_google_hit(self):
         results = probe_mx(["smtp.google.com"])
         assert len(results) == 1

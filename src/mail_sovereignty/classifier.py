@@ -129,25 +129,33 @@ def _independent_confidence(
     """Return confidence for an INDEPENDENT classification.
 
     Called when no provider wins the primary-signal vote (i.e. no provider
-    has any primary signal).  Confidence is based purely on whether the
-    domain has MX records and/or SPF records at all:
+    has any primary signal).  Base confidence reflects whether the domain
+    has MX records and/or SPF records at all:
 
-    * MX + SPF present → 0.90 (infrastructure exists, just not a known provider)
+    * MX + SPF present → 0.90
     * MX only          → 0.60
     * Any evidence     → 0.50
     * Nothing          → 0.0
+
+    After the base is selected, each distinct signal kind in *evidence*
+    beyond MX and SPF adds ``_BOOST_PER_SIGNAL`` (same mechanism as
+    ``_rule_confidence``).  The final value is capped at 1.0.
     """
     has_mx = bool(mx_hosts) or any(e.kind == SignalKind.MX for e in evidence)
     has_spf = bool(spf_raw) or any(e.kind == SignalKind.SPF for e in evidence)
 
     if has_mx and has_spf:
-        return 0.90
+        base = 0.90
     elif has_mx:
-        return 0.60
+        base = 0.60
     elif evidence:
-        return 0.50
+        base = 0.50
     else:
         return 0.0
+
+    extra_kinds = {e.kind for e in evidence} - {SignalKind.MX, SignalKind.SPF}
+    boost = len(extra_kinds) * _BOOST_PER_SIGNAL
+    return min(1.0, base + boost)
 
 
 def _aggregate(

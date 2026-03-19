@@ -68,7 +68,7 @@ SIGNATURES: list[ProviderSignature] = [
     ),
     ProviderSignature(
         provider=Provider.INFOMANIAK,
-        mx_patterns=("mxpool.infomaniak.com", "ikmail.com"),
+        mx_patterns=("mxpool.infomaniak.com", "ikmail.com", "mta-gw.infomaniak.ch"),
         spf_includes=("spf.infomaniak.ch",),
         dkim_selectors=(),
         dkim_cname_patterns=(),

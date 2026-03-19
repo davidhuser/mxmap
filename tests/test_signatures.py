@@ -77,6 +77,7 @@ class TestSignatures:
         infomaniak = next(s for s in SIGNATURES if s.provider == Provider.INFOMANIAK)
         assert "mxpool.infomaniak.com" in infomaniak.mx_patterns
         assert "ikmail.com" in infomaniak.mx_patterns
+        assert "mta-gw.infomaniak.ch" in infomaniak.mx_patterns
 
     def test_infomaniak_has_spf(self):
         infomaniak = next(s for s in SIGNATURES if s.provider == Provider.INFOMANIAK)
