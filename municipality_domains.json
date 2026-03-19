@@ -1,5 +1,5 @@
 {
-  "generated": "2026-03-18T21:48:53Z",
+  "generated": "2026-03-19T12:49:38Z",
   "total": 2110,
   "municipalities": {
     "1": {
@@ -7578,19 +7578,21 @@
       "name": "Hermrigen",
       "canton": "Kanton Bern",
       "domain": "hermrigen.ch",
-      "source": "guess",
-      "confidence": "low",
+      "source": "scrape",
+      "confidence": "high",
       "sources_detail": {
-        "scrape": [],
+        "scrape": [
+          "hermrigen.ch"
+        ],
         "redirect": [],
-        "wikidata": [],
+        "wikidata": [
+          "hermrigen.ch"
+        ],
         "guess": [
           "hermrigen.ch"
         ]
       },
-      "flags": [
-        "guess_only"
-      ]
+      "flags": []
     },
     "738": {
       "bfs": "738",
@@ -7664,8 +7666,7 @@
       "confidence": "high",
       "sources_detail": {
         "scrape": [
-          "merzligen.ch",
-          "team8.ch"
+          "merzligen.ch"
         ],
         "redirect": [],
         "wikidata": [
@@ -10602,8 +10603,7 @@
       "confidence": "high",
       "sources_detail": {
         "scrape": [
-          "stadtluzern.ch",
-          "stadtluzern.ch."
+          "stadtluzern.ch"
         ],
         "redirect": [],
         "wikidata": [
@@ -12744,8 +12744,7 @@
       "sources_detail": {
         "scrape": [
           "lungern.ch",
-          "lungern.ow.ch",
-          "wahimana.ch"
+          "lungern.ow.ch"
         ],
         "redirect": [],
         "wikidata": [
@@ -17967,18 +17966,12 @@
       "bfs": "2762",
       "name": "Allschwil",
       "canton": "Kanton Basel-Landschaft",
-      "domain": "allschwil.ch",
-      "source": "wikidata",
+      "domain": "allschwil.bl.ch",
+      "source": "override",
       "confidence": "high",
       "sources_detail": {
-        "scrape": [],
-        "redirect": [],
-        "wikidata": [
-          "allschwil.ch"
-        ],
-        "guess": [
-          "allschwil.bl.ch",
-          "allschwil.ch"
+        "override": [
+          "allschwil.bl.ch"
         ]
       },
       "flags": []
@@ -22151,6 +22144,7 @@
       "sources_detail": {
         "scrape": [
           "hellmueller.ch",
+          "kobesenmuehle.ch",
           "niederhelfenschwil.ch",
           "nsnz.clubdesk.com",
           "sproochbrugg.ch",
@@ -23969,7 +23963,8 @@
       "confidence": "medium",
       "sources_detail": {
         "scrape": [
-          "handmade-music.ch"
+          "handmade-music.ch",
+          "klibuehni.ch"
         ],
         "redirect": [],
         "wikidata": [
@@ -28014,7 +28009,6 @@
       "confidence": "high",
       "sources_detail": {
         "scrape": [
-          "schoeftland.ch",
           "staffelbach.ch"
         ],
         "redirect": [],
@@ -32301,10 +32295,12 @@
       "name": "Lavey-Morcles",
       "canton": "Kanton Waadt",
       "domain": "lavey.ch",
-      "source": "wikidata",
-      "confidence": "medium",
+      "source": "scrape",
+      "confidence": "high",
       "sources_detail": {
-        "scrape": [],
+        "scrape": [
+          "lavey.ch"
+        ],
         "redirect": [],
         "wikidata": [
           "lavey.ch"
@@ -32420,10 +32416,12 @@
       "name": "Rennaz",
       "canton": "Kanton Waadt",
       "domain": "rennaz.ch",
-      "source": "wikidata",
+      "source": "scrape",
       "confidence": "high",
       "sources_detail": {
-        "scrape": [],
+        "scrape": [
+          "rennaz.ch"
+        ],
         "redirect": [],
         "wikidata": [
           "rennaz.ch"
@@ -32519,10 +32517,12 @@
       "name": "Ballens",
       "canton": "Kanton Waadt",
       "domain": "ballens.ch",
-      "source": "wikidata",
+      "source": "scrape",
       "confidence": "high",
       "sources_detail": {
-        "scrape": [],
+        "scrape": [
+          "ballens.ch"
+        ],
         "redirect": [],
         "wikidata": [
           "ballens.ch"
@@ -32576,10 +32576,13 @@
       "name": "Bougy-Villars",
       "canton": "Kanton Waadt",
       "domain": "bougy-villars.ch",
-      "source": "wikidata",
+      "source": "scrape",
       "confidence": "high",
       "sources_detail": {
-        "scrape": [],
+        "scrape": [
+          "aubonne.ch",
+          "bougy-villars.ch"
+        ],
         "redirect": [],
         "wikidata": [
           "bougy-villars.ch"
@@ -32714,10 +32717,12 @@
       "name": "Saint-Livres",
       "canton": "Kanton Waadt",
       "domain": "st-livres.ch",
-      "source": "wikidata",
-      "confidence": "medium",
+      "source": "scrape",
+      "confidence": "high",
       "sources_detail": {
-        "scrape": [],
+        "scrape": [
+          "st-livres.ch"
+        ],
         "redirect": [],
         "wikidata": [
           "st-livres.ch"
@@ -32832,10 +32837,12 @@
       "name": "Vully-les-Lacs",
       "canton": "Kanton Waadt",
       "domain": "vully-les-lacs.ch",
-      "source": "wikidata",
+      "source": "scrape",
       "confidence": "high",
       "sources_detail": {
-        "scrape": [],
+        "scrape": [
+          "vully-les-lacs.ch"
+        ],
         "redirect": [],
         "wikidata": [
           "vully-les-lacs.ch"
@@ -33495,10 +33502,12 @@
       "name": "Bretigny-sur-Morrens",
       "canton": "Kanton Waadt",
       "domain": "bretigny.ch",
-      "source": "wikidata",
-      "confidence": "medium",
+      "source": "scrape",
+      "confidence": "high",
       "sources_detail": {
-        "scrape": [],
+        "scrape": [
+          "bretigny.ch"
+        ],
         "redirect": [],
         "wikidata": [
           "bretigny.ch"
@@ -33764,10 +33773,12 @@
       "name": "Saint-Barthélemy (VD)",
       "canton": "Kanton Waadt",
       "domain": "st-barthelemy.ch",
-      "source": "wikidata",
-      "confidence": "medium",
+      "source": "scrape",
+      "confidence": "high",
       "sources_detail": {
-        "scrape": [],
+        "scrape": [
+          "st-barthelemy.ch"
+        ],
         "redirect": [],
         "wikidata": [
           "st-barthelemy.ch"
@@ -34620,10 +34631,12 @@
       "name": "Buchillon",
       "canton": "Kanton Waadt",
       "domain": "buchillon.ch",
-      "source": "wikidata",
+      "source": "scrape",
       "confidence": "high",
       "sources_detail": {
-        "scrape": [],
+        "scrape": [
+          "buchillon.ch"
+        ],
         "redirect": [],
         "wikidata": [
           "buchillon.ch"
@@ -34716,10 +34729,12 @@
       "name": "Denens",
       "canton": "Kanton Waadt",
       "domain": "denens.ch",
-      "source": "wikidata",
+      "source": "scrape",
       "confidence": "high",
       "sources_detail": {
-        "scrape": [],
+        "scrape": [
+          "denens.ch"
+        ],
         "redirect": [],
         "wikidata": [
           "denens.ch"
@@ -35185,10 +35200,12 @@
       "name": "Boulens",
       "canton": "Kanton Waadt",
       "domain": "boulens.ch",
-      "source": "wikidata",
+      "source": "scrape",
       "confidence": "high",
       "sources_detail": {
-        "scrape": [],
+        "scrape": [
+          "boulens.ch"
+        ],
         "redirect": [],
         "wikidata": [
           "boulens.ch"
@@ -35526,10 +35543,13 @@
       "name": "Arzier-Le Muids",
       "canton": "Kanton Waadt",
       "domain": "arzier.ch",
-      "source": "wikidata",
-      "confidence": "medium",
+      "source": "scrape",
+      "confidence": "high",
       "sources_detail": {
-        "scrape": [],
+        "scrape": [
+          "arzier.ch",
+          "vd.ch"
+        ],
         "redirect": [],
         "wikidata": [
           "arzier.ch"
@@ -35649,10 +35669,12 @@
       "name": "Chavannes-des-Bois",
       "canton": "Kanton Waadt",
       "domain": "chavannes-des-bois.ch",
-      "source": "wikidata",
+      "source": "scrape",
       "confidence": "high",
       "sources_detail": {
-        "scrape": [],
+        "scrape": [
+          "chavannes-des-bois.ch"
+        ],
         "redirect": [],
         "wikidata": [
           "chavannes-des-bois.ch"
@@ -35668,10 +35690,12 @@
       "name": "Chéserex",
       "canton": "Kanton Waadt",
       "domain": "cheserex.ch",
-      "source": "wikidata",
+      "source": "scrape",
       "confidence": "high",
       "sources_detail": {
-        "scrape": [],
+        "scrape": [
+          "cheserex.ch"
+        ],
         "redirect": [],
         "wikidata": [
           "cheserex.ch"
@@ -35687,10 +35711,12 @@
       "name": "Coinsins",
       "canton": "Kanton Waadt",
       "domain": "coinsins.ch",
-      "source": "wikidata",
+      "source": "scrape",
       "confidence": "high",
       "sources_detail": {
-        "scrape": [],
+        "scrape": [
+          "coinsins.ch"
+        ],
         "redirect": [],
         "wikidata": [
           "coinsins.ch"
@@ -36122,10 +36148,12 @@
       "name": "Vich",
       "canton": "Kanton Waadt",
       "domain": "vich.ch",
-      "source": "wikidata",
+      "source": "scrape",
       "confidence": "high",
       "sources_detail": {
-        "scrape": [],
+        "scrape": [
+          "vich.ch"
+        ],
         "redirect": [],
         "wikidata": [
           "vich.ch"
@@ -36570,10 +36598,12 @@
       "name": "Vaulion",
       "canton": "Kanton Waadt",
       "domain": "vaulion.ch",
-      "source": "wikidata",
+      "source": "scrape",
       "confidence": "high",
       "sources_detail": {
-        "scrape": [],
+        "scrape": [
+          "vaulion.ch"
+        ],
         "redirect": [],
         "wikidata": [
           "vaulion.ch"
@@ -36833,10 +36863,12 @@
       "name": "Corcelles-près-Payerne",
       "canton": "Kanton Waadt",
       "domain": "corcelles.ch",
-      "source": "wikidata",
-      "confidence": "medium",
+      "source": "scrape",
+      "confidence": "high",
       "sources_detail": {
-        "scrape": [],
+        "scrape": [
+          "corcelles.ch"
+        ],
         "redirect": [],
         "wikidata": [
           "corcelles.ch"
@@ -36892,10 +36924,12 @@
       "name": "Missy",
       "canton": "Kanton Waadt",
       "domain": "missy.ch",
-      "source": "wikidata",
+      "source": "scrape",
       "confidence": "high",
       "sources_detail": {
-        "scrape": [],
+        "scrape": [
+          "missy.ch"
+        ],
         "redirect": [],
         "wikidata": [
           "missy.ch"
@@ -37030,10 +37064,12 @@
       "name": "Rossinière",
       "canton": "Kanton Waadt",
       "domain": "rossiniere.ch",
-      "source": "wikidata",
+      "source": "scrape",
       "confidence": "high",
       "sources_detail": {
-        "scrape": [],
+        "scrape": [
+          "rossiniere.ch"
+        ],
         "redirect": [],
         "wikidata": [
           "rossiniere.ch"
@@ -37049,10 +37085,12 @@
       "name": "Rougemont",
       "canton": "Kanton Waadt",
       "domain": "rougemont.ch",
-      "source": "wikidata",
+      "source": "scrape",
       "confidence": "high",
       "sources_detail": {
-        "scrape": [],
+        "scrape": [
+          "rougemont.ch"
+        ],
         "redirect": [],
         "wikidata": [
           "rougemont.ch"
@@ -37072,8 +37110,7 @@
       "confidence": "high",
       "sources_detail": {
         "scrape": [
-          "allaman.ch",
-          "allaman.ch."
+          "allaman.ch"
         ],
         "redirect": [],
         "wikidata": [
@@ -37548,10 +37585,12 @@
       "name": "Veytaux",
       "canton": "Kanton Waadt",
       "domain": "veytaux.ch",
-      "source": "wikidata",
+      "source": "scrape",
       "confidence": "high",
       "sources_detail": {
-        "scrape": [],
+        "scrape": [
+          "veytaux.ch"
+        ],
         "redirect": [],
         "wikidata": [
           "veytaux.ch"
@@ -40684,16 +40723,13 @@
       "bfs": "6421",
       "name": "La Chaux-de-Fonds",
       "canton": "Kanton Neuenburg",
-      "domain": "chaux-de-fonds.ch",
-      "source": "wikidata",
-      "confidence": "medium",
+      "domain": "ne.ch",
+      "source": "override",
+      "confidence": "high",
       "sources_detail": {
-        "scrape": [],
-        "redirect": [],
-        "wikidata": [
-          "chaux-de-fonds.ch"
-        ],
-        "guess": []
+        "override": [
+          "ne.ch"
+        ]
       },
       "flags": []
     },
@@ -42328,10 +42364,12 @@
       "name": "Les Genevez (JU)",
       "canton": "Kanton Jura",
       "domain": "lesgenevez.ch",
-      "source": "wikidata",
+      "source": "scrape",
       "confidence": "high",
       "sources_detail": {
-        "scrape": [],
+        "scrape": [
+          "lesgenevez.ch"
+        ],
         "redirect": [],
         "wikidata": [
           "lesgenevez.ch"
@@ -42428,10 +42466,12 @@
       "name": "Saignelégier",
       "canton": "Kanton Jura",
       "domain": "saignelegier.ch",
-      "source": "wikidata",
+      "source": "scrape",
       "confidence": "high",
       "sources_detail": {
-        "scrape": [],
+        "scrape": [
+          "saignelegier.ch"
+        ],
         "redirect": [],
         "wikidata": [
           "saignelegier.ch"
@@ -42674,10 +42714,12 @@
       "name": "Fontenais",
       "canton": "Kanton Jura",
       "domain": "fontenais.ch",
-      "source": "wikidata",
+      "source": "scrape",
       "confidence": "high",
       "sources_detail": {
-        "scrape": [],
+        "scrape": [
+          "fontenais.ch"
+        ],
         "redirect": [],
         "wikidata": [
           "fontenais.ch"
@@ -42844,8 +42886,7 @@
       "confidence": "high",
       "sources_detail": {
         "scrape": [
-          "damphreux-lugnez.ch",
-          "damphreux-lugnez.ch."
+          "damphreux-lugnez.ch"
         ],
         "redirect": [],
         "wikidata": [

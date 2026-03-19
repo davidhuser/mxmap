@@ -137,12 +137,14 @@ datenschutz.html       # Privacy policy
 
 ## Data files
 
-| File | Description |
-|---|---|
+| File                        | Description                                                         |
+|-----------------------------|---------------------------------------------------------------------|
 | `municipality_domains.json` | Intermediate output from Stage 1 — domains, MX/SPF records, sources |
-| `data.json` | Final classifications with full evidence and confidence scores |
-| `data.min.json` | Minified version served to the frontend |
-| `overrides.json` | Manual classification corrections for edge cases |
+| `data.json`                 | Final classifications with full evidence and confidence scores      |
+| `data.min.json`             | Minified version served to the frontend                             |
+| `overrides.json`            | Manual classification corrections for edge cases                    |
+| `mxmap.log`                 | Pipeline log files (might be outdated)                              |
+
 
 ## Related work
 

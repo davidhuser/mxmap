@@ -1,12 +1,12 @@
 {
-  "generated":"2026-03-19T10:55:46Z",
+  "generated":"2026-03-19T13:24:29Z",
   "total":2110,
   "counts":{
     "aws":23,
     "google":6,
-    "independent":713,
+    "independent":710,
     "infomaniak":139,
-    "microsoft":1229
+    "microsoft":1232
   },
   "municipalities":{
     "1":{
@@ -4625,15 +4625,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"google",
-          "weight":0.07,
-          "detail":"TXT verification matches google"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"microsoft",
           "weight":0.07,
           "detail":"TXT verification matches ms365"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"google",
+          "weight":0.07,
+          "detail":"TXT verification matches google"
         },
         {
           "kind":"spf_ip",
@@ -7312,8 +7312,14 @@
       "spf":"v=spf1 include:_spf.rzobt.ch ip4:212.80.96.0/21 ip4:149.126.4.38 ip6:2a01:7480:1:100::/64 -all",
       "provider":"independent",
       "category":"swiss-based",
-      "classification_confidence":92.0,
+      "classification_confidence":96.0,
       "classification_signals":[
+        {
+          "kind":"tenant",
+          "provider":"microsoft",
+          "weight":0.1,
+          "detail":"MS365 tenant detected: Managed"
+        },
         {
           "kind":"asn",
           "provider":"swiss-isp",
@@ -7325,6 +7331,12 @@
           "provider":"swiss-isp",
           "weight":0.03,
           "detail":"ASN 3303 is Swiss ISP: Swisscom"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"microsoft",
+          "weight":0.07,
+          "detail":"TXT verification matches ms365"
         }
       ],
       "sources_detail":{
@@ -9086,15 +9098,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"microsoft",
-          "weight":0.07,
-          "detail":"TXT verification matches ms365"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"google",
           "weight":0.07,
           "detail":"TXT verification matches google"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"microsoft",
+          "weight":0.07,
+          "detail":"TXT verification matches ms365"
         }
       ],
       "sources_detail":{
@@ -9898,19 +9910,54 @@
       "canton":"Kanton Zürich",
       "domain":"andelfingen.ch",
       "mx":[
-        "mta1.abxsec.com",
-        "mta2.abxsec.com"
+        "andelfingen-ch.mail.protection.outlook.com"
       ],
       "spf":"v=spf1 mx include:_spf.rzobt.ch include:spf.abxsec.com include:_spf.i-web.ch ~all",
-      "provider":"independent",
-      "category":"swiss-based",
-      "classification_confidence":94.0,
+      "provider":"microsoft",
+      "category":"us-cloud",
+      "classification_confidence":91.0,
       "classification_signals":[
+        {
+          "kind":"mx",
+          "provider":"microsoft",
+          "weight":0.2,
+          "detail":"MX andelfingen-ch.mail.protection.outlook.com matches ms365"
+        },
+        {
+          "kind":"smtp",
+          "provider":"microsoft",
+          "weight":0.04,
+          "detail":"SMTP banner matches ms365"
+        },
         {
           "kind":"tenant",
           "provider":"microsoft",
           "weight":0.1,
           "detail":"MS365 tenant detected: Managed"
+        },
+        {
+          "kind":"asn",
+          "provider":"microsoft",
+          "weight":0.03,
+          "detail":"ASN 8075 matches ms365"
+        },
+        {
+          "kind":"asn",
+          "provider":"microsoft",
+          "weight":0.03,
+          "detail":"ASN 8075 matches ms365"
+        },
+        {
+          "kind":"asn",
+          "provider":"microsoft",
+          "weight":0.03,
+          "detail":"ASN 8075 matches ms365"
+        },
+        {
+          "kind":"asn",
+          "provider":"microsoft",
+          "weight":0.03,
+          "detail":"ASN 8075 matches ms365"
         },
         {
           "kind":"txt_verification",
@@ -9919,7 +9966,6 @@
           "detail":"TXT verification matches ms365"
         }
       ],
-      "gateway":"abxsec",
       "sources_detail":{
         "scrape":[
           "andelfingen.ch"
@@ -10254,15 +10300,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"microsoft",
-          "weight":0.07,
-          "detail":"TXT verification matches ms365"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"google",
           "weight":0.07,
           "detail":"TXT verification matches google"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"microsoft",
+          "weight":0.07,
+          "detail":"TXT verification matches ms365"
         }
       ],
       "sources_detail":{
@@ -22094,15 +22140,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"google",
-          "weight":0.07,
-          "detail":"TXT verification matches google"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"microsoft",
           "weight":0.07,
           "detail":"TXT verification matches ms365"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"google",
+          "weight":0.07,
+          "detail":"TXT verification matches google"
         }
       ],
       "sources_detail":{
@@ -23918,15 +23964,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"microsoft",
-          "weight":0.07,
-          "detail":"TXT verification matches ms365"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"google",
           "weight":0.07,
           "detail":"TXT verification matches google"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"microsoft",
+          "weight":0.07,
+          "detail":"TXT verification matches ms365"
         }
       ],
       "sources_detail":{
@@ -24801,16 +24847,18 @@
         }
       ],
       "sources_detail":{
-        "scrape":[],
+        "scrape":[
+          "hermrigen.ch"
+        ],
         "redirect":[],
-        "wikidata":[],
+        "wikidata":[
+          "hermrigen.ch"
+        ],
         "guess":[
           "hermrigen.ch"
         ]
       },
-      "resolve_flags":[
-        "guess_only"
-      ]
+      "resolve_flags":[]
     },
     "738":{
       "bfs":"738",
@@ -25079,8 +25127,7 @@
       ],
       "sources_detail":{
         "scrape":[
-          "merzligen.ch",
-          "team8.ch"
+          "merzligen.ch"
         ],
         "redirect":[],
         "wikidata":[
@@ -25995,15 +26042,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"microsoft",
-          "weight":0.07,
-          "detail":"TXT verification matches ms365"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"google",
           "weight":0.07,
           "detail":"TXT verification matches google"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"microsoft",
+          "weight":0.07,
+          "detail":"TXT verification matches ms365"
         },
         {
           "kind":"spf_ip",
@@ -30609,15 +30656,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"microsoft",
-          "weight":0.07,
-          "detail":"TXT verification matches ms365"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"google",
           "weight":0.07,
           "detail":"TXT verification matches google"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"microsoft",
+          "weight":0.07,
+          "detail":"TXT verification matches ms365"
         }
       ],
       "sources_detail":{
@@ -33116,15 +33163,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"microsoft",
-          "weight":0.07,
-          "detail":"TXT verification matches ms365"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"google",
           "weight":0.07,
           "detail":"TXT verification matches google"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"microsoft",
+          "weight":0.07,
+          "detail":"TXT verification matches ms365"
         }
       ],
       "sources_detail":{
@@ -34328,8 +34375,7 @@
       ],
       "sources_detail":{
         "scrape":[
-          "stadtluzern.ch",
-          "stadtluzern.ch."
+          "stadtluzern.ch"
         ],
         "redirect":[],
         "wikidata":[
@@ -37350,15 +37396,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"microsoft",
-          "weight":0.07,
-          "detail":"TXT verification matches ms365"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"google",
           "weight":0.07,
           "detail":"TXT verification matches google"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"microsoft",
+          "weight":0.07,
+          "detail":"TXT verification matches ms365"
         }
       ],
       "sources_detail":{
@@ -37620,15 +37666,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"google",
-          "weight":0.07,
-          "detail":"TXT verification matches google"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"microsoft",
           "weight":0.07,
           "detail":"TXT verification matches ms365"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"google",
+          "weight":0.07,
+          "detail":"TXT verification matches google"
         }
       ],
       "sources_detail":{
@@ -38469,15 +38515,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"microsoft",
-          "weight":0.07,
-          "detail":"TXT verification matches ms365"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"google",
           "weight":0.07,
           "detail":"TXT verification matches google"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"microsoft",
+          "weight":0.07,
+          "detail":"TXT verification matches ms365"
         }
       ],
       "sources_detail":{
@@ -38793,15 +38839,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"microsoft",
-          "weight":0.07,
-          "detail":"TXT verification matches ms365"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"google",
           "weight":0.07,
           "detail":"TXT verification matches google"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"microsoft",
+          "weight":0.07,
+          "detail":"TXT verification matches ms365"
         },
         {
           "kind":"spf_ip",
@@ -40137,8 +40183,7 @@
       "sources_detail":{
         "scrape":[
           "lungern.ch",
-          "lungern.ow.ch",
-          "wahimana.ch"
+          "lungern.ow.ch"
         ],
         "redirect":[],
         "wikidata":[
@@ -40357,15 +40402,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"google",
-          "weight":0.07,
-          "detail":"TXT verification matches google"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"microsoft",
           "weight":0.07,
           "detail":"TXT verification matches ms365"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"google",
+          "weight":0.07,
+          "detail":"TXT verification matches google"
         }
       ],
       "sources_detail":{
@@ -40590,15 +40635,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"google",
-          "weight":0.07,
-          "detail":"TXT verification matches google"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"microsoft",
           "weight":0.07,
           "detail":"TXT verification matches ms365"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"google",
+          "weight":0.07,
+          "detail":"TXT verification matches google"
         }
       ],
       "sources_detail":{
@@ -41087,7 +41132,6 @@
       "canton":"Kanton Zug",
       "domain":"neuheim.ch",
       "mx":[
-        "mail.zg.ch",
         "mail1.zg.ch",
         "mail2.zg.ch"
       ],
@@ -41383,15 +41427,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"microsoft",
-          "weight":0.07,
-          "detail":"TXT verification matches ms365"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"google",
           "weight":0.07,
           "detail":"TXT verification matches google"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"microsoft",
+          "weight":0.07,
+          "detail":"TXT verification matches ms365"
         }
       ],
       "sources_detail":{
@@ -45784,15 +45828,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"google",
-          "weight":0.07,
-          "detail":"TXT verification matches google"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"microsoft",
           "weight":0.07,
           "detail":"TXT verification matches ms365"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"google",
+          "weight":0.07,
+          "detail":"TXT verification matches google"
         }
       ],
       "sources_detail":{
@@ -47322,15 +47366,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"microsoft",
-          "weight":0.07,
-          "detail":"TXT verification matches ms365"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"google",
           "weight":0.07,
           "detail":"TXT verification matches google"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"microsoft",
+          "weight":0.07,
+          "detail":"TXT verification matches ms365"
         },
         {
           "kind":"spf_ip",
@@ -54644,7 +54688,7 @@
       "mx":[
         "bellach-ch.mail.protection.outlook.com"
       ],
-      "spf":"v=spf1 +a +mx +a:mailsrv.dynabyte.ch +ip4:193.135.56.6 include:spf.protection.outlook.com -all",
+      "spf":"v=spf1 +a +mx +a:mailsrv.dynabyte.ch +ip4:193.135.56.6  include:spf.protection.outlook.com -all",
       "provider":"microsoft",
       "category":"us-cloud",
       "classification_confidence":100.0,
@@ -57922,15 +57966,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"microsoft",
-          "weight":0.07,
-          "detail":"TXT verification matches ms365"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"google",
           "weight":0.07,
           "detail":"TXT verification matches google"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"microsoft",
+          "weight":0.07,
+          "detail":"TXT verification matches ms365"
         },
         {
           "kind":"spf_ip",
@@ -57940,27 +57984,27 @@
         },
         {
           "kind":"spf_ip",
-          "provider":"microsoft",
-          "weight":0.08,
-          "detail":"SPF ip4/a ASN 8075 matches ms365"
-        },
-        {
-          "kind":"spf_ip",
           "provider":"aws",
           "weight":0.08,
           "detail":"SPF ip4/a ASN 16509 matches aws"
         },
         {
           "kind":"spf_ip",
-          "provider":"swiss-isp",
+          "provider":"microsoft",
           "weight":0.08,
-          "detail":"SPF ip4/a ASN 3303 is Swiss ISP: Swisscom"
+          "detail":"SPF ip4/a ASN 8075 matches ms365"
         },
         {
           "kind":"spf_ip",
           "provider":"swiss-isp",
           "weight":0.08,
           "detail":"SPF ip4/a ASN 6730 is Swiss ISP: Sunrise UPC"
+        },
+        {
+          "kind":"spf_ip",
+          "provider":"swiss-isp",
+          "weight":0.08,
+          "detail":"SPF ip4/a ASN 3303 is Swiss ISP: Swisscom"
         }
       ],
       "sources_detail":{
@@ -58167,20 +58211,23 @@
       "bfs":"2762",
       "name":"Allschwil",
       "canton":"Kanton Basel-Landschaft",
-      "domain":"allschwil.ch",
+      "domain":"allschwil.bl.ch",
       "mx":[
-        "212.120.53.8"
+        "ktvmx01.mail.admin.ch",
+        "ktvmx02.mail.admin.ch",
+        "ktvmx03.mail.admin.ch",
+        "ktvmx04.mail.admin.ch"
       ],
-      "spf":"",
-      "provider":"independent",
-      "category":"swiss-based",
-      "classification_confidence":66.0,
+      "spf":"v=spf1 include:_netblocks1.admin.ch include:_netblocks2.admin.ch include:_netblocks3.admin.ch include:_netblocks4.admin.ch include:_spf.talus.ch ip4:178.174.17.194 a:smtp-inca.allschwil.bl.ch include:spf.protection.outlook.com ~all",
+      "provider":"microsoft",
+      "category":"us-cloud",
+      "classification_confidence":82.0,
       "classification_signals":[
         {
-          "kind":"smtp",
+          "kind":"spf",
           "provider":"microsoft",
-          "weight":0.04,
-          "detail":"SMTP banner matches ms365"
+          "weight":0.2,
+          "detail":"SPF include:spf.protection.outlook.com matches ms365"
         },
         {
           "kind":"tenant",
@@ -58193,17 +58240,17 @@
           "provider":"microsoft",
           "weight":0.07,
           "detail":"TXT verification matches ms365"
+        },
+        {
+          "kind":"spf_ip",
+          "provider":"swiss-isp",
+          "weight":0.08,
+          "detail":"SPF ip4/a ASN 3303 is Swiss ISP: Swisscom"
         }
       ],
       "sources_detail":{
-        "scrape":[],
-        "redirect":[],
-        "wikidata":[
-          "allschwil.ch"
-        ],
-        "guess":[
-          "allschwil.bl.ch",
-          "allschwil.ch"
+        "override":[
+          "allschwil.bl.ch"
         ]
       },
       "resolve_flags":[]
@@ -64345,15 +64392,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"microsoft",
-          "weight":0.07,
-          "detail":"TXT verification matches ms365"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"google",
           "weight":0.07,
           "detail":"TXT verification matches google"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"microsoft",
+          "weight":0.07,
+          "detail":"TXT verification matches ms365"
         },
         {
           "kind":"txt_verification",
@@ -64882,15 +64929,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"microsoft",
-          "weight":0.07,
-          "detail":"TXT verification matches ms365"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"google",
           "weight":0.07,
           "detail":"TXT verification matches google"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"microsoft",
+          "weight":0.07,
+          "detail":"TXT verification matches ms365"
         }
       ],
       "sources_detail":{
@@ -70828,6 +70875,7 @@
       "sources_detail":{
         "scrape":[
           "hellmueller.ch",
+          "kobesenmuehle.ch",
           "niederhelfenschwil.ch",
           "nsnz.clubdesk.com",
           "sproochbrugg.ch",
@@ -72078,15 +72126,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"google",
-          "weight":0.07,
-          "detail":"TXT verification matches google"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"microsoft",
           "weight":0.07,
           "detail":"TXT verification matches ms365"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"google",
+          "weight":0.07,
+          "detail":"TXT verification matches google"
         }
       ],
       "sources_detail":{
@@ -73087,15 +73135,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"google",
-          "weight":0.07,
-          "detail":"TXT verification matches google"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"microsoft",
           "weight":0.07,
           "detail":"TXT verification matches ms365"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"google",
+          "weight":0.07,
+          "detail":"TXT verification matches google"
         }
       ],
       "sources_detail":{
@@ -76492,7 +76540,8 @@
       ],
       "sources_detail":{
         "scrape":[
-          "handmade-music.ch"
+          "handmade-music.ch",
+          "klibuehni.ch"
         ],
         "redirect":[],
         "wikidata":[
@@ -78970,15 +79019,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"aws",
-          "weight":0.07,
-          "detail":"TXT verification matches aws"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"microsoft",
           "weight":0.07,
           "detail":"TXT verification matches ms365"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"aws",
+          "weight":0.07,
+          "detail":"TXT verification matches aws"
         },
         {
           "kind":"txt_verification",
@@ -80381,15 +80430,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"google",
-          "weight":0.07,
-          "detail":"TXT verification matches google"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"microsoft",
           "weight":0.07,
           "detail":"TXT verification matches ms365"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"google",
+          "weight":0.07,
+          "detail":"TXT verification matches google"
         },
         {
           "kind":"spf_ip",
@@ -90976,15 +91025,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"microsoft",
-          "weight":0.07,
-          "detail":"TXT verification matches ms365"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"aws",
           "weight":0.07,
           "detail":"TXT verification matches aws"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"microsoft",
+          "weight":0.07,
+          "detail":"TXT verification matches ms365"
         },
         {
           "kind":"spf_ip",
@@ -92860,7 +92909,6 @@
       ],
       "sources_detail":{
         "scrape":[
-          "schoeftland.ch",
           "staffelbach.ch"
         ],
         "redirect":[],
@@ -94550,15 +94598,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"google",
-          "weight":0.07,
-          "detail":"TXT verification matches google"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"microsoft",
           "weight":0.07,
           "detail":"TXT verification matches ms365"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"google",
+          "weight":0.07,
+          "detail":"TXT verification matches google"
         }
       ],
       "sources_detail":{
@@ -95065,15 +95113,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"google",
-          "weight":0.07,
-          "detail":"TXT verification matches google"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"microsoft",
           "weight":0.07,
           "detail":"TXT verification matches ms365"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"google",
+          "weight":0.07,
+          "detail":"TXT verification matches google"
         },
         {
           "kind":"spf_ip",
@@ -104550,15 +104598,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"microsoft",
-          "weight":0.07,
-          "detail":"TXT verification matches ms365"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"google",
           "weight":0.07,
           "detail":"TXT verification matches google"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"microsoft",
+          "weight":0.07,
+          "detail":"TXT verification matches ms365"
         },
         {
           "kind":"spf_ip",
@@ -106269,7 +106317,9 @@
         }
       ],
       "sources_detail":{
-        "scrape":[],
+        "scrape":[
+          "lavey.ch"
+        ],
         "redirect":[],
         "wikidata":[
           "lavey.ch"
@@ -106708,7 +106758,9 @@
         }
       ],
       "sources_detail":{
-        "scrape":[],
+        "scrape":[
+          "rennaz.ch"
+        ],
         "redirect":[],
         "wikidata":[
           "rennaz.ch"
@@ -107136,7 +107188,9 @@
         }
       ],
       "sources_detail":{
-        "scrape":[],
+        "scrape":[
+          "ballens.ch"
+        ],
         "redirect":[],
         "wikidata":[
           "ballens.ch"
@@ -107346,7 +107400,10 @@
         }
       ],
       "sources_detail":{
-        "scrape":[],
+        "scrape":[
+          "aubonne.ch",
+          "bougy-villars.ch"
+        ],
         "redirect":[],
         "wikidata":[
           "bougy-villars.ch"
@@ -107827,7 +107884,9 @@
         }
       ],
       "sources_detail":{
-        "scrape":[],
+        "scrape":[
+          "st-livres.ch"
+        ],
         "redirect":[],
         "wikidata":[
           "st-livres.ch"
@@ -108038,7 +108097,7 @@
       "mx":[
         "cudrefin-ch.mail.protection.outlook.com"
       ],
-      "spf":"v=spf1 include:spf.protection.outlook.com -all",
+      "spf":"v=spf1 include:spf.protection.outlook.com include:spf.infomaniak.ch -all",
       "provider":"microsoft",
       "category":"us-cloud",
       "classification_confidence":100.0,
@@ -108056,16 +108115,10 @@
           "detail":"SPF include:spf.protection.outlook.com matches ms365"
         },
         {
-          "kind":"dkim",
-          "provider":"microsoft",
-          "weight":0.15,
-          "detail":"DKIM selector1._domainkey.cudrefin.ch CNAME → selector1-cudrefin-ch._domainkey.communecudrefin.onmicrosoft.com"
-        },
-        {
-          "kind":"dkim",
-          "provider":"microsoft",
-          "weight":0.15,
-          "detail":"DKIM selector2._domainkey.cudrefin.ch CNAME → selector2-cudrefin-ch._domainkey.communecudrefin.onmicrosoft.com"
+          "kind":"spf",
+          "provider":"infomaniak",
+          "weight":0.2,
+          "detail":"SPF include:spf.infomaniak.ch matches infomaniak"
         },
         {
           "kind":"autodiscover",
@@ -108281,7 +108334,9 @@
         }
       ],
       "sources_detail":{
-        "scrape":[],
+        "scrape":[
+          "vully-les-lacs.ch"
+        ],
         "redirect":[],
         "wikidata":[
           "vully-les-lacs.ch"
@@ -108461,15 +108516,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"microsoft",
-          "weight":0.07,
-          "detail":"TXT verification matches ms365"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"google",
           "weight":0.07,
           "detail":"TXT verification matches google"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"microsoft",
+          "weight":0.07,
+          "detail":"TXT verification matches ms365"
         }
       ],
       "sources_detail":{
@@ -110759,7 +110814,9 @@
         }
       ],
       "sources_detail":{
-        "scrape":[],
+        "scrape":[
+          "bretigny.ch"
+        ],
         "redirect":[],
         "wikidata":[
           "bretigny.ch"
@@ -111769,7 +111826,9 @@
         }
       ],
       "sources_detail":{
-        "scrape":[],
+        "scrape":[
+          "st-barthelemy.ch"
+        ],
         "redirect":[],
         "wikidata":[
           "st-barthelemy.ch"
@@ -114608,7 +114667,9 @@
         }
       ],
       "sources_detail":{
-        "scrape":[],
+        "scrape":[
+          "buchillon.ch"
+        ],
         "redirect":[],
         "wikidata":[
           "buchillon.ch"
@@ -114973,7 +115034,9 @@
         }
       ],
       "sources_detail":{
-        "scrape":[],
+        "scrape":[
+          "denens.ch"
+        ],
         "redirect":[],
         "wikidata":[
           "denens.ch"
@@ -115823,15 +115886,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"microsoft",
-          "weight":0.07,
-          "detail":"TXT verification matches ms365"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"google",
           "weight":0.07,
           "detail":"TXT verification matches google"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"microsoft",
+          "weight":0.07,
+          "detail":"TXT verification matches ms365"
         }
       ],
       "gateway":"cisco",
@@ -116940,7 +117003,9 @@
       "classification_confidence":90.0,
       "classification_signals":[],
       "sources_detail":{
-        "scrape":[],
+        "scrape":[
+          "boulens.ch"
+        ],
         "redirect":[],
         "wikidata":[
           "boulens.ch"
@@ -117520,10 +117585,10 @@
         "aspmx4.googlemail.com",
         "aspmx5.googlemail.com"
       ],
-      "spf":"v=spf1 include:_spf.google.com ~all",
+      "spf":"v=spf1 include:servers.mcsv.net ?all",
       "provider":"google",
       "category":"us-cloud",
-      "classification_confidence":92.0,
+      "classification_confidence":62.0,
       "classification_signals":[
         {
           "kind":"mx",
@@ -117568,22 +117633,10 @@
           "detail":"MX aspmx5.googlemail.com matches google"
         },
         {
-          "kind":"spf",
-          "provider":"google",
-          "weight":0.2,
-          "detail":"SPF include:_spf.google.com matches google"
-        },
-        {
           "kind":"tenant",
           "provider":"microsoft",
           "weight":0.1,
           "detail":"MS365 tenant detected: Managed"
-        },
-        {
-          "kind":"asn",
-          "provider":"google",
-          "weight":0.03,
-          "detail":"ASN 15169 matches google"
         },
         {
           "kind":"asn",
@@ -118059,7 +118112,10 @@
         }
       ],
       "sources_detail":{
-        "scrape":[],
+        "scrape":[
+          "arzier.ch",
+          "vd.ch"
+        ],
         "redirect":[],
         "wikidata":[
           "arzier.ch"
@@ -118602,7 +118658,9 @@
         }
       ],
       "sources_detail":{
-        "scrape":[],
+        "scrape":[
+          "chavannes-des-bois.ch"
+        ],
         "redirect":[],
         "wikidata":[
           "chavannes-des-bois.ch"
@@ -118694,7 +118752,9 @@
         }
       ],
       "sources_detail":{
-        "scrape":[],
+        "scrape":[
+          "cheserex.ch"
+        ],
         "redirect":[],
         "wikidata":[
           "cheserex.ch"
@@ -118774,7 +118834,9 @@
         }
       ],
       "sources_detail":{
-        "scrape":[],
+        "scrape":[
+          "coinsins.ch"
+        ],
         "redirect":[],
         "wikidata":[
           "coinsins.ch"
@@ -119935,15 +119997,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"google",
-          "weight":0.07,
-          "detail":"TXT verification matches google"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"microsoft",
           "weight":0.07,
           "detail":"TXT verification matches ms365"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"google",
+          "weight":0.07,
+          "detail":"TXT verification matches google"
         }
       ],
       "sources_detail":{
@@ -119998,15 +120060,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"google",
-          "weight":0.07,
-          "detail":"TXT verification matches google"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"aws",
           "weight":0.07,
           "detail":"TXT verification matches aws"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"google",
+          "weight":0.07,
+          "detail":"TXT verification matches google"
         },
         {
           "kind":"txt_verification",
@@ -120622,15 +120684,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"aws",
-          "weight":0.07,
-          "detail":"TXT verification matches aws"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"microsoft",
           "weight":0.07,
           "detail":"TXT verification matches ms365"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"aws",
+          "weight":0.07,
+          "detail":"TXT verification matches aws"
         },
         {
           "kind":"txt_verification",
@@ -120722,7 +120784,9 @@
         }
       ],
       "sources_detail":{
-        "scrape":[],
+        "scrape":[
+          "vich.ch"
+        ],
         "redirect":[],
         "wikidata":[
           "vich.ch"
@@ -122198,7 +122262,9 @@
         }
       ],
       "sources_detail":{
-        "scrape":[],
+        "scrape":[
+          "vaulion.ch"
+        ],
         "redirect":[],
         "wikidata":[
           "vaulion.ch"
@@ -123093,7 +123159,9 @@
         }
       ],
       "sources_detail":{
-        "scrape":[],
+        "scrape":[
+          "corcelles.ch"
+        ],
         "redirect":[],
         "wikidata":[
           "corcelles.ch"
@@ -123269,7 +123337,9 @@
         }
       ],
       "sources_detail":{
-        "scrape":[],
+        "scrape":[
+          "missy.ch"
+        ],
         "redirect":[],
         "wikidata":[
           "missy.ch"
@@ -123533,15 +123603,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"google",
-          "weight":0.07,
-          "detail":"TXT verification matches google"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"microsoft",
           "weight":0.07,
           "detail":"TXT verification matches ms365"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"google",
+          "weight":0.07,
+          "detail":"TXT verification matches google"
         },
         {
           "kind":"spf_ip",
@@ -123691,7 +123761,9 @@
         }
       ],
       "sources_detail":{
-        "scrape":[],
+        "scrape":[
+          "rossiniere.ch"
+        ],
         "redirect":[],
         "wikidata":[
           "rossiniere.ch"
@@ -123771,7 +123843,9 @@
         }
       ],
       "sources_detail":{
-        "scrape":[],
+        "scrape":[
+          "rougemont.ch"
+        ],
         "redirect":[],
         "wikidata":[
           "rougemont.ch"
@@ -123852,8 +123926,7 @@
       ],
       "sources_detail":{
         "scrape":[
-          "allaman.ch",
-          "allaman.ch."
+          "allaman.ch"
         ],
         "redirect":[],
         "wikidata":[
@@ -125639,7 +125712,9 @@
         }
       ],
       "sources_detail":{
-        "scrape":[],
+        "scrape":[
+          "veytaux.ch"
+        ],
         "redirect":[],
         "wikidata":[
           "veytaux.ch"
@@ -125731,15 +125806,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"microsoft",
-          "weight":0.07,
-          "detail":"TXT verification matches ms365"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"google",
           "weight":0.07,
           "detail":"TXT verification matches google"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"microsoft",
+          "weight":0.07,
+          "detail":"TXT verification matches ms365"
         }
       ],
       "sources_detail":{
@@ -126509,15 +126584,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"microsoft",
-          "weight":0.07,
-          "detail":"TXT verification matches ms365"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"google",
           "weight":0.07,
           "detail":"TXT verification matches google"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"microsoft",
+          "weight":0.07,
+          "detail":"TXT verification matches ms365"
         }
       ],
       "sources_detail":{
@@ -129128,15 +129203,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"microsoft",
-          "weight":0.07,
-          "detail":"TXT verification matches ms365"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"google",
           "weight":0.07,
           "detail":"TXT verification matches google"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"microsoft",
+          "weight":0.07,
+          "detail":"TXT verification matches ms365"
         }
       ],
       "sources_detail":{
@@ -129978,18 +130053,6 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"microsoft",
-          "weight":0.07,
-          "detail":"TXT verification matches ms365"
-        },
-        {
-          "kind":"txt_verification",
-          "provider":"microsoft",
-          "weight":0.07,
-          "detail":"TXT verification matches ms365"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"google",
           "weight":0.07,
           "detail":"TXT verification matches google"
@@ -129999,6 +130062,18 @@
           "provider":"google",
           "weight":0.07,
           "detail":"TXT verification matches google"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"microsoft",
+          "weight":0.07,
+          "detail":"TXT verification matches ms365"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"microsoft",
+          "weight":0.07,
+          "detail":"TXT verification matches ms365"
         },
         {
           "kind":"spf_ip",
@@ -131970,15 +132045,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"google",
-          "weight":0.07,
-          "detail":"TXT verification matches google"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"microsoft",
           "weight":0.07,
           "detail":"TXT verification matches ms365"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"google",
+          "weight":0.07,
+          "detail":"TXT verification matches google"
         }
       ],
       "sources_detail":{
@@ -133638,15 +133713,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"google",
-          "weight":0.07,
-          "detail":"TXT verification matches google"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"microsoft",
           "weight":0.07,
           "detail":"TXT verification matches ms365"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"google",
+          "weight":0.07,
+          "detail":"TXT verification matches google"
         }
       ],
       "sources_detail":{
@@ -134011,21 +134086,21 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"microsoft",
-          "weight":0.07,
-          "detail":"TXT verification matches ms365"
-        },
-        {
-          "kind":"txt_verification",
-          "provider":"microsoft",
-          "weight":0.07,
-          "detail":"TXT verification matches ms365"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"google",
           "weight":0.07,
           "detail":"TXT verification matches google"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"microsoft",
+          "weight":0.07,
+          "detail":"TXT verification matches ms365"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"microsoft",
+          "weight":0.07,
+          "detail":"TXT verification matches ms365"
         }
       ],
       "gateway":"proofpoint",
@@ -134713,15 +134788,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"google",
-          "weight":0.07,
-          "detail":"TXT verification matches google"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"microsoft",
           "weight":0.07,
           "detail":"TXT verification matches ms365"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"google",
+          "weight":0.07,
+          "detail":"TXT verification matches google"
         }
       ],
       "gateway":"proofpoint",
@@ -136580,16 +136655,28 @@
       "bfs":"6421",
       "name":"La Chaux-de-Fonds",
       "canton":"Kanton Neuenburg",
-      "domain":"chaux-de-fonds.ch",
+      "domain":"ne.ch",
       "mx":[
         "ne2mx9a.ne.ch",
         "nemx9a.ne.ch"
       ],
-      "spf":"",
-      "provider":"independent",
-      "category":"swiss-based",
-      "classification_confidence":64.0,
+      "spf":"v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ip4:148.196.27.140 ip4:148.196.27.141 +mx:hin.ch -all",
+      "provider":"microsoft",
+      "category":"us-cloud",
+      "classification_confidence":82.0,
       "classification_signals":[
+        {
+          "kind":"spf",
+          "provider":"microsoft",
+          "weight":0.2,
+          "detail":"SPF include:spf.protection.outlook.com matches ms365"
+        },
+        {
+          "kind":"tenant",
+          "provider":"microsoft",
+          "weight":0.1,
+          "detail":"MS365 tenant detected: Managed"
+        },
         {
           "kind":"asn",
           "provider":"swiss-isp",
@@ -136604,18 +136691,21 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"google",
+          "provider":"microsoft",
           "weight":0.07,
-          "detail":"TXT verification matches google"
+          "detail":"TXT verification matches ms365"
+        },
+        {
+          "kind":"spf_ip",
+          "provider":"swiss-isp",
+          "weight":0.08,
+          "detail":"SPF ip4/a ASN 559 is Swiss ISP: SWITCH"
         }
       ],
       "sources_detail":{
-        "scrape":[],
-        "redirect":[],
-        "wikidata":[
-          "chaux-de-fonds.ch"
-        ],
-        "guess":[]
+        "override":[
+          "ne.ch"
+        ]
       },
       "resolve_flags":[]
     },
@@ -137928,12 +138018,6 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"google",
-          "weight":0.07,
-          "detail":"TXT verification matches google"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"microsoft",
           "weight":0.07,
           "detail":"TXT verification matches ms365"
@@ -137943,6 +138027,12 @@
           "provider":"aws",
           "weight":0.07,
           "detail":"TXT verification matches aws"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"google",
+          "weight":0.07,
+          "detail":"TXT verification matches google"
         },
         {
           "kind":"txt_verification",
@@ -138224,15 +138314,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"aws",
-          "weight":0.07,
-          "detail":"TXT verification matches aws"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"microsoft",
           "weight":0.07,
           "detail":"TXT verification matches ms365"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"aws",
+          "weight":0.07,
+          "detail":"TXT verification matches aws"
         },
         {
           "kind":"txt_verification",
@@ -138675,6 +138765,18 @@
         },
         {
           "kind":"txt_verification",
+          "provider":"microsoft",
+          "weight":0.07,
+          "detail":"TXT verification matches ms365"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"google",
+          "weight":0.07,
+          "detail":"TXT verification matches google"
+        },
+        {
+          "kind":"txt_verification",
           "provider":"google",
           "weight":0.07,
           "detail":"TXT verification matches google"
@@ -138690,18 +138792,6 @@
           "provider":"microsoft",
           "weight":0.07,
           "detail":"TXT verification matches ms365"
-        },
-        {
-          "kind":"txt_verification",
-          "provider":"microsoft",
-          "weight":0.07,
-          "detail":"TXT verification matches ms365"
-        },
-        {
-          "kind":"txt_verification",
-          "provider":"google",
-          "weight":0.07,
-          "detail":"TXT verification matches google"
         },
         {
           "kind":"txt_verification",
@@ -139376,15 +139466,15 @@
         },
         {
           "kind":"txt_verification",
-          "provider":"microsoft",
-          "weight":0.07,
-          "detail":"TXT verification matches ms365"
-        },
-        {
-          "kind":"txt_verification",
           "provider":"google",
           "weight":0.07,
           "detail":"TXT verification matches google"
+        },
+        {
+          "kind":"txt_verification",
+          "provider":"microsoft",
+          "weight":0.07,
+          "detail":"TXT verification matches ms365"
         }
       ],
       "sources_detail":{
@@ -140963,7 +141053,9 @@
         }
       ],
       "sources_detail":{
-        "scrape":[],
+        "scrape":[
+          "lesgenevez.ch"
+        ],
         "redirect":[],
         "wikidata":[
           "lesgenevez.ch"
@@ -141205,7 +141297,9 @@
       "classification_confidence":90.0,
       "classification_signals":[],
       "sources_detail":{
-        "scrape":[],
+        "scrape":[
+          "saignelegier.ch"
+        ],
         "redirect":[],
         "wikidata":[
           "saignelegier.ch"
@@ -142084,7 +142178,9 @@
         }
       ],
       "sources_detail":{
-        "scrape":[],
+        "scrape":[
+          "fontenais.ch"
+        ],
         "redirect":[],
         "wikidata":[
           "fontenais.ch"
@@ -142726,8 +142822,7 @@
       ],
       "sources_detail":{
         "scrape":[
-          "damphreux-lugnez.ch",
-          "damphreux-lugnez.ch."
+          "damphreux-lugnez.ch"
         ],
         "redirect":[],
         "wikidata":[
