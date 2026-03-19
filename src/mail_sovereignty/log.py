@@ -40,6 +40,19 @@ def setup(verbose: bool = False) -> None:
         )
     logger.add(sys.stderr, format=fmt, level=level, colorize=True)
 
+    # Log everything to a rotating file (always DEBUG regardless of verbosity)
+    file_fmt = (
+        "{time:YYYY-MM-DD HH:mm:ss} | {level:<7} | {name}:{function}:{line} | {message}"
+    )
+    logger.add(
+        "mxmap.log",
+        format=file_fmt,
+        level="DEBUG",
+        rotation="5 MB",
+        retention=3,
+        encoding="utf-8",
+    )
+
     # Intercept all stdlib logging → loguru
     logging.basicConfig(handlers=[_InterceptHandler()], level=0, force=True)
 
