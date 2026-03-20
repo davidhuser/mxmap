@@ -84,7 +84,17 @@ uv run ruff format src tests
 
 * [hpr4379 :: Mapping Municipalities' Digital Dependencies](https://hackerpublicradio.org/eps/hpr4379/index.html)
 * If you know of other similar projects, please open an issue or submit a PR to add them here!
-* See also the forks of this repository for related efforts.
+
+## Forks
+
+* DE https://b42labs.github.io/mxmap/
+* NL https://mxmap.nl/
+* NO https://kommune-epost-norge.netlify.app/
+* BE https://mxmap.be/
+* EU https://livenson.github.io/mxmap/
+* LV: https://securit.lv/mxmap
+* See also the forks of this repository
+
 
 ## Contributing
 
