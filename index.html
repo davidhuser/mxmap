@@ -282,8 +282,80 @@ function renderTable(hosts) {
   return `<table class="dns-table">${rows}</table>`;
 }
 
+const SIGNAL_LABELS = {
+  mx: 'MX', spf: 'SPF', dkim: 'DKIM', asn: 'ASN',
+  tenant: 'Tenant', spf_ip: 'SPF IP', txt_verification: 'TXT',
+  autodiscover: 'Autodisc.', dmarc: 'DMARC', cname_chain: 'CNAME', smtp: 'SMTP'
+};
+
+function deduplicateSignals(signals) {
+  const seen = new Map();
+  for (const s of signals) {
+    const key = s.kind + '|' + s.detail;
+    if (seen.has(key)) {
+      seen.get(key).count++;
+    } else {
+      seen.set(key, { kind: s.kind, provider: s.provider, weight: s.weight, detail: s.detail, count: 1 });
+    }
+  }
+  return Array.from(seen.values()).sort((a, b) => b.weight - a.weight);
+}
+
+function condenseDetail(kind, detail) {
+  var m;
+  switch (kind) {
+    case 'mx':
+      m = detail.match(/^MX\s+(\S+)\s+matches\s+\S+$/);
+      return m ? m[1] : detail;
+    case 'spf':
+      m = detail.match(/^SPF\s+include:(\S+)\s+matches\s+\S+$/);
+      return m ? m[1] : detail;
+    case 'dkim':
+      m = detail.match(/^DKIM\s+(selector\d+)\._domainkey\.\S+\s+CNAME\s+→\s+\S+\._domainkey\.(\S+)$/);
+      return m ? m[1] + ' \u2192 ' + m[2] : detail;
+    case 'asn':
+      m = detail.match(/^ASN\s+(\d+)\s+matches\s+\S+$/);
+      if (m) return 'AS' + m[1];
+      m = detail.match(/^ASN\s+(\d+)\s+is Swiss ISP:\s+(.+)$/);
+      if (m) return 'AS' + m[1] + ' (' + m[2] + ')';
+      return detail;
+    case 'tenant':
+      m = detail.match(/^MS365 tenant detected:\s+(.+)$/);
+      return m ? m[1] : detail;
+    case 'autodiscover':
+      m = detail.match(/^autodiscover\s+(CNAME|SRV)\s+→\s+(.+)$/);
+      if (m) return (m[1] === 'CNAME' ? '\u2192 ' : m[1] + ' \u2192 ') + m[2];
+      return detail;
+    case 'txt_verification':
+      m = detail.match(/^TXT verification matches\s+(\S+)$/);
+      if (m) return m[1];
+      if (detail.includes('AWS SES')) return 'AWS SES';
+      return detail;
+    case 'spf_ip':
+      m = detail.match(/ASN\s+(\d+)\s+is Swiss ISP:\s+(.+)$/);
+      if (m) return 'AS' + m[1] + ' (' + m[2] + ')';
+      m = detail.match(/ASN\s+(\d+)\s+matches\s+(\S+)$/);
+      if (m) return 'AS' + m[1];
+      return detail;
+    case 'dmarc':
+      m = detail.match(/^DMARC record\s+(.+)$/);
+      return m ? m[1] : detail;
+    default:
+      return detail;
+  }
+}
+
+
 const map = initMap('map');
 setupInfoBar(map);
+const isMobile = window.innerWidth <= 600;
+
+// Toggle collapsible popup sections (inline onclick, bypasses Leaflet event interception)
+window.toggleSection = function(el) {
+  el.classList.toggle('popup-toggle-open');
+  var body = el.nextElementSibling;
+  body.style.display = body.style.display === 'none' ? '' : 'none';
+};
 
 var muni = {};
 var muniLayer;
@@ -398,33 +470,40 @@ async function loadData() {
       const textColor = (level === 'high' && cat) ? '#fff' : '#333';
       const label = LABELS[m.provider] || m.provider;
 
+      const showBody = isMobile ? 'display:none' : '';
+
       let mxSection = '';
       if (m.mx && m.mx.length > 0) {
-        mxSection = `<div class="popup-section"><div class="popup-section-title">Incoming mail handled by <span class="popup-section-hint">(MX)</span></div>${renderTable(m.mx)}</div>`;
+        mxSection = `<div class="popup-section"><div class="popup-toggle${isMobile ? '' : ' popup-toggle-open'}" onclick="window.toggleSection(this)">Incoming mail handled by <span class="popup-section-hint">(MX)</span></div><div class="popup-section-body" style="${showBody}">${renderTable(m.mx)}</div></div>`;
       } else {
-        mxSection = `<div class="popup-section"><div class="popup-section-title">Incoming mail handled by <span class="popup-section-hint">(MX)</span></div><span style="color:#999;font-size:12px">No MX records found</span></div>`;
+        mxSection = `<div class="popup-section"><div class="popup-toggle${isMobile ? '' : ' popup-toggle-open'}" onclick="window.toggleSection(this)">Incoming mail handled by <span class="popup-section-hint">(MX)</span></div><div class="popup-section-body" style="${showBody}"><span class="popup-empty">No MX records found</span></div></div>`;
       }
 
       const spfDelegations = parseSpfDelegations(m.spf);
       let spfSection = '';
       if (spfDelegations.length > 0) {
-        spfSection = `<div class="popup-section"><div class="popup-section-title">Authorized to send mail <span class="popup-section-hint">(SPF)</span></div>${renderTable(spfDelegations)}</div>`;
+        spfSection = `<div class="popup-section"><div class="popup-toggle${isMobile ? '' : ' popup-toggle-open'}" onclick="window.toggleSection(this)">Authorized to send mail <span class="popup-section-hint">(SPF)</span></div><div class="popup-section-body" style="${showBody}">${renderTable(spfDelegations)}</div></div>`;
       } else if (m.spf) {
-        spfSection = `<div class="popup-section"><div class="popup-section-title">Authorized to send mail <span class="popup-section-hint">(SPF)</span></div><span style="color:#999;font-size:12px">${escapeHtml(m.spf)}</span></div>`;
+        spfSection = `<div class="popup-section"><div class="popup-toggle${isMobile ? '' : ' popup-toggle-open'}" onclick="window.toggleSection(this)">Authorized to send mail <span class="popup-section-hint">(SPF)</span></div><div class="popup-section-body" style="${showBody}"><span class="popup-empty">${escapeHtml(m.spf)}</span></div></div>`;
       } else {
-        spfSection = `<div class="popup-section"><div class="popup-section-title">Authorized to send mail <span class="popup-section-hint">(SPF)</span></div><span style="color:#999;font-size:12px">No SPF record found</span></div>`;
+        spfSection = `<div class="popup-section"><div class="popup-toggle${isMobile ? '' : ' popup-toggle-open'}" onclick="window.toggleSection(this)">Authorized to send mail <span class="popup-section-hint">(SPF)</span></div><div class="popup-section-body" style="${showBody}"><span class="popup-empty">No SPF record found</span></div></div>`;
       }
 
       const confidence = m.classification_confidence != null ? m.classification_confidence : 0;
       const confPct = Math.round(confidence) + '%';
       let signalsSection = '';
       if (m.classification_signals && m.classification_signals.length > 0) {
-        const signalRows = m.classification_signals.map(s =>
-          `<tr><td style="font-weight:600;white-space:nowrap">${escapeHtml(s.kind)}</td><td style="color:#666;font-size:11px">${escapeHtml(s.detail)}</td></tr>`
-        ).join('');
-        signalsSection = `<div class="popup-section"><div class="popup-section-title">Classification signals</div><table class="dns-table">${signalRows}</table></div>`;
+        const deduped = deduplicateSignals(m.classification_signals);
+        const uniqueCount = deduped.length;
+        const signalItems = deduped.map(s => {
+          const kindLabel = SIGNAL_LABELS[s.kind] || s.kind;
+          const condensed = condenseDetail(s.kind, s.detail);
+          const dup = s.count > 1 ? `<span class="signal-dup">\u00d7${s.count}</span>` : '';
+          return `<div class="signal-item" title="${escapeHtml(s.detail).replace(/"/g, '&quot;')}"><span class="signal-kind">${escapeHtml(kindLabel)}</span><span class="signal-text">${escapeHtml(condensed)}</span>${dup}</div>`;
+        }).join('');
+        signalsSection = `<div class="popup-section"><div class="popup-toggle" onclick="window.toggleSection(this)">Classification signals <span class="popup-signal-count" title="DNS and network evidence used to identify the email provider">${uniqueCount}</span></div><div class="popup-section-body" style="display:none"><div class="signal-list">${signalItems}</div></div></div>`;
       } else {
-        signalsSection = `<div class="popup-section"><div class="popup-section-title">Classification signals</div><span style="color:#999;font-size:12px">No classification signals</span></div>`;
+        signalsSection = `<div class="popup-section"><div class="popup-toggle" onclick="window.toggleSection(this)">Classification signals</div><div class="popup-section-body" style="display:none"><span class="popup-empty">No classification signals</span></div></div>`;
       }
 
       const eName = escapeHtml(m.name);
@@ -432,17 +511,19 @@ async function loadData() {
       const nameDisplay = cantonCode ? `${eName} (${cantonCode})` : eName;
       const eDomain = escapeHtml(m.domain || 'unknown');
       const eLabel = escapeHtml(label);
-      const confLine = `<br><span style="font-size:11px;color:#888">Confidence: ${confPct}</span>`;
-      const gatewayLine = m.gateway ? `<br><span style="font-size:11px;color:#888">Gateway: ${escapeHtml(m.gateway)}</span>` : '';
       const badge = `<span class="provider-badge" style="background:${color};color:${textColor}">${eLabel}</span>`;
+      const metaParts = [`Confidence: ${confPct}`];
+      if (m.gateway) metaParts.push(`Gateway: ${escapeHtml(m.gateway)}`);
+      const metaLine = `<div class="popup-meta">${metaParts.join(' &middot; ')}</div>`;
 
       layer.bindPopup(
         `<div class="info-popup">` +
         `<strong>${nameDisplay}</strong><br>` +
-        `${eDomain} ${badge}${confLine}${gatewayLine}` +
-        signalsSection + mxSection + spfSection +
+        `${eDomain} ${badge}` +
+        metaLine +
+        mxSection + spfSection + signalsSection +
         `</div>`,
-        { maxWidth: 450 }
+        { maxWidth: isMobile ? 300 : 450 }
       );
       layer.on('mouseover', function () { this.setStyle({ weight: 2, color: '#333' }); });
       layer.on('mouseout', function () { this.setStyle({ weight: 0.5, color: '#666' }); });
