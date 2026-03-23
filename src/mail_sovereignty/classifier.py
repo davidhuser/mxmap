@@ -84,30 +84,22 @@ def _rule_confidence(
 
     Rule chain (ordered by specificity, first match wins):
 
-  ```
-- MX only 80% (Most likely unfinished config)
-- MX + SPF 90% (Managed setup)
-- AD + SPF 90% (Security GW upfront)
-- MX + SPF + AD 95% (Cloud Setup)
-
-AD Cases sind natürlich nur MS-relevant. Mit den restlichen Indikatoren könntest du bspw. dann die restlichen 5-10% auffüllen.  Die %-te kann man natürlich auch anders aufteilen.
-```
-
-// messen wie viel Rule gebraucht wird, evtl R5-R8 nicht unbeding relevant
-
-
     ====  ==========================  ====
     Rule  Condition                   Base
     ====  ==========================  ====
     R1    MX ∧ SPF ∧ TENANT          0.95
-    R2    MX ∧ SPF                   0.90
-    R3    SPF ∧ TENANT ∧ GW          0.90
-    R4    MX ∧ TENANT                0.85
-    R5    SPF ∧ TENANT               0.80
-    R6    SPF ∧ GW                   0.70
-    R7    MX                         0.80
-    R8    SPF                        0.50
-    R9    else                       0.40
+    R2    MX ∧ SPF ∧ AD              0.95
+    R3    AD ∧ SPF ∧ TENANT          0.95
+    R4    MX ∧ SPF                   0.90
+    R5    SPF ∧ TENANT ∧ GW          0.90
+    R6    AD ∧ SPF                   0.90
+    R7    MX ∧ TENANT                0.85
+    R8    MX ∧ AD                    0.85
+    R9    SPF ∧ TENANT               0.80
+    R10   SPF ∧ GW                   0.70
+    R11   MX                         0.80
+    R12   SPF                        0.50
+    R13   else                       0.40
     ====  ==========================  ====
 
     After the base is selected, each signal in *signals* that was **not**
@@ -118,17 +110,26 @@ AD Cases sind natürlich nur MS-relevant. Mit den restlichen Indikatoren könnte
     has_mx = SignalKind.MX in signals
     has_spf = SignalKind.SPF in signals
     has_tenant = SignalKind.TENANT in signals and provider == Provider.MS365
+    has_autodiscover = SignalKind.AUTODISCOVER in signals
     has_gateway = gateway is not None
 
     # Base confidence from rules (ordered by specificity)
     if has_mx and has_spf and has_tenant:
         base, used = 0.95, {SignalKind.MX, SignalKind.SPF, SignalKind.TENANT}
+    elif has_mx and has_spf and has_autodiscover:
+        base, used = 0.95, {SignalKind.MX, SignalKind.SPF, SignalKind.AUTODISCOVER}
+    elif has_autodiscover and has_spf and has_tenant:
+        base, used = 0.95, {SignalKind.AUTODISCOVER, SignalKind.SPF, SignalKind.TENANT}
     elif has_mx and has_spf:
         base, used = 0.90, {SignalKind.MX, SignalKind.SPF}
     elif has_spf and has_tenant and has_gateway:
         base, used = 0.90, {SignalKind.SPF, SignalKind.TENANT}
+    elif has_autodiscover and has_spf:
+        base, used = 0.90, {SignalKind.AUTODISCOVER, SignalKind.SPF}
     elif has_mx and has_tenant:
         base, used = 0.85, {SignalKind.MX, SignalKind.TENANT}
+    elif has_mx and has_autodiscover:
+        base, used = 0.85, {SignalKind.MX, SignalKind.AUTODISCOVER}
     elif has_spf and has_tenant:
         base, used = 0.80, {SignalKind.SPF, SignalKind.TENANT}
     elif has_spf and has_gateway:
