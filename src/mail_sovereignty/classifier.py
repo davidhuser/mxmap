@@ -74,9 +74,7 @@ _PROVIDER_RULES: tuple[_Rule, ...] = (
     _Rule("ad_spf_tenant",  frozenset({_S.AUTODISCOVER, _S.SPF, _S.TENANT}),   False,   0.95),
     _Rule("mx_spf",         frozenset({_S.MX, _S.SPF}),                        False,   0.90),
     _Rule("spf_tenant_gw",  frozenset({_S.SPF, _S.TENANT}),                    True,    0.90),
-    _Rule("ad_spf",         frozenset({_S.AUTODISCOVER, _S.SPF}),              False,   0.90),
     _Rule("mx_tenant",      frozenset({_S.MX, _S.TENANT}),                     False,   0.85),
-    _Rule("mx_ad",          frozenset({_S.MX, _S.AUTODISCOVER}),               False,   0.85),
     _Rule("spf_tenant",     frozenset({_S.SPF, _S.TENANT}),                    False,   0.80),
     _Rule("spf_gw",         frozenset({_S.SPF}),                               True,    0.70),
     _Rule("mx_only",        frozenset({_S.MX}),                                False,   0.80),
@@ -96,9 +94,8 @@ _INDEPENDENT_RULES: tuple[tuple[str, float], ...] = (
 )
 # fmt: on
 
-_ALL_RULE_NAMES: tuple[str, ...] = (
-    tuple(r.name for r in _PROVIDER_RULES)
-    + tuple(name for name, _ in _INDEPENDENT_RULES)
+_ALL_RULE_NAMES: tuple[str, ...] = tuple(r.name for r in _PROVIDER_RULES) + tuple(
+    name for name, _ in _INDEPENDENT_RULES
 )
 
 

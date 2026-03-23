@@ -414,34 +414,34 @@ class TestAggregate:
         assert result.confidence == pytest.approx(0.95)
 
     def test_autodiscover_spf(self):
-        """R6: AD + SPF → 0.90 (gateway hides MX but SPF+AD confirm)."""
+        """AD + SPF → falls to spf_only (0.50) + AD boost."""
         evidence = [
             _ev(SignalKind.AUTODISCOVER, Provider.MS365),
             _ev(SignalKind.SPF, Provider.MS365),
         ]
         result, _ = _aggregate(evidence)
         assert result.provider == Provider.MS365
-        assert result.confidence == pytest.approx(0.90)
+        assert result.confidence == pytest.approx(0.52)
 
     def test_mx_autodiscover(self):
-        """R8: MX + AD → 0.85."""
+        """MX + AD → falls to mx_only (0.80) + AD boost."""
         evidence = [
             _ev(SignalKind.MX, Provider.MS365),
             _ev(SignalKind.AUTODISCOVER, Provider.MS365),
         ]
         result, _ = _aggregate(evidence)
         assert result.provider == Provider.MS365
-        assert result.confidence == pytest.approx(0.85)
+        assert result.confidence == pytest.approx(0.82)
 
     def test_autodiscover_spf_gateway(self):
-        """AD + SPF + GW → 0.90 (matches R6, gateway doesn't boost)."""
+        """AD + SPF + GW → falls to spf_gw (0.70) + AD boost."""
         evidence = [
             _ev(SignalKind.AUTODISCOVER, Provider.MS365),
             _ev(SignalKind.SPF, Provider.MS365),
         ]
         result, _ = _aggregate(evidence, gateway="barracuda")
         assert result.provider == Provider.MS365
-        assert result.confidence == pytest.approx(0.90)
+        assert result.confidence == pytest.approx(0.72)
 
     def test_independent_with_mx_and_spf_full_confidence(self):
         """Independent domain with MX + SPF → 90% base confidence."""
