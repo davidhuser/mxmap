@@ -1,0 +1,61 @@
+/* shared.css — reset, header, navigation (all pages) */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+
+#header {
+  background: #1a1a2e; color: #fff; height: 44px; padding: 0 16px;
+  display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+  position: relative; z-index: 2000;
+}
+.header-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.brand { font-size: 17px; font-weight: 700; white-space: nowrap; margin: 0; }
+.brand a { color: #fff; text-decoration: none; }
+.beta-badge {
+  font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+  background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+  color: #f0c040; padding: 1px 6px; border-radius: 3px; vertical-align: middle;
+  cursor: default;
+}
+.header-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+
+#nav { display: flex; align-items: center; gap: 8px; position: relative; margin-left: 6px; }
+
+.nav-primary { display: flex; align-items: center; gap: 6px; }
+.nav-primary .header-link {
+  font-size: 13px; padding: 5px 14px; border-radius: 4px; font-weight: 500;
+  border: 1px solid rgba(255,255,255,0.3); color: #ccc; text-decoration: none;
+}
+.nav-primary .header-link:hover {
+  background: rgba(255,255,255,0.15); color: #fff;
+}
+.nav-primary .header-link.active {
+  background: rgba(255,255,255,0.2); color: #fff; font-weight: 600;
+  border-color: rgba(255,255,255,0.5);
+}
+
+.nav-menu-toggle {
+  background: none; border: none; color: #a0a0b0; font-size: 18px;
+  cursor: pointer; padding: 2px 4px; line-height: 1;
+}
+.nav-menu-toggle:hover { color: #fff; }
+.nav-menu {
+  display: none; position: absolute; top: 34px; left: 0;
+  background: #1a1a2e; border-radius: 0 0 6px 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3); min-width: 160px; z-index: 100;
+}
+.nav-menu.open { display: block; }
+.nav-menu .header-link {
+  display: block; padding: 10px 16px; font-size: 13px; color: #a0a0b0; text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.nav-menu .header-link:hover { color: #fff; }
+.nav-menu .header-link.active { color: #fff; font-weight: 600; }
+.nav-menu .header-link:last-child { border-bottom: none; }
+.nav-menu .nav-menu-mobile { display: none; }
+
+@media (max-width: 600px) {
+  .beta-badge { display: none; }
+  .nav-primary .header-link { font-size: 11px; padding: 2px 8px; }
+  .nav-primary { display: none; }
+  .nav-menu .nav-menu-mobile { display: block; }
+}

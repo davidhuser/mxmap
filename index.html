@@ -4,13 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="preconnect" href="https://unpkg.com" crossorigin>
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preconnect" href="https://a.basemaps.cartocdn.com" crossorigin>
 <link rel="preconnect" href="https://b.basemaps.cartocdn.com" crossorigin>
 <link rel="preconnect" href="https://c.basemaps.cartocdn.com" crossorigin>
 <link rel="preconnect" href="https://d.basemaps.cartocdn.com" crossorigin>
 <link rel="dns-prefetch" href="https://unpkg.com">
-<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 <link rel="dns-prefetch" href="https://a.basemaps.cartocdn.com">
 <link rel="dns-prefetch" href="https://b.basemaps.cartocdn.com">
 <link rel="dns-prefetch" href="https://c.basemaps.cartocdn.com">
@@ -33,115 +31,23 @@
 <meta name="twitter:description" content="Interactive map showing where Swiss municipalities host their official email. DNS analysis of all ~2,100 municipalities.">
 <meta name="twitter:image" content="https://mxmap.ch/og-image.jpg">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='7' width='28' height='18' rx='2' fill='%231a1a2e'/%3E%3Cpath d='M2 9l14 9 14-9' fill='none' stroke='%2316a34a' stroke-width='2'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/shared.css">
+<link rel="stylesheet" href="css/map.css">
 <link rel="preload" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"></noscript>
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script defer src="https://unpkg.com/topojson-client@3/dist/topojson-client.min.js"></script>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; height: 100dvh; overflow: hidden; }
-  #header {
-    background: #1a1a2e; color: #fff; height: 44px; padding: 0 16px;
-    display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
-  }
-  .header-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
-  .brand { font-size: 17px; font-weight: 700; white-space: nowrap; margin: 0; }
-  .beta-badge {
-    font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
-    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
-    color: #f0c040; padding: 1px 6px; border-radius: 3px; vertical-align: middle;
-    cursor: default;
-  }
-  .separator { color: #555; font-size: 15px; }
-  .tagline { color: #a0a0b0; font-size: 13px; white-space: nowrap; }
-  .header-link { color: #a0a0b0; font-size: 12px; text-decoration: none; }
-  .header-link:hover { color: #fff; }
-  .header-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-  .updated { font-size: 11px; color: #888; }
-  .toggle-info {
-    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
-    color: #ccc; font-size: 13px; font-weight: 500; padding: 5px 14px; border-radius: 4px; cursor: pointer;
-    white-space: nowrap;
-  }
-  .toggle-info:hover { background: rgba(255,255,255,0.25); color: #fff; }
-  #info-bar {
-    background: #f8f9fb; border-bottom: 1px solid #e2e4e8; overflow: hidden; flex-shrink: 0;
-    max-height: 600px;
-    padding: 16px 20px;
-  }
-  #info-bar.collapsed { max-height: 0; padding-top: 0; padding-bottom: 0; }
-  .info-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 14px;
-  }
-  .info-card h3 { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: #1a1a2e; }
-  .info-card p { font-size: 13px; color: #444; line-height: 1.5; margin: 0; }
-  .info-card a { color: #2563eb; text-decoration: none; }
-  .info-card a:hover { text-decoration: underline; }
-  #generated { font-size: 11px; color: #999; margin-top: 4px; }
-  .legend-toggle {
-    display: none; background: none; border: none; font-size: 13px;
-    font-weight: 600; cursor: pointer; padding: 0; color: #333;
-  }
-  .info-title { display: none; font-size: 16px; font-weight: 600; color: #1a1a2e; margin-bottom: 12px; }
-  @media (max-width: 600px) {
-    .separator, .tagline { display: none; }
-    .info-title { display: block; }
-    .info-grid { grid-template-columns: 1fr; }
-    .legend-toggle { display: block; }
-    .legend.legend-collapsed .legend-content { display: none; }
-    .legend.legend-collapsed { padding: 8px 12px; }
-    .header-link { font-size: 11px; }
-  }
-  #map { flex: 1; position: relative; width: 100%; will-change: transform; }
-  .legend {
-    background: white; padding: 10px 14px; border-radius: 6px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2); font-size: 13px; line-height: 1.8;
-  }
-  .legend i {
-    width: 14px; height: 14px; display: inline-block; margin-right: 6px;
-    border-radius: 3px; vertical-align: middle;
-  }
-  .info-popup { font-size: 13px; line-height: 1.6; }
-  .info-popup strong { font-size: 14px; }
-  .info-popup .provider-badge {
-    display: inline-block; padding: 1px 8px; margin-left: 5px; border-radius: 3px;
-    color: #fff; font-size: 12px; font-weight: 600;
-  }
-  .popup-section { margin-top: 10px; }
-  .popup-section-title {
-    font-size: 11px; color: #999; text-transform: uppercase;
-    letter-spacing: 0.5px; margin-bottom: 2px; font-weight: 600;
-  }
-  .popup-section-hint { font-weight: 400; opacity: 0.7; }
-  .dns-table { border-collapse: collapse; }
-  .dns-table td { padding: 1px 8px 1px 0; vertical-align: baseline; font-size: 12px; white-space: nowrap; }
-  .dns-table .dn { font-weight: 600; }
-  .dns-table .host { color: #999; font-size: 11px; font-family: ui-monospace, monospace; max-width: 200px; overflow: hidden; text-overflow: ellipsis; }
-  .cat-badge {
-    display: inline-block; padding: 0 5px; border-radius: 3px;
-    font-size: 10px; font-weight: 600; line-height: 1.6;
-  }
-  .cat-badge.hyperscaler { background: #fde8e8; color: #E83838; }
-  .cat-badge.swiss { background: #e0f5f1; color: #10B898; }
-  .cat-badge.foreign { background: #fef3c7; color: #b45309; }
-  .cat-badge.unknown { background: #f3f4f6; color: #6b7280; }
-  .legend-group { margin-top: 8px; }
-  .legend-group:first-child { margin-top: 4px; }
-  .legend-group-label { font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 0.3px; font-weight: 600; display: block; margin-bottom: 2px; }
-</style>
+<script defer src="js/nav.js"></script>
+<script defer src="js/map-shared.js"></script>
 </head>
 <body>
 <header id="header">
   <div class="header-left">
     <h1 class="brand">MXmap</h1>
     <span class="beta-badge" title="Beta status, this website may contain errors">beta</span>
-    <span class="separator">|</span>
-    <span class="tagline">Email Providers of Swiss Municipalities</span>
+    <nav id="nav"></nav>
   </div>
   <div class="header-right">
-    <a href="/impressum.html" class="header-link">Impressum</a>
-    <a href="/datenschutz.html" class="header-link">Datenschutz</a>
     <button class="toggle-info" id="toggle-info" aria-expanded="true" aria-controls="info-bar">About &#9652;</button>
   </div>
 </header>
@@ -151,7 +57,7 @@
   <div class="info-grid">
     <div class="info-card">
       <h3>What is this?</h3>
-      <p>A map of all ~2,100 Swiss municipalities showing which provider handles their official email — grouped by jurisdiction — based on public DNS records.</p>
+      <p>A map of all ~2,100 Swiss municipalities showing which provider handles their official email — grouped by jurisdiction — based on public DNS records and other public network signals.</p>
     </div>
     <div class="info-card">
       <h3>Context</h3>
@@ -159,7 +65,7 @@
     </div>
     <div class="info-card">
       <h3>How does it work?</h3>
-      <p>Each municipality's official domain is checked via public DNS records (MX + SPF) and classified by provider type.</p>
+      <p>Each municipality's official domain is checked via 11 signals from DNS records, SMTP banners, ASN lookups, and a public Microsoft API endpoint, then classified by provider type with confidence scoring.</p>
       <p style="font-size:12px;color:#777;margin-top:6px;">Disclaimer: DNS records indicate mail routing and authorized senders, not necessarily where data is stored.</p>
     </div>
     <div class="info-card">
@@ -176,33 +82,61 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-if (!CSS.supports('height', '100dvh')) {
-  document.body.style.height = window.innerHeight + 'px';
-}
-const COLORS = {
-  microsoft:      '#E83838',  // punchy vivid red — US cloud
-  google:         '#FFAB96',  // bright warm peach — US cloud
-  aws:            '#FF7A5C',  // bright hot coral — US cloud
-  infomaniak:     '#78FFD6',  // vivid bright mint — Swiss provider
-  'swiss-isp':    '#2EDBA8',  // neon-ish seafoam — Swiss ISP
-  'independent':  '#10B898',  // vivid bright teal — independent
-  unknown:        '#BFBFBF'   // neutral mid-gray with hatching
+const COLOR_SCHEMES = {
+  default: {
+    'us-cloud':    { high: '#ffa199', medium: '#ffccb6', low: '#cccccc' },
+    'swiss-based': { high: '#88faaa', medium: '#daffc2', low: '#cccccc' },
+    lake: '#89B3D6',
+  },
+  colorblind: {
+    'us-cloud':    { high: '#f1be61', medium: '#fde7c4', low: '#cccccc' },
+    'swiss-based': { high: '#6fa2d0', medium: '#C0D8E8', low: '#cccccc' },
+    lake: '#c4afff',
+  },
 };
+var CATEGORY_COLORS = COLOR_SCHEMES.default;
+const GRAY = '#BFBFBF';
 
+const CANTON_CODES = {
+  'Kanton Zürich': 'ZH', 'Kanton Bern': 'BE', 'Kanton Luzern': 'LU',
+  'Kanton Uri': 'UR', 'Kanton Schwyz': 'SZ', 'Kanton Obwalden': 'OW',
+  'Kanton Nidwalden': 'NW', 'Kanton Glarus': 'GL', 'Kanton Zug': 'ZG',
+  'Kanton Freiburg': 'FR', 'Kanton Solothurn': 'SO', 'Kanton Basel-Stadt': 'BS',
+  'Kanton Basel-Landschaft': 'BL', 'Kanton Schaffhausen': 'SH',
+  'Kanton Appenzell Ausserrhoden': 'AR', 'Kanton Appenzell Innerrhoden': 'AI',
+  'Kanton St. Gallen': 'SG', 'Kanton Graubünden': 'GR', 'Kanton Aargau': 'AG',
+  'Kanton Thurgau': 'TG', 'Kanton Tessin': 'TI', 'Kanton Waadt': 'VD',
+  'Kanton Wallis': 'VS', 'Kanton Neuenburg': 'NE', 'Kanton Genf': 'GE',
+  'Kanton Jura': 'JU'
+};
 const LABELS = {
   microsoft:      'Microsoft 365',
   google:         'Google Workspace',
   aws:            'Amazon Web Services',
   infomaniak:     'Infomaniak',
   'swiss-isp':    'Swiss ISP',
-  'independent':  'Independent',
+  'independent':  'Self-hosted / Other',
   unknown:        'Unknown'
 };
 
-function escapeHtml(str) {
-  const el = document.createElement('span');
-  el.textContent = str;
-  return el.innerHTML;
+function effectiveCategory(m) {
+  if (!m || !m.category || m.category === 'unknown') return null;
+  return m.category;
+}
+
+function confidenceLevel(confidence) {
+  if (confidence >= 90) return 'high';
+  if (confidence >= 60) return 'medium';
+  if (confidence >= 30) return 'low';
+  return 'insufficient'
+}
+
+function getColor(m) {
+  const cat = effectiveCategory(m);
+  if (!cat) return GRAY;
+  const level = confidenceLevel(m.classification_confidence || 0);
+  if (level === 'insufficient') return GRAY;
+  return CATEGORY_COLORS[cat][level];
 }
 
 function classifyHost(host) {
@@ -260,12 +194,61 @@ function classifyHost(host) {
     return { name: 'CodeTwo', category: 'foreign' };
   if (h.includes('freshservice'))
     return { name: 'Freshservice', category: 'foreign' };
+  // Email security gateways
+  if (['ppe-hosted','pphosted'].some(k => h.includes(k)))
+    return { name: 'Proofpoint', category: 'foreign' };
+  if (h.includes('vadesecure'))
+    return { name: 'Vade Secure', category: 'foreign' };
+  if (h.includes('fortimailcloud'))
+    return { name: 'Fortinet FortiMail', category: 'foreign' };
+  if (h.includes('spamtitan'))
+    return { name: 'SpamTitan', category: 'foreign' };
+  if (['spamexperts','antispamcloud'].some(k => h.includes(k)))
+    return { name: 'SpamExperts', category: 'foreign' };
+  if (h.includes('iphmx'))
+    return { name: 'Cisco IronPort', category: 'foreign' };
+  if (h.includes('mailcontrol'))
+    return { name: 'MailControl', category: 'foreign' };
+  if (h.includes('mimecast'))
+    return { name: 'Mimecast', category: 'foreign' };
+  if (h.includes('messagelabs'))
+    return { name: 'MessageLabs', category: 'foreign' };
+  // Email routing / hosting
+  if (h.includes('mtaroutes'))
+    return { name: 'MTARoutes', category: 'foreign' };
+  if (h.includes('jimdo'))
+    return { name: 'Jimdo', category: 'foreign' };
+  if (h.includes('arsmtp'))
+    return { name: 'Aruba', category: 'foreign' };
+  if (h.includes('stackmail'))
+    return { name: 'StackMail', category: 'foreign' };
+  // SPF-only services
+  if (h.includes('umantis'))
+    return { name: 'Haufe', category: 'foreign' };
+  if (['emailsignatures365','signature365'].some(k => h.includes(k)))
+    return { name: 'Email Signatures 365', category: 'foreign' };
+  if (h.includes('crsend'))
+    return { name: 'CleverReach', category: 'foreign' };
+  if (h.includes('mailersend'))
+    return { name: 'MailerSend', category: 'foreign' };
+  if (h.includes('emailsrvr'))
+    return { name: 'Rackspace', category: 'foreign' };
+  if (h.includes('edgepilot'))
+    return { name: 'EdgePilot', category: 'foreign' };
+  if (h.includes('appriver'))
+    return { name: 'AppRiver', category: 'foreign' };
+  if (h.includes('scnem'))
+    return { name: 'Evalanche', category: 'foreign' };
+  if (h.includes('rubicon.eu'))
+    return { name: 'Rubicon', category: 'foreign' };
   // Known Swiss providers with non-.ch TLDs
   const SWISS_DOMAINS = [
     'abxsec.com','swiss-egov.cloud','sui-inter.net','ch-dns.net','cyon.net',
     'seppmail.cloud','swisscom.com','privasphere.com','tinext.com','cloudrexx.com',
     'mailomat.cloud','comp-sys.net','engadin.cloud','ti-informatique.com',
-    'assolo.net','moresi.com'
+    'assolo.net','moresi.com',
+    'naveum.services','spamvor.com','swisscenter.com','seabix.cloud',
+    'swizzonic.email','tinext.net','hosttech.eu','mailpro.com','tizoo.com'
   ];
   if (SWISS_DOMAINS.some(d => h.endsWith(d) || h.endsWith('.' + d)))
     return { name: h.replace(/^_/, '').split('.').slice(-2).join('.'), category: 'swiss' };
@@ -299,100 +282,141 @@ function renderTable(hosts) {
   return `<table class="dns-table">${rows}</table>`;
 }
 
-const map = L.map('map', {
-  center: [46.8, 8.2],
-  zoom: 8,
-  minZoom: 7,
-  maxZoom: 14,
-  renderer: L.canvas()
-});
+const SIGNAL_LABELS = {
+  mx: 'MX', spf: 'SPF', dkim: 'DKIM', asn: 'ASN',
+  tenant: 'Tenant', spf_ip: 'SPF IP', txt_verification: 'TXT',
+  autodiscover: 'Autodisc.', dmarc: 'DMARC', cname_chain: 'CNAME', smtp: 'SMTP'
+};
 
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
-  subdomains: 'abcd',
-  maxZoom: 19
-}).addTo(map);
-
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
-  subdomains: 'abcd',
-  maxZoom: 19,
-  pane: 'shadowPane'
-}).addTo(map);
-
-var resizeTimer;
-window.addEventListener('resize', function () {
-  clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(function () {
-    map.invalidateSize({ animate: false });
-  }, 100);
-});
-
-function toggleInfo() {
-  const bar = document.getElementById('info-bar');
-  const btn = document.getElementById('toggle-info');
-  bar.classList.toggle('collapsed');
-  const collapsed = bar.classList.contains('collapsed');
-  btn.innerHTML = collapsed ? 'About \u25be' : 'About \u25b4';
-  btn.setAttribute('aria-expanded', String(!collapsed));
+function deduplicateSignals(signals) {
+  const seen = new Map();
+  for (const s of signals) {
+    const key = s.kind + '|' + s.detail;
+    if (seen.has(key)) {
+      seen.get(key).count++;
+    } else {
+      seen.set(key, { kind: s.kind, provider: s.provider, weight: s.weight, detail: s.detail, count: 1 });
+    }
+  }
+  return Array.from(seen.values()).sort((a, b) => b.weight - a.weight);
 }
 
-document.getElementById('toggle-info').addEventListener('click', function () {
-  toggleInfo();
-  map.invalidateSize({ animate: false });
-});
-
-// Collapse info bar by default on mobile
-if (window.innerWidth <= 600) {
-  document.getElementById('info-bar').classList.add('collapsed');
-  const btn = document.getElementById('toggle-info');
-  btn.innerHTML = 'About \u25be';
-  btn.setAttribute('aria-expanded', 'false');
+function condenseDetail(kind, detail) {
+  var m;
+  switch (kind) {
+    case 'mx':
+      m = detail.match(/^MX\s+(\S+)\s+matches\s+\S+$/);
+      return m ? m[1] : detail;
+    case 'spf':
+      m = detail.match(/^SPF\s+include:(\S+)\s+matches\s+\S+$/);
+      return m ? m[1] : detail;
+    case 'dkim':
+      m = detail.match(/^DKIM\s+(selector\d+)\._domainkey\.\S+\s+CNAME\s+→\s+\S+\._domainkey\.(\S+)$/);
+      return m ? m[1] + ' \u2192 ' + m[2] : detail;
+    case 'asn':
+      m = detail.match(/^ASN\s+(\d+)\s+matches\s+\S+$/);
+      if (m) return 'AS' + m[1];
+      m = detail.match(/^ASN\s+(\d+)\s+is Swiss ISP:\s+(.+)$/);
+      if (m) return 'AS' + m[1] + ' (' + m[2] + ')';
+      return detail;
+    case 'tenant':
+      m = detail.match(/^MS365 tenant detected:\s+(.+)$/);
+      return m ? m[1] : detail;
+    case 'autodiscover':
+      m = detail.match(/^autodiscover\s+(CNAME|SRV)\s+→\s+(.+)$/);
+      if (m) return (m[1] === 'CNAME' ? '\u2192 ' : m[1] + ' \u2192 ') + m[2];
+      return detail;
+    case 'txt_verification':
+      m = detail.match(/^TXT verification matches\s+(\S+)$/);
+      if (m) return m[1];
+      if (detail.includes('AWS SES')) return 'AWS SES';
+      return detail;
+    case 'spf_ip':
+      m = detail.match(/ASN\s+(\d+)\s+is Swiss ISP:\s+(.+)$/);
+      if (m) return 'AS' + m[1] + ' (' + m[2] + ')';
+      m = detail.match(/ASN\s+(\d+)\s+matches\s+(\S+)$/);
+      if (m) return 'AS' + m[1];
+      return detail;
+    case 'dmarc':
+      m = detail.match(/^DMARC record\s+(.+)$/);
+      return m ? m[1] : detail;
+    default:
+      return detail;
+  }
 }
 
-function toggleLegend() {
-  const legend = document.querySelector('.legend');
-  const btn = legend.querySelector('.legend-toggle');
-  legend.classList.toggle('legend-collapsed');
-  const collapsed = legend.classList.contains('legend-collapsed');
-  btn.textContent = collapsed ? 'Legend \u25B8' : '\u2715';
-  btn.setAttribute('aria-expanded', String(!collapsed));
+
+const map = initMap('map');
+setupInfoBar(map);
+const isMobile = window.innerWidth <= 600;
+
+// Toggle collapsible popup sections (inline onclick, bypasses Leaflet event interception)
+window.toggleSection = function(el) {
+  el.classList.toggle('popup-toggle-open');
+  var body = el.nextElementSibling;
+  body.style.display = body.style.display === 'none' ? '' : 'none';
+};
+
+var muni = {};
+var muniLayer;
+var lakeLayer;
+
+function toggleColorScheme() {
+  var isDefault = CATEGORY_COLORS === COLOR_SCHEMES.default;
+  CATEGORY_COLORS = isDefault ? COLOR_SCHEMES.colorblind : COLOR_SCHEMES.default;
+
+  muniLayer.eachLayer(function (layer) {
+    var bfs = String(layer.feature.id);
+    var m = muni[bfs];
+    layer.setStyle({ fillColor: getColor(m) });
+  });
+
+  if (lakeLayer) {
+    lakeLayer.setStyle({ fillColor: CATEGORY_COLORS.lake });
+  }
+
+  document.querySelectorAll('.legend-swatch').forEach(function (el) {
+    el.style.background = CATEGORY_COLORS[el.dataset.cat][el.dataset.level];
+  });
+
+  var btn = document.querySelector('.color-toggle');
+  btn.textContent = isDefault ? '\u25D0 Default colors' : '\u25D0 Colorblind mode';
 }
 
-function legendItemHtml(key, counts) {
-  const hatchSvg = 'data:image/svg+xml,' +
-    encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect width="8" height="8" fill="#BFBFBF"/><path d="M-1,1 l2,-2 M0,8 l8,-8 M7,9 l2,-2" stroke="#000" stroke-width="1"/></svg>');
-  const bg = key === 'unknown'
-    ? "background-image:url('" + hatchSvg + "')"
-    : `background:${COLORS[key]}`;
-  return `<i style="${bg}"></i>${LABELS[key]} (${counts[key] || 0})`;
-}
-
-function legendGroupHtml(label, keys, counts) {
-  const heading = label
-    ? `<span class="legend-group-label">${label}</span>`
-    : '';
-  const items = keys.map(k => legendItemHtml(k, counts)).join('<br>');
-  return `<div class="legend-group">${heading}${items}</div>`;
+function legendCategoryHtml(label, colors, count, catKey, levels) {
+  return `<div class="legend-group">` +
+    `<span class="legend-group-label">${label} (${count})</span>` +
+    `<i class="legend-swatch" data-cat="${catKey}" data-level="high" style="background:${colors.high}"></i>High confidence (${levels.high})<br>` +
+    `<i class="legend-swatch" data-cat="${catKey}" data-level="medium" style="background:${colors.medium}"></i>Medium (${levels.medium})<br>` +
+    `<i class="legend-swatch" data-cat="${catKey}" data-level="low" style="background:${colors.low}"></i>Low (${levels.low})` +
+    `</div>`;
 }
 
 async function loadData() {
-  const [topoRes, dataRes] = await Promise.all([
-    fetch('https://cdn.jsdelivr.net/npm/swiss-maps@4.7.0/2026/ch-combined.json'),
-    fetch('data.json')
-  ]);
+  const { topo, dnsData } = await fetchMapData();
+  muni = dnsData.municipalities;
+  showGenerated(dnsData);
 
-  const topo = await topoRes.json();
-  const dnsData = await dataRes.json();
-
-  // Build lookup by BFS number
-  const muni = dnsData.municipalities;
-
-  // Show dataset info
-  if (dnsData.generated) {
-    const date = new Date(dnsData.generated);
-    document.getElementById('generated').textContent =
-      'Updated ' + date.toLocaleString('de-CH', { dateStyle: 'medium', timeStyle: 'short' });
+  // Count by jurisdiction and confidence level
+  const catCounts = { 'us-cloud': 0, 'swiss-based': 0, 'insufficient': 0 };
+  const levelCounts = {
+    'us-cloud': { high: 0, medium: 0, low: 0 },
+    'swiss-based': { high: 0, medium: 0, low: 0 }
+  };
+  for (const bfs of Object.keys(muni)) {
+    const m = muni[bfs];
+    const cat = effectiveCategory(m);
+    if (cat) {
+      catCounts[cat]++;
+      const level = confidenceLevel(m ? (m.classification_confidence || 0) : 0);
+      if (level !== 'insufficient') levelCounts[cat][level]++;
+    } else {
+      catCounts['insufficient']++;
+    }
   }
+
+  const hatchSvg = 'data:image/svg+xml,' +
+    encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect width="8" height="8" fill="#BFBFBF"/><path d="M-1,1 l2,-2 M0,8 l8,-8 M7,9 l2,-2" stroke="#000" stroke-width="1"/></svg>');
 
   // Legend with counts
   const isMobile = window.innerWidth <= 600;
@@ -403,38 +427,34 @@ async function loadData() {
     div.innerHTML =
       '<button class="legend-toggle" aria-label="Toggle legend" aria-expanded="' + (!isMobile) + '">' + (isMobile ? 'Legend \u25B8' : '') + '</button>' +
       '<div class="legend-content">' +
-      '<strong>Email Provider</strong>' +
-      legendGroupHtml('US-based', ['microsoft', 'aws', 'google'], dnsData.counts) +
-      legendGroupHtml('Swiss-based', ['independent', 'swiss-isp', 'infomaniak'], dnsData.counts) +
+      '<strong>Email Jurisdiction</strong>' +
+      legendCategoryHtml('US Cloud', CATEGORY_COLORS['us-cloud'], catCounts['us-cloud'], 'us-cloud', levelCounts['us-cloud']) +
+      legendCategoryHtml('Swiss Based', CATEGORY_COLORS['swiss-based'], catCounts['swiss-based'], 'swiss-based', levelCounts['swiss-based']) +
+      '<div class="legend-group"><i style="background-image:url(\'' + hatchSvg + '\')"></i>Insufficient data (' + catCounts['insufficient'] + ')</div>' +
+      '<button class="color-toggle" aria-label="Switch to colorblind-safe colors">\u25D0 Colorblind mode</button>' +
       '</div>';
     L.DomEvent.disableClickPropagation(div);
     return div;
   };
   legend.addTo(map);
   document.querySelector('.legend-toggle').addEventListener('click', toggleLegend);
+  document.querySelector('.color-toggle').addEventListener('click', toggleColorScheme);
 
-  // Render lakes as a distinct layer
-  if (topo.objects.lakes) {
-    const lakes = topojson.feature(topo, topo.objects.lakes);
-    L.geoJSON(lakes, {
-      interactive: false,
-      style: { fillColor: '#5B9BD5', fillOpacity: 1, weight: 0, color: 'transparent' }
-    }).addTo(map);
-  }
+  // Render lakes
+  lakeLayer = addLakes(map, topo, CATEGORY_COLORS.lake);
 
-  // Extract municipalities from the topology
+  // Render municipalities
   const geojson = topojson.feature(topo, topo.objects.municipalities);
 
-  L.geoJSON(geojson, {
+  muniLayer = L.geoJSON(geojson, {
     style: function (feature) {
       const bfs = String(feature.id);
       const m = muni[bfs];
-      const provider = m ? m.provider : 'unknown';
       return {
-        fillColor: COLORS[provider] || COLORS.unknown,
-        weight: 0.5,
+        fillColor: getColor(m),
+        weight: 0.6,
         color: '#666',
-        fillOpacity: 0.75
+        fillOpacity: 1
       };
     },
     onEachFeature: function (feature, layer) {
@@ -444,50 +464,77 @@ async function loadData() {
         layer.bindPopup(`<div class="info-popup"><strong>BFS ${bfs}</strong><br>No data</div>`);
         return;
       }
-      const color = COLORS[m.provider] || COLORS.unknown;
-      const textColor = ['aws', 'google', 'infomaniak', 'swiss-isp', 'unknown'].includes(m.provider) ? '#333' : '#fff';
+      const color = getColor(m);
+      const cat = effectiveCategory(m);
+      const level = confidenceLevel(m.classification_confidence || 0);
+      const textColor = '#000';
       const label = LABELS[m.provider] || m.provider;
+
+      const showBody = isMobile ? 'display:none' : '';
 
       let mxSection = '';
       if (m.mx && m.mx.length > 0) {
-        mxSection = `<div class="popup-section"><div class="popup-section-title">Incoming mail handled by <span class="popup-section-hint">(MX)</span></div>${renderTable(m.mx)}</div>`;
+        mxSection = `<div class="popup-section"><div class="popup-toggle${isMobile ? '' : ' popup-toggle-open'}" onclick="window.toggleSection(this)">Incoming mail handled by <span class="popup-section-hint">(MX)</span></div><div class="popup-section-body" style="${showBody}">${renderTable(m.mx)}</div></div>`;
+      } else {
+        mxSection = `<div class="popup-section"><div class="popup-toggle${isMobile ? '' : ' popup-toggle-open'}" onclick="window.toggleSection(this)">Incoming mail handled by <span class="popup-section-hint">(MX)</span></div><div class="popup-section-body" style="${showBody}"><span class="popup-empty">No MX records found</span></div></div>`;
       }
 
       const spfDelegations = parseSpfDelegations(m.spf);
       let spfSection = '';
       if (spfDelegations.length > 0) {
-        spfSection = `<div class="popup-section"><div class="popup-section-title">Authorized to send mail <span class="popup-section-hint">(SPF)</span></div>${renderTable(spfDelegations)}</div>`;
+        spfSection = `<div class="popup-section"><div class="popup-toggle${isMobile ? '' : ' popup-toggle-open'}" onclick="window.toggleSection(this)">Authorized to send mail <span class="popup-section-hint">(SPF)</span></div><div class="popup-section-body" style="${showBody}">${renderTable(spfDelegations)}</div></div>`;
+      } else if (m.spf) {
+        spfSection = `<div class="popup-section"><div class="popup-toggle${isMobile ? '' : ' popup-toggle-open'}" onclick="window.toggleSection(this)">Authorized to send mail <span class="popup-section-hint">(SPF)</span></div><div class="popup-section-body" style="${showBody}"><span class="popup-empty">${escapeHtml(m.spf)}</span></div></div>`;
+      } else {
+        spfSection = `<div class="popup-section"><div class="popup-toggle${isMobile ? '' : ' popup-toggle-open'}" onclick="window.toggleSection(this)">Authorized to send mail <span class="popup-section-hint">(SPF)</span></div><div class="popup-section-body" style="${showBody}"><span class="popup-empty">No SPF record found</span></div></div>`;
+      }
+
+      const confidence = m.classification_confidence != null ? m.classification_confidence : 0;
+      const confPct = Math.round(confidence) + '%';
+      let signalsSection = '';
+      if (m.classification_signals && m.classification_signals.length > 0) {
+        const deduped = deduplicateSignals(m.classification_signals);
+        const uniqueCount = deduped.length;
+        const signalItems = deduped.map(s => {
+          const kindLabel = SIGNAL_LABELS[s.kind] || s.kind;
+          const condensed = condenseDetail(s.kind, s.detail);
+          const dup = s.count > 1 ? `<span class="signal-dup">\u00d7${s.count}</span>` : '';
+          return `<div class="signal-item" title="${escapeHtml(s.detail).replace(/"/g, '&quot;')}"><span class="signal-kind">${escapeHtml(kindLabel)}</span><span class="signal-text">${escapeHtml(condensed)}</span>${dup}</div>`;
+        }).join('');
+        signalsSection = `<div class="popup-section"><div class="popup-toggle" onclick="window.toggleSection(this)">Classification signals <span class="popup-signal-count" title="DNS and network evidence used to identify the email provider">${uniqueCount}</span></div><div class="popup-section-body" style="display:none"><div class="signal-list">${signalItems}</div></div></div>`;
+      } else {
+        signalsSection = `<div class="popup-section"><div class="popup-toggle" onclick="window.toggleSection(this)">Classification signals</div><div class="popup-section-body" style="display:none"><span class="popup-empty">No classification signals</span></div></div>`;
       }
 
       const eName = escapeHtml(m.name);
+      const cantonCode = CANTON_CODES[m.canton] || '';
+      const nameDisplay = cantonCode ? `${eName} (${cantonCode})` : eName;
       const eDomain = escapeHtml(m.domain || 'unknown');
       const eLabel = escapeHtml(label);
+      const badge = `<span class="provider-badge" style="background:${color};color:${textColor}">${eLabel}</span>`;
+      const metaParts = [`Confidence: ${confPct}`];
+      if (m.gateway) metaParts.push(`Gateway: ${escapeHtml(m.gateway)}`);
+      const metaLine = `<div class="popup-meta">${metaParts.join(' &middot; ')}</div>`;
+
       layer.bindPopup(
         `<div class="info-popup">` +
-        `<strong>${eName}</strong><br>` +
-        `${eDomain} <span class="provider-badge" style="background:${color};color:${textColor}">${eLabel}</span>` +
-        mxSection + spfSection +
+        `<strong>${nameDisplay}</strong><br>` +
+        `${eDomain} ${badge}` +
+        metaLine +
+        mxSection + spfSection + signalsSection +
         `</div>`,
-        { maxWidth: 450 }
+        { maxWidth: isMobile ? 300 : 450 }
       );
       layer.on('mouseover', function () { this.setStyle({ weight: 2, color: '#333' }); });
       layer.on('mouseout', function () { this.setStyle({ weight: 0.5, color: '#666' }); });
     }
   }).addTo(map);
 
-  const loading = document.getElementById('map-loading');
-  if (loading) loading.remove();
+  removeLoading();
   map.invalidateSize({ animate: false });
 }
 
-loadData().catch(err => {
-  console.error('Failed to load data:', err);
-  const loading = document.getElementById('map-loading');
-  if (loading) {
-    loading.textContent = 'Failed to load map data. Please try again later.';
-    loading.style.color = '#dc2626';
-  }
-});
+loadData().catch(handleLoadError);
 });
 </script>
 </body>

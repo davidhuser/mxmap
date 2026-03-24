@@ -1,7 +1,6 @@
 # MXmap — Email Providers of Swiss Municipalities
 
 [![CI](https://github.com/davidhuser/mxmap/actions/workflows/ci.yml/badge.svg)](https://github.com/davidhuser/mxmap/actions/workflows/ci.yml)
-[![Nightly](https://github.com/davidhuser/mxmap/actions/workflows/nightly.yml/badge.svg)](https://github.com/davidhuser/mxmap/actions/workflows/nightly.yml)
 
 An interactive map showing where Swiss municipalities host their email — whether with US hyperscalers (Microsoft, Google, AWS) or Swiss providers or other solutions.
 
@@ -11,66 +10,57 @@ An interactive map showing where Swiss municipalities host their email — wheth
 
 ## How it works
 
-The data pipeline has three steps:
+The data pipeline has two stages:
 
-1. **Preprocess** -- Fetches all ~2100 Swiss municipalities from Wikidata, performs MX and SPF DNS lookups on their official domains, and classifies each municipality's email provider.
-2. **Postprocess** -- Applies manual overrides for edge cases, retries DNS for unresolved domains, checks SMTP banners of independent MX hosts for hidden providers, then scrapes websites of still-unclassified municipalities for email addresses.
-3. **Validate** -- Cross-validates MX and SPF records, assigns a confidence score (0-100) to each entry, and generates a validation report.
+1. **Resolve domains** — Fetches all ~2100 Swiss municipalities from Wikidata and the BFS (Swiss Statistics) API, applies manual overrides, scrapes municipal websites for email addresses, guesses domains from municipality names, and verifies candidates with MX lookups. Scores source agreement to pick the best domain. Outputs `municipality_domains.json`.
+
+2. **Classify providers** — For each resolved domain, looks up all MX hosts, pattern-matches them, then runs 10 concurrent probes (SPF, DKIM, DMARC, Autodiscover, CNAME chain, SMTP banner, Tenant, ASN, TXT verification, SPF IP). Aggregates weighted evidence, computes confidence scores (0–100). Outputs `data.json` (full) and `data.min.json` (minified for the frontend).
 
 ```mermaid
 flowchart TD
-    trigger["Nightly trigger"] --> wikidata
-
-    subgraph pre ["1 · Preprocess"]
-        wikidata[/"Wikidata SPARQL"/] --> fetch["Fetch ~2100 municipalities"]
-        fetch --> domains["Extract domains +<br/>guess candidates"]
-        domains --> dns["MX + SPF lookups<br/>(3 resolvers)"]
-        dns --> spf_resolve["Resolve SPF includes<br/>& redirects"]
-        spf_resolve --> cname["Follow CNAME chains"]
-        cname --> asn["ASN lookups<br/>(Team Cymru)"]
-        asn --> autodiscover["Autodiscover DNS<br/>(CNAME + SRV)"]
-        autodiscover --> gateway["Detect gateways<br/>(SeppMail, Barracuda,<br/>Proofpoint, Sophos ...)"]
-        gateway --> classify["Classify providers<br/>MX → CNAME → SPF → Autodiscover → SMTP"]
+    subgraph resolve ["1 · Resolve domains"]
+        bfs[/"BFS Statistics API"/] --> merge["Merge ~2100 municipalities"]
+        wikidata[/"Wikidata SPARQL"/] --> merge
+        overrides[/"overrides.json"/] --> per_muni
+        merge --> per_muni["Per municipality"]
+        per_muni --> scrape["Scrape website for<br/>email addresses"]
+        per_muni --> guess["Guess domains<br/>from name"]
+        scrape --> mx_verify["MX lookup to<br/>verify domains"]
+        guess --> mx_verify
+        mx_verify --> score["Score source<br/>agreement"]
     end
 
-    classify --> overrides
+    score --> domains[("municipality_domains.json")]
+    domains --> classify_in
 
-    subgraph post ["2 · Postprocess"]
-        overrides["Apply manual overrides<br/>(19 edge cases)"] --> retry["Retry DNS<br/>for unknowns"]
-        retry --> smtp["SMTP banner check<br/>(EHLO on port 25)"]
-        smtp --> scrape_urls["Probe municipal websites<br/>(/kontakt, /contact, /impressum …)"]
-        scrape_urls --> extract["Extract emails<br/>+ decrypt TYPO3 obfuscation"]
-        extract --> scrape_dns["DNS lookup on<br/>email domains"]
-        scrape_dns --> reclassify["Reclassify<br/>resolved entries"]
+    subgraph classify ["2 · Classify providers"]
+        classify_in["Per unique domain"] --> mx_lookup["MX lookup<br/>(all hosts)"]
+        mx_lookup --> mx_match["Pattern-match MX<br/>+ detect gateway"]
+        mx_match --> concurrent["10 concurrent probes<br/>SPF · DKIM · DMARC<br/>Autodiscover · CNAME chain<br/>SMTP · Tenant · ASN<br/>TXT verification · SPF IP"]
+        concurrent --> aggregate["Aggregate weighted<br/>evidence"]
+        aggregate --> vote["Primary vote<br/>+ confidence scoring"]
     end
 
-    reclassify --> data[("data.json")]
-    data --> score
-
-    subgraph val ["3 · Validate"]
-        score["Confidence scoring · 0–100"] --> gwarn["Flag potential<br/>unknown gateways"]
-        gwarn --> gate{"Quality gate<br/>avg ≥ 70 · high-conf ≥ 80%"}
-    end
-
-    gate -- "Pass" --> deploy["Commit & deploy to Pages"]
-    gate -- "Fail" --> issue["Open GitHub issue"]
-
-    style trigger fill:#e8f4fd,stroke:#4a90d9,color:#1a5276
-    style wikidata fill:#e8f4fd,stroke:#4a90d9,color:#1a5276
-    style data fill:#d5f5e3,stroke:#27ae60,color:#1e8449
-    style deploy fill:#d5f5e3,stroke:#27ae60,color:#1e8449
-    style issue fill:#fadbd8,stroke:#e74c3c,color:#922b21
-    style gate fill:#fdebd0,stroke:#e67e22,color:#935116
+    vote --> data[("data.json + data.min.json")]
+    data --> frontend["Leaflet map<br/>mxmap.ch"]
 ```
+
+## Classification system
+
+see [`classifier.py`](src/mail_sovereignty/classifier.py) for the full implementation details, but in summary,
+we use a weighted evidence system where each probe contributes signals of varying strength towards different provider classifications.
+
 
 ## Quick start
 
 ```bash
 uv sync
 
-uv run preprocess
-uv run postprocess
-uv run validate
+# Stage 1: resolve municipality domains
+uv run resolve-domains
+
+# Stage 2: classify email providers
+uv run classify-providers
 
 # Serve the map locally
 python -m http.server
@@ -81,20 +71,36 @@ python -m http.server
 ```bash
 uv sync --group dev
 
-# Run tests with coverage
+# Run tests (90% coverage threshold enforced)
 uv run pytest --cov --cov-report=term-missing
 
-# Lint the codebase
+# Lint & format
 uv run ruff check src tests
 uv run ruff format src tests
 ```
 
+
 ## Related work
 
 * [hpr4379 :: Mapping Municipalities' Digital Dependencies](https://hackerpublicradio.org/eps/hpr4379/index.html)
-* if you know of other similar projects, please open an issue or submit a PR to add them here!
+* If you know of other similar projects, please open an issue or submit a PR to add them here!
+
+## Forks
+
+* DE https://b42labs.github.io/mxmap/
+* NL https://mxmap.nl/
+* NO https://kommune-epost-norge.netlify.app/
+* BE https://mxmap.be/
+* EU https://livenson.github.io/mxmap/
+* LV: https://securit.lv/mxmap
+* See also the forks of this repository
+
 
 ## Contributing
 
 If you spot a misclassification, please open an issue with the BFS number and the correct provider.
-For municipalities where automated detection fails, corrections can be added to the `MANUAL_OVERRIDES` dict in `src/mail_sovereignty/postprocess.py`.
+For municipalities where automated detection fails, corrections can be added to [`overrides.json`](overrides.json).
+
+## Licence
+
+[MIT](LICENCE)

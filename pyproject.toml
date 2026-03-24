@@ -11,12 +11,15 @@ requires-python = ">=3.13"
 dependencies = [
     "dnspython>=2.8.0",
     "httpx>=0.28.1",
+    "loguru>=0.7.3",
+    "pydantic>=2.0",
+    "stamina>=25.2.0",
 ]
 
 [project.scripts]
-preprocess = "mail_sovereignty.cli:preprocess"
-postprocess = "mail_sovereignty.cli:postprocess"
-validate = "mail_sovereignty.cli:validate"
+resolve-domains = "mail_sovereignty.cli:resolve_domains"
+classify-providers = "mail_sovereignty.cli:classify_providers"
+analyze = "mail_sovereignty.cli:analyze"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/mail_sovereignty"]

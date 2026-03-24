@@ -1,20 +1,44 @@
+import argparse
 import asyncio
 from pathlib import Path
 
-
-def preprocess() -> None:
-    from mail_sovereignty.preprocess import run
-
-    asyncio.run(run(Path("data.json")))
+from mail_sovereignty.log import setup as setup_logging
 
 
-def postprocess() -> None:
-    from mail_sovereignty.postprocess import run
+def resolve_domains() -> None:
+    from mail_sovereignty.resolve import run
 
-    asyncio.run(run(Path("data.json")))
+    parser = argparse.ArgumentParser(description="Resolve municipality email domains")
+    parser.add_argument("--date", help="BFS snapshot date (DD-MM-YYYY)", default=None)
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="Enable debug logging"
+    )
+    args = parser.parse_args()
+
+    setup_logging(args.verbose)
+
+    asyncio.run(
+        run(Path("municipality_domains.json"), Path("overrides.json"), date=args.date)
+    )
 
 
-def validate() -> None:
-    from mail_sovereignty.validate import run
+def classify_providers() -> None:
+    from mail_sovereignty.pipeline import run
 
-    run(Path("data.json"), Path("."), quality_gate=True)
+    parser = argparse.ArgumentParser(
+        description="Classify municipality email providers"
+    )
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="Enable debug logging"
+    )
+    args = parser.parse_args()
+
+    setup_logging(args.verbose)
+
+    asyncio.run(run(Path("municipality_domains.json"), Path("data.json")))
+
+
+def analyze() -> None:
+    from mail_sovereignty.analyze import main
+
+    main()

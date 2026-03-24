@@ -5,53 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, follow">
 <title>Datenschutzerklärung — MXmap</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #222; background: #fff; }
-  #header {
-    background: #1a1a2e; color: #fff; height: 44px; padding: 0 16px;
-    display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
-  }
-  .header-left { display: flex; align-items: center; gap: 10px; }
-  .brand { font-size: 17px; font-weight: 700; white-space: nowrap; margin: 0; }
-  .brand a { color: #fff; text-decoration: none; }
-  .header-nav { display: flex; align-items: center; gap: 12px; }
-  .header-link { color: #a0a0b0; font-size: 12px; text-decoration: none; }
-  .header-link:hover { color: #fff; }
-  .header-link.active { color: #fff; }
-  @media (max-width: 600px) {
-    .header-link { font-size: 11px; }
-  }
-  main {
-    max-width: 720px; margin: 0 auto; padding: 32px 20px 48px;
-    line-height: 1.7; font-size: 15px;
-  }
-  h1 { font-size: 22px; font-weight: 700; color: #1a1a2e; margin-bottom: 24px; }
-  h2 { font-size: 17px; font-weight: 600; color: #1a1a2e; margin-top: 28px; margin-bottom: 8px; }
-  p { margin-bottom: 12px; }
-  ul { margin: 0 0 12px 20px; }
-  li { margin-bottom: 4px; }
-  a { color: #2563eb; text-decoration: none; }
-  a:hover { text-decoration: underline; }
-  code { font-family: ui-monospace, monospace; font-size: 13px; background: #f3f4f6; padding: 1px 5px; border-radius: 3px; }
-  footer {
-    max-width: 720px; margin: 0 auto; padding: 24px 20px;
-    border-top: 1px solid #e2e4e8; font-size: 13px; color: #888;
-  }
-  footer a { color: #888; }
-  footer a:hover { color: #555; }
-</style>
+<link rel="stylesheet" href="css/shared.css">
+<link rel="stylesheet" href="css/content.css">
+<script defer src="js/nav.js"></script>
 </head>
 <body>
 <header id="header">
   <div class="header-left">
     <h1 class="brand"><a href="/">MXmap</a></h1>
+    <nav id="nav"></nav>
   </div>
-  <nav class="header-nav">
-    <a href="/" class="header-link">Karte</a>
-    <a href="/impressum.html" class="header-link">Impressum</a>
-    <a href="/datenschutz.html" class="header-link active">Datenschutz</a>
-  </nav>
 </header>
 <main>
   <h1>Datenschutzerklärung</h1>
@@ -61,12 +24,12 @@
 
   <h2>2. Hosting</h2>
   <p>Diese Website wird über <strong>GitHub Pages</strong> (GitHub Inc., USA) bereitgestellt. Beim Aufruf der Website wird Ihre IP-Adresse an die Server von GitHub übermittelt. Dies ist technisch notwendig, um die Website auszuliefern. Weitere Informationen finden Sie in der <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank">Datenschutzerklärung von GitHub</a>. Die Übermittlung in die USA erfolgt gestützt auf Art. 17 des Bundesgesetzes über den Datenschutz (nDSG).</p>
+  <p>Die Auslieferung der Website erfolgt über das Content-Delivery-Network von <strong>Cloudflare</strong> (Cloudflare Inc., USA). Dabei wird Ihre IP-Adresse an Cloudflare-Server übermittelt, um die Website performant und sicher auszuliefern. Weitere Informationen finden Sie in der <a href="https://www.cloudflare.com/privacypolicy/" target="_blank">Datenschutzerklärung von Cloudflare</a>. Die Übermittlung in die USA erfolgt gestützt auf Art. 17 nDSG.</p>
 
   <h2>3. Externe Ressourcen (CDNs)</h2>
   <p>Zur Darstellung der Karte werden externe Ressourcen von Drittanbietern geladen. Dabei wird Ihre IP-Adresse an die jeweiligen Server übermittelt:</p>
   <ul>
-    <li><code>unpkg.com</code> — Leaflet-Kartenbibliothek</li>
-    <li><code>cdn.jsdelivr.net</code> — Schweizer Gemeindegrenzen (TopoJSON)</li>
+    <li><code>unpkg.com</code> — Leaflet-Kartenbibliothek und Schweizer Gemeindegrenzen (TopoJSON)</li>
     <li><code>basemaps.cartocdn.com</code> — Kartenkacheln (CARTO)</li>
   </ul>
 
