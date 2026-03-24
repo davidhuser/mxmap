@@ -60,6 +60,7 @@ class TestSignatures:
     def test_ms365_has_mx(self):
         ms365 = next(s for s in SIGNATURES if s.provider == Provider.MS365)
         assert "mail.protection.outlook.com" in ms365.mx_patterns
+        assert "mx.microsoft" in ms365.mx_patterns
 
     def test_google_has_mx(self):
         google = next(s for s in SIGNATURES if s.provider == Provider.GOOGLE)
@@ -104,6 +105,12 @@ class TestSignatures:
         ms365 = next(s for s in SIGNATURES if s.provider == Provider.MS365)
         assert "microsoft esmtp mail service" in ms365.smtp_banner_patterns
         assert "protection.outlook.com" in ms365.smtp_banner_patterns
+        assert "mx.microsoft" in ms365.smtp_banner_patterns
+
+    def test_ms365_cname_patterns(self):
+        ms365 = next(s for s in SIGNATURES if s.provider == Provider.MS365)
+        assert "mail.protection.outlook.com" in ms365.cname_patterns
+        assert "mx.microsoft" in ms365.cname_patterns
 
     def test_google_smtp_banner_patterns(self):
         google = next(s for s in SIGNATURES if s.provider == Provider.GOOGLE)

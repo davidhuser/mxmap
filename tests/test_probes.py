@@ -109,6 +109,13 @@ class TestProbeMx:
         assert results[0].kind == SignalKind.MX
         assert results[0].weight == WEIGHTS[SignalKind.MX]
 
+    def test_ms365_mx_microsoft_hit(self):
+        results = probe_mx(["example-com.mx.microsoft"])
+        assert len(results) == 1
+        assert results[0].provider == Provider.MS365
+        assert results[0].kind == SignalKind.MX
+        assert results[0].weight == WEIGHTS[SignalKind.MX]
+
     def test_google_hit(self):
         results = probe_mx(["aspmx.l.google.com"])
         assert len(results) == 1
@@ -324,6 +331,24 @@ class TestProbeCnameChain:
         assert results[0].provider == Provider.MS365
         assert results[0].kind == SignalKind.CNAME_CHAIN
 
+    async def test_follows_chain_to_mx_microsoft(self):
+        call_count = 0
+
+        async def _resolve(qname, rdtype):
+            nonlocal call_count
+            call_count += 1
+            if call_count == 1:
+                return [_cname_rdata("hop1.example.com.")]
+            if call_count == 2:
+                return [_cname_rdata("final.mx.microsoft.")]
+            return None
+
+        with patch("mail_sovereignty.probes.resolve_robust", side_effect=_resolve):
+            results = await probe_cname_chain("example.com", ["custom-mx.example.com"])
+        assert len(results) == 1
+        assert results[0].provider == Provider.MS365
+        assert results[0].kind == SignalKind.CNAME_CHAIN
+
     async def test_no_cname(self):
         with patch(
             "mail_sovereignty.probes.resolve_robust",
@@ -387,6 +412,39 @@ class TestProbeSmtp:
         readline_calls = iter(
             [
                 b"220 mail.protection.outlook.com Microsoft ESMTP MAIL Service ready\r\n",
+                b"250 OK\r\n",
+                b"221 Bye\r\n",
+            ]
+        )
+        mock_reader.readline = AsyncMock(side_effect=lambda: next(readline_calls))
+
+        with patch(
+            "mail_sovereignty.probes.asyncio.open_connection",
+            new=AsyncMock(return_value=(mock_reader, mock_writer)),
+        ):
+            with patch("mail_sovereignty.probes.asyncio.wait_for") as mock_wait:
+
+                async def wait_for_impl(coro, timeout):
+                    return await coro
+
+                mock_wait.side_effect = wait_for_impl
+                results = await probe_smtp(["mx.example.com"])
+
+        assert len(results) >= 1
+        assert any(
+            e.provider == Provider.MS365 and e.kind == SignalKind.SMTP for e in results
+        )
+
+    async def test_ms365_mx_microsoft_banner(self):
+        mock_reader = AsyncMock()
+        mock_writer = MagicMock()
+        mock_writer.drain = AsyncMock()
+        mock_writer.close = MagicMock()
+        mock_writer.wait_closed = AsyncMock()
+
+        readline_calls = iter(
+            [
+                b"220 example-com.mx.microsoft Microsoft ESMTP MAIL Service ready\r\n",
                 b"250 OK\r\n",
                 b"221 Bye\r\n",
             ]

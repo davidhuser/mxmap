@@ -26,16 +26,17 @@ class ProviderSignature(BaseModel):
 SIGNATURES: list[ProviderSignature] = [
     ProviderSignature(
         provider=Provider.MS365,
-        mx_patterns=("mail.protection.outlook.com",),
+        mx_patterns=("mail.protection.outlook.com", "mx.microsoft"),
         spf_includes=("spf.protection.outlook.com",),
         dkim_selectors=("selector1", "selector2"),
         dkim_cname_patterns=("onmicrosoft.com",),
         autodiscover_patterns=("autodiscover.outlook.com",),
-        cname_patterns=("mail.protection.outlook.com",),
+        cname_patterns=("mail.protection.outlook.com", "mx.microsoft"),
         dmarc_patterns=("rua.agari.com",),
         smtp_banner_patterns=(
             "microsoft esmtp mail service",
             "protection.outlook.com",
+            "mx.microsoft",
         ),
         txt_verification_patterns=("ms=ms",),
         asns=(8075,),
