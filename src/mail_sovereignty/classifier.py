@@ -70,8 +70,8 @@ _S = SignalKind  # local alias for compact table
 _PROVIDER_RULES: tuple[_Rule, ...] = (
     # rule name             signals                                            gw?      base
     # --- 3 signals (0.90–0.95) ---
-    _Rule("mx_spf_tenant",  frozenset({_S.MX, _S.SPF, _S.TENANT}),             False,   0.95),
     _Rule("mx_spf_ad",      frozenset({_S.MX, _S.SPF, _S.AUTODISCOVER}),       False,   0.95),
+    _Rule("mx_spf_tenant",  frozenset({_S.MX, _S.SPF, _S.TENANT}),             False,   0.95),
     _Rule("ad_spf_tenant",  frozenset({_S.AUTODISCOVER, _S.SPF, _S.TENANT}),   False,   0.95),
     _Rule("dkim_ad_tenant", frozenset({_S.DKIM, _S.AUTODISCOVER, _S.TENANT}),  False,   0.90),
     _Rule("dkim_spf_tenant",frozenset({_S.DKIM, _S.SPF, _S.TENANT}),           False,   0.90),
