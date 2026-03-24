@@ -1,7 +1,9 @@
 import asyncio
 import json
 import re
+import ssl
 import time
+import warnings
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
@@ -382,17 +384,20 @@ def extract_email_domains(html: str) -> set[str]:
     """Extract email domains from HTML, including TYPO3-obfuscated emails."""
     domains = set()
 
+    # simple @ in body
     for email in EMAIL_RE.findall(html):
         domain = email.split("@")[1].lower()
         if domain not in SKIP_DOMAINS:
             domains.add(domain)
 
+    # mailto:
     for email in re.findall(r'mailto:([^">\s?]+)', html):
         if "@" in email:
             domain = email.split("@")[1].lower().rstrip("\\/.")
             if domain not in SKIP_DOMAINS:
                 domains.add(domain)
 
+    # typo3 obfuscated emails
     for encoded in TYPO3_RE.findall(html):
         for offset in range(-25, 26):
             decoded = decrypt_typo3(encoded, offset)
@@ -403,8 +408,11 @@ def extract_email_domains(html: str) -> set[str]:
                     domains.add(domain)
                 break
 
-    for match in re.findall(r'[\w.-]+\s*[\[(]at[\])]\s*[\w.-]+\.\w+', html, re.IGNORECASE):
-        normalized = re.sub(r'\s*[\[(]at[\])]\s*', '@', match, flags=re.IGNORECASE)
+    # user(at)domain.ch and user[at]domain.ch variants
+    for match in re.findall(
+        r"[\w.-]+\s*[\[(]at[\])]\s*[\w.-]+\.\w+", html, re.IGNORECASE
+    ):
+        normalized = re.sub(r"\s*[\[(]at[\])]\s*", "@", match, flags=re.IGNORECASE)
         if "@" in normalized:
             domain = normalized.split("@")[1].lower()
             if domain not in SKIP_DOMAINS:
@@ -433,6 +441,51 @@ def build_urls(domain: str) -> list[str]:
     return urls
 
 
+def _is_ssl_error(exc: BaseException) -> bool:
+    """Check if an exception (or any in its chain) is an SSL verification error."""
+    current: BaseException | None = exc
+    while current is not None:
+        if isinstance(current, ssl.SSLCertVerificationError):
+            return True
+        # Some builds wrap the error as a string only
+        if "CERTIFICATE_VERIFY_FAILED" in str(current):
+            return True
+        current = current.__cause__ if current.__cause__ is not current else None
+    return False
+
+
+async def _fetch_insecure(url: str) -> httpx.Response:
+    """Fetch a URL with SSL verification disabled (single request)."""
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", message="Unverified HTTPS request")
+        async with httpx.AsyncClient(verify=False) as insecure_client:
+            return await insecure_client.get(url, follow_redirects=True, timeout=15)
+
+
+def _process_scrape_response(
+    r: httpx.Response,
+    domain: str,
+    all_domains: set[str],
+    redirect_domain: str | None,
+) -> tuple[set[str], str | None]:
+    """Extract emails and detect redirects from a scrape response.
+
+    Mutates all_domains in place. Returns updated (all_domains, redirect_domain).
+    """
+    if r.status_code != 200:
+        return all_domains, redirect_domain
+
+    if redirect_domain is None:
+        final_domain = url_to_domain(str(r.url))
+        if final_domain and final_domain != domain:
+            redirect_domain = final_domain
+            logger.info("Redirect detected: {} -> {}", domain, redirect_domain)
+
+    domains = extract_email_domains(r.text)
+    all_domains |= domains
+    return all_domains, redirect_domain
+
+
 async def scrape_email_domains(
     client: httpx.AsyncClient, domain: str
 ) -> tuple[set[str], str | None]:
@@ -453,23 +506,26 @@ async def scrape_email_domains(
     for url in urls:
         try:
             r = await client.get(url, follow_redirects=True, timeout=15)
-            if r.status_code != 200:
+        except httpx.ConnectError as exc:
+            if _is_ssl_error(exc):
+                logger.info("SSL error on {}, retrying without verification", url)
+                try:
+                    r = await _fetch_insecure(url)
+                except Exception as retry_exc:
+                    logger.debug("Insecure retry {} failed: {}", url, retry_exc)
+                    continue
+            else:
+                logger.debug("Scrape {} failed: {}", url, exc)
                 continue
-
-            # Detect cross-domain redirect (only from first successful response)
-            if redirect_domain is None:
-                final_domain = url_to_domain(str(r.url))
-                if final_domain and final_domain != domain:
-                    redirect_domain = final_domain
-                    logger.info("Redirect detected: {} -> {}", domain, redirect_domain)
-
-            domains = extract_email_domains(r.text)
-            all_domains |= domains
-            if all_domains:
-                return all_domains, redirect_domain
         except Exception as exc:
             logger.debug("Scrape {} failed: {}", url, exc)
             continue
+
+        all_domains, redirect_domain = _process_scrape_response(
+            r, domain, all_domains, redirect_domain
+        )
+        if all_domains:
+            return all_domains, redirect_domain
 
     return all_domains, redirect_domain
 

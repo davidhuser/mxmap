@@ -7,6 +7,8 @@ import respx
 import stamina
 
 from mail_sovereignty.resolve import (
+    _is_ssl_error,
+    _process_scrape_response,
     build_urls,
     decrypt_typo3,
     detect_website_mismatch,
@@ -1075,3 +1077,150 @@ class TestResolveRunLogging:
             "municipalities in BFS but missing from Wikidata" in msg
             for msg in caplog.messages
         )
+
+
+# ── _process_scrape_response() ────────────────────────────────────────
+
+
+class TestProcessScrapeResponse:
+    def test_non_200_returns_unchanged(self):
+        r = httpx.Response(404, request=httpx.Request("GET", "https://example.ch"))
+        domains, redirect = _process_scrape_response(r, "example.ch", set(), None)
+        assert domains == set()
+        assert redirect is None
+
+    def test_200_extracts_email_and_redirect(self):
+        r = httpx.Response(
+            200,
+            text="Contact: info@3908.ch",
+            request=httpx.Request("GET", "https://www.3908.ch/"),
+        )
+        domains, redirect = _process_scrape_response(
+            r, "gemeinde-saas-balen.ch", set(), None
+        )
+        assert "3908.ch" in domains
+        assert redirect == "3908.ch"
+
+    def test_200_same_domain_no_redirect(self):
+        r = httpx.Response(
+            200,
+            text="Contact: info@mygemeinde.ch",
+            request=httpx.Request("GET", "https://www.mygemeinde.ch/"),
+        )
+        domains, redirect = _process_scrape_response(r, "mygemeinde.ch", set(), None)
+        assert "mygemeinde.ch" in domains
+        assert redirect is None
+
+    def test_preserves_existing_redirect(self):
+        r = httpx.Response(
+            200,
+            text="Contact: info@other.ch",
+            request=httpx.Request("GET", "https://www.other.ch/"),
+        )
+        domains, redirect = _process_scrape_response(
+            r, "example.ch", set(), "already.ch"
+        )
+        assert "other.ch" in domains
+        assert redirect == "already.ch"
+
+
+# ── _is_ssl_error() ─────────────────────────────────────────────────
+
+
+class TestIsSslError:
+    def test_direct_ssl_error(self):
+        import ssl
+
+        exc = ssl.SSLCertVerificationError("certificate verify failed")
+        assert _is_ssl_error(exc) is True
+
+    def test_nested_ssl_error(self):
+        import ssl
+
+        ssl_exc = ssl.SSLCertVerificationError("certificate verify failed")
+        connect_exc = httpx.ConnectError("SSL error")
+        connect_exc.__cause__ = ssl_exc
+        assert _is_ssl_error(connect_exc) is True
+
+    def test_non_ssl_error(self):
+        exc = ConnectionRefusedError("Connection refused")
+        assert _is_ssl_error(exc) is False
+
+    def test_string_fallback(self):
+        exc = Exception("CERTIFICATE_VERIFY_FAILED in handshake")
+        assert _is_ssl_error(exc) is True
+
+
+# ── SSL retry in scrape_email_domains() ──────────────────────────────
+
+
+class TestSslRetry:
+    @pytest.mark.asyncio
+    async def test_ssl_error_triggers_insecure_retry(self):
+        """SSL error should trigger an insecure retry that recovers."""
+        import ssl
+
+        ssl_exc = ssl.SSLCertVerificationError("certificate verify failed")
+        connect_exc = httpx.ConnectError("SSL handshake failed")
+        connect_exc.__cause__ = ssl_exc
+
+        client = AsyncMock()
+        client.get = AsyncMock(side_effect=connect_exc)
+
+        fake_response = AsyncMock()
+        fake_response.status_code = 200
+        fake_response.text = "Contact: gemeinde@3908.ch"
+        fake_response.url = httpx.URL("https://www.3908.ch/")
+
+        with patch(
+            "mail_sovereignty.resolve._fetch_insecure",
+            new_callable=AsyncMock,
+            return_value=fake_response,
+        ) as mock_fetch:
+            domains, redirect = await scrape_email_domains(
+                client, "gemeinde-saas-balen.ch"
+            )
+
+        assert "3908.ch" in domains
+        assert redirect == "3908.ch"
+        mock_fetch.assert_called()
+
+    @pytest.mark.asyncio
+    async def test_non_ssl_connect_error_no_retry(self):
+        """Non-SSL ConnectError should not trigger insecure retry."""
+        connect_exc = httpx.ConnectError("Connection refused")
+
+        client = AsyncMock()
+        client.get = AsyncMock(side_effect=connect_exc)
+
+        with patch(
+            "mail_sovereignty.resolve._fetch_insecure",
+            new_callable=AsyncMock,
+        ) as mock_fetch:
+            domains, redirect = await scrape_email_domains(client, "example.ch")
+
+        assert domains == set()
+        assert redirect is None
+        mock_fetch.assert_not_called()
+
+    @pytest.mark.asyncio
+    async def test_ssl_retry_failure_continues(self):
+        """If insecure retry also fails, scrape should continue gracefully."""
+        import ssl
+
+        ssl_exc = ssl.SSLCertVerificationError("certificate verify failed")
+        connect_exc = httpx.ConnectError("SSL handshake failed")
+        connect_exc.__cause__ = ssl_exc
+
+        client = AsyncMock()
+        client.get = AsyncMock(side_effect=connect_exc)
+
+        with patch(
+            "mail_sovereignty.resolve._fetch_insecure",
+            new_callable=AsyncMock,
+            side_effect=httpx.ConnectError("still broken"),
+        ):
+            domains, redirect = await scrape_email_domains(client, "example.ch")
+
+        assert domains == set()
+        assert redirect is None
