@@ -61,17 +61,19 @@
     </div>
     <div class="info-card">
       <h3>What does a tenant mean?</h3>
-      <p>A registered M365 tenant means the municipality's domain is in Microsoft Entra ID, implying (but not confirming) the use of M365 services such as Teams, SharePoint, or OneDrive &mdash; but <strong>not necessarily email</strong>. See the <a href="/">Email Map</a> for email hosting.</p>
+      <p>A registered M365 tenant means the municipality's domain is in Microsoft Entra ID, implying (but not confirming) the use of some M365 services.</p>
     </div>
     <div class="info-card">
       <h3>Methodology</h3>
-      <p>Each domain is queried against Microsoft's public <code>getuserrealm.srf</code> endpoint (unauthenticated). It returns: <i>Managed</i> (fully cloud-managed identity), <i>Federated</i> (hybrid, on-premises AD synced to cloud), or no result.</p>
-      <p style="font-size:12px;color:#777;margin-top:6px;">Caveat: Tenant presence confirms domain registration, not specific service usage. Some tenants could be inactive.</p>
+      <p>Each domain is queried against Microsoft's public <code>getuserrealm.srf</code> endpoint, which returns <i>Managed</i>, <i>Federated</i>, or no result.</p>
+    </div>
+    <div class="info-card">
+      <h3>Accuracy</h3>
+      <p>Tenant presence confirms domain registration, not specific service usage. Tenants could be inactive. If you notice an error, please <a href="https://github.com/davidhuser/mxmap/issues" target="_blank">submit an issue</a>.</p>
     </div>
     <div class="info-card">
       <h3>Open source &amp; open data</h3>
-      <p>The code and data are on <a href="https://github.com/davidhuser/mxmap" target="_blank">GitHub</a>.<br>
-      If you have noticed an error, please <a href="https://github.com/davidhuser/mxmap/issues" target="_blank">submit an issue</a>.</p>
+      <p>The code and data are on <a href="https://github.com/davidhuser/mxmap" target="_blank">GitHub</a>.</p>
       <p id="generated"></p>
     </div>
   </div>

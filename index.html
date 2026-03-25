@@ -61,17 +61,19 @@
     </div>
     <div class="info-card">
       <h3>Context</h3>
-      <p>Digital sovereignty: US-based providers are subject to the US CLOUD Act, which allows US authorities to request stored data, regardless of where it is physically hosted. This map makes the current provider landscape visible.</p>
+      <p>US-based providers are subject to the US CLOUD Act, allowing US authorities to request stored data regardless of where it is hosted. This map makes the current provider landscape visible.</p>
     </div>
     <div class="info-card">
       <h3>How does it work?</h3>
-      <p>Each municipality's official domain is checked via 11 signals from DNS records, SMTP banners, ASN lookups, and a public Microsoft API endpoint, then classified by provider type with confidence scoring.</p>
-      <p style="font-size:12px;color:#777;margin-top:6px;">Disclaimer: DNS records indicate mail routing and authorized senders, not necessarily where data is stored.</p>
+      <p>Each municipality's email domain is checked against multiple public DNS and network signals, then classified by provider type.</p>
+    </div>
+    <div class="info-card">
+      <h3>Accuracy</h3>
+      <p>Classifications may contain errors. DNS records indicate mail routing, not necessarily where data is stored. <br>If you notice an error, please <a href="https://github.com/davidhuser/mxmap/issues" target="_blank">submit an issue</a>.</p>
     </div>
     <div class="info-card">
       <h3>Open source &amp; open data</h3>
-      <p>The code and data are on <a href="https://github.com/davidhuser/mxmap" target="_blank">GitHub</a>.<br>
-      If you have noticed an error, please <a href="https://github.com/davidhuser/mxmap/issues" target="_blank">submit an issue</a>.</p>
+      <p>The code and data are on <a href="https://github.com/davidhuser/mxmap" target="_blank">GitHub</a>.</p>
       <p id="generated"></p>
     </div>
   </div>
@@ -398,7 +400,7 @@ async function loadData() {
   showGenerated(dnsData);
 
   // Count by jurisdiction and confidence level
-  const catCounts = { 'us-cloud': 0, 'swiss-based': 0, 'insufficient': 0 };
+  const catCounts = { 'us-cloud': 0, 'swiss-based': 0 };
   const levelCounts = {
     'us-cloud': { high: 0, medium: 0, low: 0 },
     'swiss-based': { high: 0, medium: 0, low: 0 }
@@ -410,13 +412,8 @@ async function loadData() {
       catCounts[cat]++;
       const level = confidenceLevel(m ? (m.classification_confidence || 0) : 0);
       if (level !== 'insufficient') levelCounts[cat][level]++;
-    } else {
-      catCounts['insufficient']++;
     }
   }
-
-  const hatchSvg = 'data:image/svg+xml,' +
-    encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect width="8" height="8" fill="#BFBFBF"/><path d="M-1,1 l2,-2 M0,8 l8,-8 M7,9 l2,-2" stroke="#000" stroke-width="1"/></svg>');
 
   // Legend with counts
   const isMobile = window.innerWidth <= 600;
@@ -427,10 +424,8 @@ async function loadData() {
     div.innerHTML =
       '<button class="legend-toggle" aria-label="Toggle legend" aria-expanded="' + (!isMobile) + '">' + (isMobile ? 'Legend \u25B8' : '') + '</button>' +
       '<div class="legend-content">' +
-      '<strong>Email Jurisdiction</strong>' +
       legendCategoryHtml('US Cloud', CATEGORY_COLORS['us-cloud'], catCounts['us-cloud'], 'us-cloud', levelCounts['us-cloud']) +
       legendCategoryHtml('Swiss Based', CATEGORY_COLORS['swiss-based'], catCounts['swiss-based'], 'swiss-based', levelCounts['swiss-based']) +
-      '<div class="legend-group"><i style="background-image:url(\'' + hatchSvg + '\')"></i>Insufficient data (' + catCounts['insufficient'] + ')</div>' +
       '<button class="color-toggle" aria-label="Switch to colorblind-safe colors">\u25D0 Colorblind mode</button>' +
       '</div>';
     L.DomEvent.disableClickPropagation(div);

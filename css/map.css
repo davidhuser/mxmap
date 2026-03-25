@@ -24,7 +24,7 @@ body { display: flex; flex-direction: column; height: 100dvh; overflow: hidden; 
 .info-card p { font-size: 13px; color: #444; line-height: 1.5; margin: 0; }
 .info-card a { color: #2563eb; text-decoration: none; }
 .info-card a:hover { text-decoration: underline; }
-#generated { font-size: 11px; color: #999; margin-top: 4px; }
+#generated { font-size: 12px; color: #999; margin-top: 4px; }
 .info-title { display: none; font-size: 16px; font-weight: 600; color: #1a1a2e; margin-bottom: 12px; }
 
 .legend-toggle {
@@ -42,8 +42,8 @@ body { display: flex; flex-direction: column; height: 100dvh; overflow: hidden; 
 .legend-group { margin-top: 8px; }
 .legend-group:first-child { margin-top: 4px; }
 .legend-group-label {
-  font-size: 11px; color: #999; text-transform: uppercase;
-  letter-spacing: 0.3px; font-weight: 600; display: block; margin-bottom: 2px;
+  font-size: 13px; color: #333;
+  letter-spacing: 0.3px; font-weight: 600; display: block; margin-bottom: 4px;
 }
 
 #map { flex: 1; position: relative; width: 100%; will-change: transform; }
@@ -108,7 +108,7 @@ body { display: flex; flex-direction: column; height: 100dvh; overflow: hidden; 
 .cat-badge.unknown { background: #f3f4f6; color: #6b7280; }
 
 .color-toggle {
-  display: block; margin-top: 8px; padding: 3px 8px; border-radius: 3px;
+  display: block; margin: 8px auto 0; padding: 3px 8px; border-radius: 3px;
   font-size: 11px; font-weight: 500; cursor: pointer;
   background: #f3f4f6; border: 1px solid #d1d5db; color: #374151;
 }

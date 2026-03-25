@@ -79,7 +79,7 @@ function showGenerated(dnsData) {
     var date = new Date(dnsData.generated);
     var text = 'Updated ' + date.toLocaleString('de-CH', { dateStyle: 'medium', timeStyle: 'short' });
     if (dnsData.commit) {
-      text += ' \u00b7 ' + dnsData.commit;
+      text += ' \u00b7 commit ' + dnsData.commit;
     }
     document.getElementById('generated').textContent = text;
   }
