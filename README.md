@@ -93,6 +93,7 @@ uv run ruff format src tests
 * BE https://mxmap.be/
 * EU https://livenson.github.io/mxmap/
 * LV: https://securit.lv/mxmap
+* [CAmap Nordic & Baltic](https://koldex.github.io/ca-sovereignty-map/) — TLS CA sovereignty for Nordic and Baltic municipalities ([source](https://github.com/koldex/ca-sovereignty-map))
 * See also the forks of this repository
 
 
