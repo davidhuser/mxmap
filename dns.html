@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://unpkg.com" crossorigin>
+<link rel="preconnect" href="https://a.basemaps.cartocdn.com" crossorigin>
+<link rel="preconnect" href="https://b.basemaps.cartocdn.com" crossorigin>
+<link rel="preconnect" href="https://c.basemaps.cartocdn.com" crossorigin>
+<link rel="preconnect" href="https://d.basemaps.cartocdn.com" crossorigin>
+<link rel="dns-prefetch" href="https://unpkg.com">
+<link rel="dns-prefetch" href="https://a.basemaps.cartocdn.com">
+<link rel="dns-prefetch" href="https://b.basemaps.cartocdn.com">
+<link rel="dns-prefetch" href="https://c.basemaps.cartocdn.com">
+<link rel="dns-prefetch" href="https://d.basemaps.cartocdn.com">
+<title>MXmap &mdash; Hyperscaler DNS Exposure of Swiss Municipalities</title>
+<meta name="description" content="Interactive map highlighting Swiss municipalities whose email-related DNS records (MX, SPF, DKIM, autodiscover, DMARC) reference a US hyperscaler &mdash; Microsoft, Google, or AWS.">
+<meta name="keywords" content="Switzerland, municipalities, DNS, SPF, MX, hyperscaler, Microsoft, Google, AWS, digital sovereignty, OSINT">
+<meta name="author" content="David Huser">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://mxmap.ch/dns.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="MXmap &mdash; Hyperscaler DNS Exposure of Swiss Municipalities">
+<meta property="og:description" content="Interactive map highlighting municipalities whose email DNS records reference Microsoft, Google, or AWS &mdash; even a single SPF include triggers exposure.">
+<meta property="og:url" content="https://mxmap.ch/dns.html">
+<meta property="og:locale" content="en_CH">
+<meta property="og:site_name" content="MXmap">
+<meta property="og:image" content="https://mxmap.ch/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MXmap &mdash; Hyperscaler DNS Exposure of Swiss Municipalities">
+<meta name="twitter:description" content="Interactive map highlighting municipalities with hyperscaler traces in their email DNS records.">
+<meta name="twitter:image" content="https://mxmap.ch/og-image.jpg">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='7' width='28' height='18' rx='2' fill='%231a1a2e'/%3E%3Cpath d='M2 9l14 9 14-9' fill='none' stroke='%23d32f2f' stroke-width='2'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/shared.css">
+<link rel="stylesheet" href="css/map.css">
+<link rel="preload" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"></noscript>
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script defer src="https://unpkg.com/topojson-client@3/dist/topojson-client.min.js"></script>
+<script defer src="js/nav.js"></script>
+<script defer src="js/map-shared.js"></script>
+</head>
+<body>
+<header id="header">
+  <div class="header-left">
+    <h1 class="brand">MXmap</h1>
+    <span class="beta-badge" title="Beta status, this website may contain errors">beta</span>
+    <nav id="nav"></nav>
+  </div>
+  <span class="header-disclaimer">&#9888; This data may be out of date or incorrect. A research project is ongoing to further develop such maps.</span>
+  <div class="header-right">
+    <button class="toggle-info" id="toggle-info" aria-expanded="true" aria-controls="info-bar">About &#9652;</button>
+  </div>
+</header>
+<section id="info-bar" aria-label="About this project">
+<script>if(window.innerWidth<=600)document.getElementById('info-bar').classList.add('collapsed');</script>
+  <h2 class="info-title">Hyperscaler DNS Exposure of Swiss Municipalities</h2>
+  <div class="info-grid">
+    <div class="info-card">
+      <h3>What is this?</h3>
+      <p>A map of all ~2,100 Swiss municipalities colored <strong style="color:#d32f2f">red</strong> if <em>any</em> email-related DNS record references a US hyperscaler &mdash; Microsoft, Google, or AWS. Even a single <code>include:</code> in SPF is enough to trigger exposure.</p>
+    </div>
+    <div class="info-card">
+      <h3>How is this different from the Email Map?</h3>
+      <p>The <a href="/">Email Map</a> picks one winning provider per municipality. This map casts a wider net: a municipality whose email is hosted by a Swiss provider but whose SPF record still delegates to <code>spf.protection.outlook.com</code> shows green on the Email Map, but red here.</p>
+    </div>
+    <div class="info-card">
+      <h3>Which records are checked?</h3>
+      <p>MX, SPF, DKIM, autodiscover, DMARC, CNAME chain, TXT verification, and ASN of MX/SPF IPs. The M365 tenant check (<code>getuserrealm.srf</code>) is <strong>not</strong> counted here because it's not a DNS record &mdash; see the <a href="/tenant.html">Tenant Map</a> for that signal.</p>
+    </div>
+    <div class="info-card">
+      <h3>Open source &amp; open data</h3>
+      <p>The code and data are on <a href="https://github.com/davidhuser/mxmap" target="_blank">GitHub</a>.<br>
+      If you have noticed an error, please <a href="https://github.com/davidhuser/mxmap/issues" target="_blank">submit an issue</a>.</p>
+      <p id="generated"></p>
+    </div>
+  </div>
+</section>
+<main id="map" role="application" aria-label="Interactive map of Swiss municipality hyperscaler DNS exposure">
+  <div id="map-loading" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:1000;background:rgba(255,255,255,0.85);font-size:15px;color:#555;">Loading map data&hellip;</div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+var DNS_COLORS = {
+  hyperscaler: '#d32f2f',
+  clean:       '#4caf50',
+  nodata:      '#cfcfcf',
+  lake:        '#afd7f5',
+};
+
+// Mirror of src/mail_sovereignty/signatures.py — keep in sync if Cloudflare
+// or another hyperscaler is added to SIGNATURES.
+var HYPERSCALER_MX = {
+  microsoft: ['mail.protection.outlook.com', 'mx.microsoft'],
+  google:    ['aspmx.l.google.com', 'googlemail.com', 'smtp.google.com'],
+  aws:       ['amazonaws.com', 'awsapps.com'],
+};
+var HYPERSCALER_SPF = {
+  microsoft: ['spf.protection.outlook.com'],
+  google:    ['_spf.google.com'],
+  aws:       ['amazonses.com'],
+};
+var HYPERSCALER_DETAIL_KEYS = {
+  microsoft: 'ms365',
+  google:    'google',
+  aws:       'aws',
+};
+var DNS_SIGNAL_KINDS = {
+  mx: 1, spf: 1, dkim: 1, autodiscover: 1, dmarc: 1,
+  cname_chain: 1, txt_verification: 1, spf_ip: 1, asn: 1,
+};
+
+var CANTON_CODES = {
+  'Kanton Zürich': 'ZH', 'Kanton Bern': 'BE', 'Kanton Luzern': 'LU',
+  'Kanton Uri': 'UR', 'Kanton Schwyz': 'SZ', 'Kanton Obwalden': 'OW',
+  'Kanton Nidwalden': 'NW', 'Kanton Glarus': 'GL', 'Kanton Zug': 'ZG',
+  'Kanton Freiburg': 'FR', 'Kanton Solothurn': 'SO', 'Kanton Basel-Stadt': 'BS',
+  'Kanton Basel-Landschaft': 'BL', 'Kanton Schaffhausen': 'SH',
+  'Kanton Appenzell Ausserrhoden': 'AR', 'Kanton Appenzell Innerrhoden': 'AI',
+  'Kanton St. Gallen': 'SG', 'Kanton Graubünden': 'GR', 'Kanton Aargau': 'AG',
+  'Kanton Thurgau': 'TG', 'Kanton Tessin': 'TI', 'Kanton Waadt': 'VD',
+  'Kanton Wallis': 'VS', 'Kanton Neuenburg': 'NE', 'Kanton Genf': 'GE',
+  'Kanton Jura': 'JU'
+};
+
+var HYPERSCALER_LABELS = {
+  microsoft: 'Microsoft',
+  google:    'Google',
+  aws:       'AWS',
+};
+
+function detectHyperscalerInString(value, patternGroups) {
+  if (!value) return null;
+  var lower = value.toLowerCase();
+  for (var h in patternGroups) {
+    var pats = patternGroups[h];
+    for (var i = 0; i < pats.length; i++) {
+      if (lower.indexOf(pats[i]) !== -1) return h;
+    }
+  }
+  return null;
+}
+
+function getHyperscalerHits(m) {
+  var hits = [];
+  var seen = {};
+
+  function push(hyperscaler, kind, detail) {
+    var key = hyperscaler + '|' + kind + '|' + detail;
+    if (seen[key]) return;
+    seen[key] = true;
+    hits.push({ hyperscaler: hyperscaler, kind: kind, detail: detail });
+  }
+
+  if (m && m.mx && m.mx.length) {
+    for (var i = 0; i < m.mx.length; i++) {
+      var host = m.mx[i];
+      var h = detectHyperscalerInString(host, HYPERSCALER_MX);
+      if (h) push(h, 'mx', host);
+    }
+  }
+
+  if (m && m.spf) {
+    var spfLower = m.spf.toLowerCase();
+    for (var sh in HYPERSCALER_SPF) {
+      var sPats = HYPERSCALER_SPF[sh];
+      for (var j = 0; j < sPats.length; j++) {
+        if (spfLower.indexOf(sPats[j]) !== -1) {
+          push(sh, 'spf', 'include:' + sPats[j]);
+        }
+      }
+    }
+  }
+
+  if (m && m.classification_signals) {
+    for (var k = 0; k < m.classification_signals.length; k++) {
+      var sig = m.classification_signals[k];
+      if (!sig || !DNS_SIGNAL_KINDS[sig.kind]) continue;
+      var dLower = (sig.detail || '').toLowerCase();
+      for (var hs in HYPERSCALER_DETAIL_KEYS) {
+        if (dLower.indexOf(HYPERSCALER_DETAIL_KEYS[hs]) !== -1) {
+          push(hs, sig.kind, sig.detail);
+        }
+      }
+    }
+  }
+
+  return hits;
+}
+
+function getDnsStatus(m) {
+  if (!m) return 'nodata';
+  var hasData = (m.mx && m.mx.length) || m.spf;
+  if (!hasData) return 'nodata';
+  return getHyperscalerHits(m).length > 0 ? 'hyperscaler' : 'clean';
+}
+
+function getColor(m) {
+  return DNS_COLORS[getDnsStatus(m)];
+}
+
+function getStatusLabel(status) {
+  if (status === 'hyperscaler') return 'Hyperscaler exposed';
+  if (status === 'clean') return 'No hyperscaler';
+  return 'No data';
+}
+
+var map = initMap('map');
+setupInfoBar(map);
+
+var muni = {};
+var muniLayer;
+var lakeLayer;
+
+async function loadData() {
+  var data = await fetchMapData();
+  var topo = data.topo;
+  var dnsData = data.dnsData;
+  muni = dnsData.municipalities;
+  showGenerated(dnsData);
+
+  var counts = { hyperscaler: 0, clean: 0, nodata: 0 };
+  var byHyperscaler = { microsoft: 0, google: 0, aws: 0 };
+  for (var bfs of Object.keys(muni)) {
+    var status = getDnsStatus(muni[bfs]);
+    counts[status]++;
+    if (status === 'hyperscaler') {
+      var hs = getHyperscalerHits(muni[bfs]);
+      var seenH = {};
+      for (var i = 0; i < hs.length; i++) {
+        if (!seenH[hs[i].hyperscaler]) {
+          seenH[hs[i].hyperscaler] = true;
+          byHyperscaler[hs[i].hyperscaler]++;
+        }
+      }
+    }
+  }
+
+  var isMobile = window.innerWidth <= 600;
+  var legend = L.control({ position: isMobile ? 'topright' : 'bottomright' });
+  legend.onAdd = function () {
+    var div = L.DomUtil.create('div', 'legend');
+    if (isMobile) div.classList.add('legend-collapsed');
+    div.innerHTML =
+      '<button class="legend-toggle" aria-label="Toggle legend" aria-expanded="' + (!isMobile) + '">' + (isMobile ? 'Legend ▸' : '') + '</button>' +
+      '<div class="legend-content">' +
+      '<strong>Hyperscaler DNS Exposure</strong>' +
+      '<div class="legend-group">' +
+      '<i class="legend-swatch" style="background:' + DNS_COLORS.hyperscaler + '"></i>Hyperscaler exposed (' + counts.hyperscaler + ')<br>' +
+      '<i class="legend-swatch" style="background:' + DNS_COLORS.clean + '"></i>No hyperscaler (' + counts.clean + ')<br>' +
+      '<i class="legend-swatch" style="background:' + DNS_COLORS.nodata + '"></i>No data (' + counts.nodata + ')' +
+      '</div>' +
+      '<div class="legend-group" style="margin-top:6px;font-size:11px;color:#666;">' +
+      'Microsoft: ' + byHyperscaler.microsoft + '<br>' +
+      'Google: ' + byHyperscaler.google + '<br>' +
+      'AWS: ' + byHyperscaler.aws +
+      '</div>' +
+      '</div>';
+    L.DomEvent.disableClickPropagation(div);
+    return div;
+  };
+  legend.addTo(map);
+  document.querySelector('.legend-toggle').addEventListener('click', toggleLegend);
+
+  lakeLayer = addLakes(map, topo, DNS_COLORS.lake);
+
+  var geojson = topojson.feature(topo, topo.objects.municipalities);
+
+  muniLayer = L.geoJSON(geojson, {
+    style: function (feature) {
+      var bfs = String(feature.id);
+      var m = muni[bfs];
+      return {
+        fillColor: getColor(m),
+        weight: 0.6,
+        color: '#afafaf',
+        fillOpacity: 1
+      };
+    },
+    onEachFeature: function (feature, layer) {
+      var bfs = String(feature.id);
+      var m = muni[bfs];
+      if (!m) {
+        layer.bindPopup('<div class="info-popup"><strong>BFS ' + bfs + '</strong><br>No data</div>');
+        return;
+      }
+      var status = getDnsStatus(m);
+      var statusLabel = getStatusLabel(status);
+      var color = DNS_COLORS[status];
+      var textColor = status === 'nodata' ? '#333' : '#fff';
+
+      var eName = escapeHtml(m.name);
+      var cantonCode = CANTON_CODES[m.canton] || '';
+      var nameDisplay = cantonCode ? eName + ' (' + cantonCode + ')' : eName;
+      var eDomain = escapeHtml(m.domain || 'unknown');
+
+      var badge = '<span class="tenant-badge" style="background:' + color + ';color:' + textColor + '">' + statusLabel + '</span>';
+
+      var body =
+        '<div class="info-popup">' +
+        '<strong>' + nameDisplay + '</strong><br>' +
+        eDomain + ' ' + badge;
+
+      if (status === 'hyperscaler') {
+        var hits = getHyperscalerHits(m);
+        var hyperscalersFound = {};
+        for (var i = 0; i < hits.length; i++) hyperscalersFound[hits[i].hyperscaler] = true;
+        var hsList = Object.keys(hyperscalersFound).map(function (h) { return HYPERSCALER_LABELS[h]; }).join(', ');
+        body += '<div class="popup-section"><strong>Hyperscalers found:</strong> ' + escapeHtml(hsList) + '</div>';
+
+        var rows = hits.slice(0, 6).map(function (hit) {
+          return '<div style="font-size:12px;margin-top:3px;"><span style="color:#888;text-transform:uppercase;font-size:10px;">' + escapeHtml(hit.kind) + '</span> &middot; ' + escapeHtml(hit.detail) + '</div>';
+        }).join('');
+        body += '<div class="popup-section">' + rows;
+        if (hits.length > 6) body += '<div style="font-size:11px;color:#888;margin-top:3px;">&hellip; and ' + (hits.length - 6) + ' more</div>';
+        body += '</div>';
+      } else if (status === 'clean') {
+        var mxLine = (m.mx && m.mx.length) ? escapeHtml(m.mx.join(', ')) : '&mdash;';
+        body += '<div class="popup-section"><span style="color:#888;text-transform:uppercase;font-size:10px;">MX</span><br>' + mxLine + '</div>';
+      }
+
+      body += '</div>';
+
+      layer.bindPopup(body, { maxWidth: 400 });
+      layer.on('mouseover', function () { this.setStyle({ weight: 2, color: '#333' }); });
+      layer.on('mouseout', function () { this.setStyle({ weight: 0.5, color: '#666' }); });
+    }
+  }).addTo(map);
+
+  removeLoading();
+  map.invalidateSize({ animate: false });
+}
+
+loadData().catch(handleLoadError);
+});
+</script>
+</body>
+</html>
