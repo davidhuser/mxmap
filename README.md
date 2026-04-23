@@ -87,13 +87,24 @@ uv run ruff format src tests
 
 ## Forks
 
-* DE https://b42labs.github.io/mxmap/
-* NL https://mxmap.nl/
-* NO https://kommune-epost-norge.netlify.app/
-* BE https://mxmap.be/
-* EU https://livenson.github.io/mxmap/
-* LV: https://securit.lv/mxmap
-* See also the forks of this repository
+Country-specific forks, alphabetical by country code:
+
+* **BE** — https://mxmap.be/
+* **DE** — https://b42labs.github.io/mxmap/ · https://mx-map.de/
+* **EU** — https://livenson.github.io/mxmap/
+* **FR** — https://mxmairies.fr/
+* **LV** — https://securit.lv/mxmap
+* **NL** — https://mxmap.nl/
+* **NO** — https://kommune-epost-norge.netlify.app/
+* **PT** — https://mxmap.pt/
+* **SE** — https://swedish-mail-dependency.netlify.app/
+* **UK** — https://mxmap.uk/
+
+Related projects:
+
+* [CAmap Nordic & Baltic](https://koldex.github.io/ca-sovereignty-map/) — TLS CA sovereignty for Nordic and Baltic municipalities ([source](https://github.com/koldex/ca-sovereignty-map))
+
+See also the [forks of this repository](https://github.com/davidhuser/mxmap/network/members).
 
 
 ## Contributing
