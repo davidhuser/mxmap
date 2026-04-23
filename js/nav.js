@@ -4,6 +4,7 @@
   var primary = [
     { href: '/', label: 'Email Map', match: ['/', '/index.html'] },
     { href: '/tenant.html', label: 'Tenant Map' },
+    { href: '/dns.html', label: 'DNS Exposure' },
   ];
   var secondary = [
     { href: '/impressum.html', label: 'Impressum' },
