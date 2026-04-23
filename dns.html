@@ -58,11 +58,11 @@
   <div class="info-grid">
     <div class="info-card">
       <h3>What is this?</h3>
-      <p>A map of all ~2,100 Swiss municipalities colored <strong style="color:#d32f2f">red</strong> if <em>any</em> email-related DNS record references a US hyperscaler &mdash; Microsoft, Google, or AWS. Even a single <code>include:</code> in SPF is enough to trigger exposure.</p>
+      <p>A map of all ~2,100 Swiss municipalities shaded by how deeply their email DNS touches a US hyperscaler &mdash; Microsoft, Google, or AWS. <strong style="color:#e8741b">Orange</strong> means the MX record itself points to a hyperscaler (email lives there). <strong style="color:#c48b1a">Pale amber</strong> means the MX is elsewhere but SPF, DKIM, autodiscover, or another record still delegates to one. <strong style="color:#5a8a63">Green</strong> means no hyperscaler trace at all.</p>
     </div>
     <div class="info-card">
       <h3>How is this different from the Email Map?</h3>
-      <p>The <a href="/">Email Map</a> picks one winning provider per municipality. This map casts a wider net: a municipality whose email is hosted by a Swiss provider but whose SPF record still delegates to <code>spf.protection.outlook.com</code> shows green on the Email Map, but red here.</p>
+      <p>The <a href="/">Email Map</a> picks one winning provider per municipality. This map casts a wider net and grades exposure: a municipality whose email is hosted by a Swiss provider but whose SPF record still delegates to <code>spf.protection.outlook.com</code> shows as Swiss on the Email Map, but pale amber here.</p>
     </div>
     <div class="info-card">
       <h3>Which records are checked?</h3>
@@ -84,10 +84,18 @@
 document.addEventListener('DOMContentLoaded', function () {
 
 var DNS_COLORS = {
-  hyperscaler: '#d32f2f',
-  clean:       '#4caf50',
-  nodata:      '#cfcfcf',
-  lake:        '#afd7f5',
+  heavy:   '#fc7417',
+  partial: '#fcae3c',
+  clean:   '#8cee92',
+  nodata:  '#d8d8d8',
+  lake:    '#8fc1e8',
+};
+
+var DNS_TEXT_ON = {
+  heavy:   '#fff',
+  partial: '#5a3a00',
+  clean:   '#1f3a22',
+  nodata:  '#333',
 };
 
 // Mirror of src/mail_sovereignty/signatures.py — keep in sync if Cloudflare
@@ -194,7 +202,12 @@ function getDnsStatus(m) {
   if (!m) return 'nodata';
   var hasData = (m.mx && m.mx.length) || m.spf;
   if (!hasData) return 'nodata';
-  return getHyperscalerHits(m).length > 0 ? 'hyperscaler' : 'clean';
+  var hits = getHyperscalerHits(m);
+  if (hits.length === 0) return 'clean';
+  for (var i = 0; i < hits.length; i++) {
+    if (hits[i].kind === 'mx') return 'heavy';
+  }
+  return 'partial';
 }
 
 function getColor(m) {
@@ -202,8 +215,9 @@ function getColor(m) {
 }
 
 function getStatusLabel(status) {
-  if (status === 'hyperscaler') return 'Hyperscaler exposed';
-  if (status === 'clean') return 'No hyperscaler';
+  if (status === 'heavy')   return 'MX on hyperscaler';
+  if (status === 'partial') return 'Hyperscaler in SPF/DNS';
+  if (status === 'clean')   return 'No hyperscaler';
   return 'No data';
 }
 
@@ -221,12 +235,12 @@ async function loadData() {
   muni = dnsData.municipalities;
   showGenerated(dnsData);
 
-  var counts = { hyperscaler: 0, clean: 0, nodata: 0 };
+  var counts = { heavy: 0, partial: 0, clean: 0, nodata: 0 };
   var byHyperscaler = { microsoft: 0, google: 0, aws: 0 };
   for (var bfs of Object.keys(muni)) {
     var status = getDnsStatus(muni[bfs]);
     counts[status]++;
-    if (status === 'hyperscaler') {
+    if (status === 'heavy' || status === 'partial') {
       var hs = getHyperscalerHits(muni[bfs]);
       var seenH = {};
       for (var i = 0; i < hs.length; i++) {
@@ -248,14 +262,15 @@ async function loadData() {
       '<div class="legend-content">' +
       '<strong>Hyperscaler DNS Exposure</strong>' +
       '<div class="legend-group">' +
-      '<i class="legend-swatch" style="background:' + DNS_COLORS.hyperscaler + '"></i>Hyperscaler exposed (' + counts.hyperscaler + ')<br>' +
+      '<i class="legend-swatch" style="background:' + DNS_COLORS.heavy + '"></i>MX on hyperscaler (' + counts.heavy + ')<br>' +
+      '<i class="legend-swatch" style="background:' + DNS_COLORS.partial + '"></i>Hyperscaler in SPF/DNS only (' + counts.partial + ')<br>' +
       '<i class="legend-swatch" style="background:' + DNS_COLORS.clean + '"></i>No hyperscaler (' + counts.clean + ')<br>' +
       '<i class="legend-swatch" style="background:' + DNS_COLORS.nodata + '"></i>No data (' + counts.nodata + ')' +
       '</div>' +
       '<div class="legend-group" style="margin-top:6px;font-size:11px;color:#666;">' +
-      'Microsoft: ' + byHyperscaler.microsoft + '<br>' +
-      'Google: ' + byHyperscaler.google + '<br>' +
-      'AWS: ' + byHyperscaler.aws +
+      'Any trace of Microsoft: ' + byHyperscaler.microsoft + '<br>' +
+      'Any trace of Google: ' + byHyperscaler.google + '<br>' +
+      'Any trace of AWS: ' + byHyperscaler.aws +
       '</div>' +
       '</div>';
     L.DomEvent.disableClickPropagation(div);
@@ -274,8 +289,8 @@ async function loadData() {
       var m = muni[bfs];
       return {
         fillColor: getColor(m),
-        weight: 0.6,
-        color: '#afafaf',
+        weight: 0.5,
+        color: '#444444',
         fillOpacity: 1
       };
     },
@@ -289,7 +304,7 @@ async function loadData() {
       var status = getDnsStatus(m);
       var statusLabel = getStatusLabel(status);
       var color = DNS_COLORS[status];
-      var textColor = status === 'nodata' ? '#333' : '#fff';
+      var textColor = DNS_TEXT_ON[status];
 
       var eName = escapeHtml(m.name);
       var cantonCode = CANTON_CODES[m.canton] || '';
@@ -303,7 +318,7 @@ async function loadData() {
         '<strong>' + nameDisplay + '</strong><br>' +
         eDomain + ' ' + badge;
 
-      if (status === 'hyperscaler') {
+      if (status === 'heavy' || status === 'partial') {
         var hits = getHyperscalerHits(m);
         var hyperscalersFound = {};
         for (var i = 0; i < hits.length; i++) hyperscalersFound[hits[i].hyperscaler] = true;
