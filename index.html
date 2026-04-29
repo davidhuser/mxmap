@@ -347,27 +347,6 @@ function condenseDetail(kind, detail) {
   }
 }
 
-// Hyperscaler trace detection for swiss-based municipalities: flags cases where
-// MX is Swiss but outbound/auth DNS still touches Microsoft/Google/AWS.
-const HYPERSCALER_PROVIDERS = { microsoft: 'Microsoft', google: 'Google', aws: 'AWS' };
-const NON_MX_TRACE_KINDS = { spf: 1, dkim: 1, autodiscover: 1, cname_chain: 1, spf_ip: 1, asn: 1 };
-
-function getHyperscalerNonMxTraces(m) {
-  if (!m || !m.classification_signals) return [];
-  const byHs = {};
-  for (const s of m.classification_signals) {
-    const label = HYPERSCALER_PROVIDERS[s.provider];
-    if (!label || !NON_MX_TRACE_KINDS[s.kind]) continue;
-    if (!byHs[label]) byHs[label] = new Set();
-    byHs[label].add(SIGNAL_LABELS[s.kind] || s.kind);
-  }
-  return Object.keys(byHs).sort().map(name => ({
-    name,
-    kinds: Array.from(byHs[name]).sort(),
-  }));
-}
-
-
 const map = initMap('map');
 setupInfoBar(map);
 const isMobile = window.innerWidth <= 600;
@@ -538,21 +517,11 @@ async function loadData() {
       if (m.gateway) metaParts.push(`Gateway: ${escapeHtml(m.gateway)}`);
       const metaLine = `<div class="popup-meta">${metaParts.join(' &middot; ')}</div>`;
 
-      let traceLine = '';
-      if (cat === 'swiss-based') {
-        const traces = getHyperscalerNonMxTraces(m);
-        if (traces.length) {
-          const parts = traces.map(t => `${t.name} (${t.kinds.join(', ')})`).join(', ');
-          traceLine = `<div class="popup-trace" title="Mail is routed through a Swiss provider, but outbound or authentication DNS still references a hyperscaler.">&#9888; Outbound DNS also references ${escapeHtml(parts)}</div>`;
-        }
-      }
-
       layer.bindPopup(
         `<div class="info-popup">` +
         `<strong>${nameDisplay}</strong><br>` +
         `${eDomain} ${badge}` +
         metaLine +
-        traceLine +
         mxSection + spfSection + signalsSection +
         `</div>`,
         { maxWidth: isMobile ? 300 : 450 }
