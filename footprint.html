@@ -13,22 +13,22 @@
 <link rel="dns-prefetch" href="https://b.basemaps.cartocdn.com">
 <link rel="dns-prefetch" href="https://c.basemaps.cartocdn.com">
 <link rel="dns-prefetch" href="https://d.basemaps.cartocdn.com">
-<title>MXmap &mdash; Hyperscaler DNS Exposure of Swiss Municipalities</title>
-<meta name="description" content="Interactive map highlighting Swiss municipalities whose email-related DNS records (MX, SPF, DKIM, autodiscover, DMARC) reference a US hyperscaler &mdash; Microsoft, Google, or AWS.">
-<meta name="keywords" content="Switzerland, municipalities, DNS, SPF, MX, hyperscaler, Microsoft, Google, AWS, digital sovereignty, OSINT">
+<title>MXmap &mdash; Hyperscaler Footprint of Swiss Municipalities</title>
+<meta name="description" content="Interactive map showing the hyperscaler footprint of Swiss municipalities &mdash; how deeply their email DNS records (MX, SPF, DKIM, autodiscover, DMARC) reference Microsoft, Google, or AWS.">
+<meta name="keywords" content="Switzerland, municipalities, hyperscaler, footprint, SPF, MX, DNS, Microsoft, Google, AWS, digital sovereignty, OSINT">
 <meta name="author" content="David Huser">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://mxmap.ch/dns.html">
+<link rel="canonical" href="https://mxmap.ch/footprint.html">
 <meta property="og:type" content="website">
-<meta property="og:title" content="MXmap &mdash; Hyperscaler DNS Exposure of Swiss Municipalities">
-<meta property="og:description" content="Interactive map highlighting municipalities whose email DNS records reference Microsoft, Google, or AWS &mdash; even a single SPF include triggers exposure.">
-<meta property="og:url" content="https://mxmap.ch/dns.html">
+<meta property="og:title" content="MXmap &mdash; Hyperscaler Footprint of Swiss Municipalities">
+<meta property="og:description" content="Interactive map showing how deeply each Swiss municipality's email DNS ties them to Microsoft, Google, or AWS.">
+<meta property="og:url" content="https://mxmap.ch/footprint.html">
 <meta property="og:locale" content="en_CH">
 <meta property="og:site_name" content="MXmap">
 <meta property="og:image" content="https://mxmap.ch/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="MXmap &mdash; Hyperscaler DNS Exposure of Swiss Municipalities">
-<meta name="twitter:description" content="Interactive map highlighting municipalities with hyperscaler traces in their email DNS records.">
+<meta name="twitter:title" content="MXmap &mdash; Hyperscaler Footprint of Swiss Municipalities">
+<meta name="twitter:description" content="Interactive map showing the hyperscaler footprint of Swiss municipalities via their email DNS records.">
 <meta name="twitter:image" content="https://mxmap.ch/og-image.jpg">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='7' width='28' height='18' rx='2' fill='%231a1a2e'/%3E%3Cpath d='M2 9l14 9 14-9' fill='none' stroke='%23d32f2f' stroke-width='2'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="css/shared.css">
@@ -43,40 +43,42 @@
 <body>
 <header id="header">
   <div class="header-left">
-    <h1 class="brand">MXmap</h1>
-    <span class="beta-badge" title="Beta status, this website may contain errors">beta</span>
+    <h1 class="brand">MXmap<span class="brand-tag">municipal email infrastructure</span></h1>
     <nav id="nav"></nav>
   </div>
-  <span class="header-disclaimer">&#9888; This data may be out of date or incorrect. A research project is ongoing to further develop such maps.</span>
+  <span class="header-disclaimer">&#9888; This data may be out of date or incorrect. A research project is ongoing to further develop these maps.</span>
   <div class="header-right">
     <button class="toggle-info" id="toggle-info" aria-expanded="true" aria-controls="info-bar">About &#9652;</button>
   </div>
 </header>
 <section id="info-bar" aria-label="About this project">
 <script>if(window.innerWidth<=600)document.getElementById('info-bar').classList.add('collapsed');</script>
-  <h2 class="info-title">Hyperscaler DNS Exposure of Swiss Municipalities</h2>
+  <h2 class="info-title">Hyperscaler Footprint of Swiss Municipalities</h2>
   <div class="info-grid">
     <div class="info-card">
       <h3>What is this?</h3>
-      <p>A map of all ~2,100 Swiss municipalities shaded by how deeply their email DNS touches a US hyperscaler &mdash; Microsoft, Google, or AWS. <strong style="color:#e8741b">Orange</strong> means the MX record itself points to a hyperscaler (email lives there). <strong style="color:#c48b1a">Pale amber</strong> means the MX is elsewhere but SPF, DKIM, autodiscover, or another record still delegates to one. <strong style="color:#5a8a63">Green</strong> means no hyperscaler trace at all.</p>
+      <p>All ~2,100 Swiss municipalities, shaded by how much their email DNS touches a US hyperscaler (Microsoft, Google, AWS). See the legend for what each color means.</p>
     </div>
     <div class="info-card">
-      <h3>How is this different from the Email Map?</h3>
-      <p>The <a href="/">Email Map</a> picks one winning provider per municipality. This map casts a wider net and grades exposure: a municipality whose email is hosted by a Swiss provider but whose SPF record still delegates to <code>spf.protection.outlook.com</code> shows as Swiss on the Email Map, but pale amber here.</p>
+      <h3>How is this different from the Providers map?</h3>
+      <p>The <a href="/">Providers map</a> names one email provider per municipality. This one is broader, it also catches Swiss-hosted municipalities that still touch Microsoft, Google, or AWS somewhere in their email setup.</p>
     </div>
     <div class="info-card">
-      <h3>Which records are checked?</h3>
-      <p>MX, SPF, DKIM, autodiscover, DMARC, CNAME chain, TXT verification, and ASN of MX/SPF IPs. The M365 tenant check (<code>getuserrealm.srf</code>) is <strong>not</strong> counted here because it's not a DNS record &mdash; see the <a href="/tenant.html">Tenant Map</a> for that signal.</p>
+      <h3>Which signals are checked?</h3>
+      <p>DNS records: MX, SPF, DKIM, autodiscover, DMARC, CNAME chain, TXT verification, and ASN of MX/SPF IPs.</p>
+    </div>
+    <div class="info-card">
+      <h3>Accuracy</h3>
+      <p>Classifications may contain errors. DNS records indicate mail routing, not necessarily where data is stored. <br>If you notice an error, please <a href="https://github.com/davidhuser/mxmap/issues" target="_blank">submit an issue</a>.</p>
     </div>
     <div class="info-card">
       <h3>Open source &amp; open data</h3>
-      <p>The code and data are on <a href="https://github.com/davidhuser/mxmap" target="_blank">GitHub</a>.<br>
-      If you have noticed an error, please <a href="https://github.com/davidhuser/mxmap/issues" target="_blank">submit an issue</a>.</p>
+      <p>The code and data are on <a href="https://github.com/davidhuser/mxmap" target="_blank">GitHub</a>.</p>
       <p id="generated"></p>
     </div>
   </div>
 </section>
-<main id="map" role="application" aria-label="Interactive map of Swiss municipality hyperscaler DNS exposure">
+<main id="map" role="application" aria-label="Interactive map of Swiss municipality hyperscaler footprint">
   <div id="map-loading" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:1000;background:rgba(255,255,255,0.85);font-size:15px;color:#555;">Loading map data&hellip;</div>
 </main>
 
@@ -84,18 +86,18 @@
 document.addEventListener('DOMContentLoaded', function () {
 
 var DNS_COLORS = {
-  heavy:   '#fc7417',
-  partial: '#fcae3c',
-  clean:   '#8cee92',
-  nodata:  '#d8d8d8',
-  lake:    '#8fc1e8',
+  heavy:   '#fd968d',
+  partial: '#ffc79f',
+  clean:   '#89ffae',
+  nodata:  '#cbd5e1',
+  lake:    '#9cdafd',
 };
 
 var DNS_TEXT_ON = {
   heavy:   '#fff',
-  partial: '#5a3a00',
-  clean:   '#1f3a22',
-  nodata:  '#333',
+  partial: '#4a2400',
+  clean:   '#0f3a2c',
+  nodata:  '#3f3f46',
 };
 
 // Mirror of src/mail_sovereignty/signatures.py — keep in sync if Cloudflare
@@ -260,7 +262,7 @@ async function loadData() {
     div.innerHTML =
       '<button class="legend-toggle" aria-label="Toggle legend" aria-expanded="' + (!isMobile) + '">' + (isMobile ? 'Legend ▸' : '') + '</button>' +
       '<div class="legend-content">' +
-      '<strong>Hyperscaler DNS Exposure</strong>' +
+      '<strong>Hyperscaler Footprint</strong>' +
       '<div class="legend-group">' +
       '<i class="legend-swatch" style="background:' + DNS_COLORS.heavy + '"></i>MX on hyperscaler (' + counts.heavy + ')<br>' +
       '<i class="legend-swatch" style="background:' + DNS_COLORS.partial + '"></i>Hyperscaler in SPF/DNS only (' + counts.partial + ')<br>' +

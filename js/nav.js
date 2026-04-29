@@ -2,9 +2,8 @@
 (function () {
   var path = window.location.pathname;
   var primary = [
-    { href: '/', label: 'Email Map', match: ['/', '/index.html'] },
-    { href: '/tenant.html', label: 'Tenant Map' },
-    { href: '/dns.html', label: 'DNS Exposure' },
+    { href: '/', label: 'Providers', match: ['/', '/index.html'] },
+    { href: '/footprint.html', label: 'Footprint' },
   ];
   var secondary = [
     { href: '/impressum.html', label: 'Impressum' },

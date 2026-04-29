@@ -11,14 +11,14 @@ body { display: flex; flex-direction: column; height: 100dvh; overflow: hidden; 
 #info-bar {
   background: #f0f1f5; border-bottom: 1px solid #d8dae0; overflow: clip; flex-shrink: 0;
   position: relative; z-index: 1;
-  max-height: 600px; padding: 16px 20px;
+  min-height: 120px; max-height: 600px; padding: 13px 20px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
-#info-bar.collapsed { max-height: 0; padding-top: 0; padding-bottom: 0; }
+#info-bar.collapsed { min-height: 0; max-height: 0; padding-top: 0; padding-bottom: 0; }
 
 .info-grid {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 14px;
+  gap: 12px;
 }
 .info-card h3 { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: #1a1a2e; }
 .info-card p { font-size: 13px; color: #444; line-height: 1.5; margin: 0; }

@@ -1,10 +1,10 @@
-# MXmap — Email Providers of Swiss Municipalities
+# MXmap — municipal email infrastructure maps
 
 [![CI](https://github.com/davidhuser/mxmap/actions/workflows/ci.yml/badge.svg)](https://github.com/davidhuser/mxmap/actions/workflows/ci.yml)
 
-An interactive map showing where Swiss municipalities host their email — whether with US hyperscalers (Microsoft, Google, AWS) or Swiss providers or other solutions.
+Interactive maps showing where Swiss municipalities host their email and how deeply their DNS is tied to US hyperscalers (Microsoft, Google, AWS) versus Swiss providers and self-hosted solutions.
 
-**[View the live map](https://mxmap.ch)**
+**[View the live maps](https://mxmap.ch)**
 
 [![Screenshot of MXmap](og-image.jpg)](https://mxmap.ch)
 
