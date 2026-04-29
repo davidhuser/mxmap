@@ -13,21 +13,21 @@
 <link rel="dns-prefetch" href="https://b.basemaps.cartocdn.com">
 <link rel="dns-prefetch" href="https://c.basemaps.cartocdn.com">
 <link rel="dns-prefetch" href="https://d.basemaps.cartocdn.com">
-<title>MXmap — Email Providers of Swiss Municipalities</title>
+<title>MXmap | Email Providers of Swiss Municipalities</title>
 <meta name="description" content="Interactive map showing the email providers of all ~2,100 Swiss municipalities, based on DNS analysis of MX and SPF records.">
 <meta name="keywords" content="Switzerland, municipalities, email, sovereignty, CLOUD Act, MX records, SPF, DNS, Microsoft 365, Google Workspace, digital sovereignty, data protection">
 <meta name="author" content="David Huser">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://mxmap.ch/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="MXmap — Email Providers of Swiss Municipalities">
+<meta property="og:title" content="MXmap | Email Providers of Swiss Municipalities">
 <meta property="og:description" content="Interactive map showing where Swiss municipalities host their official email. DNS analysis of all ~2,100 municipalities, color-coded by provider.">
 <meta property="og:url" content="https://mxmap.ch/">
 <meta property="og:locale" content="en_CH">
 <meta property="og:site_name" content="MXmap">
 <meta property="og:image" content="https://mxmap.ch/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="MXmap — Email Providers of Swiss Municipalities">
+<meta name="twitter:title" content="MXmap | Email Providers of Swiss Municipalities">
 <meta name="twitter:description" content="Interactive map showing where Swiss municipalities host their official email. DNS analysis of all ~2,100 municipalities.">
 <meta name="twitter:image" content="https://mxmap.ch/og-image.jpg">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='7' width='28' height='18' rx='2' fill='%231a1a2e'/%3E%3Cpath d='M2 9l14 9 14-9' fill='none' stroke='%2316a34a' stroke-width='2'/%3E%3C/svg%3E">
@@ -43,11 +43,10 @@
 <body>
 <header id="header">
   <div class="header-left">
-    <h1 class="brand">MXmap</h1>
-    <span class="beta-badge" title="Beta status, this website may contain errors">beta</span>
+    <h1 class="brand">MXmap<span class="brand-tag">municipal email infrastructure</span></h1>
     <nav id="nav"></nav>
   </div>
-  <span class="header-disclaimer">&#9888; This data may be out of date or incorrect. A research project is ongoing to further develop such maps.</span>
+  <span class="header-disclaimer">&#9888; <strong>Beta:</strong> data may be out of date or incorrect. A research project is ongoing to further develop these maps.</span>
   <div class="header-right">
     <button class="toggle-info" id="toggle-info" aria-expanded="true" aria-controls="info-bar">About &#9652;</button>
   </div>
@@ -58,21 +57,23 @@
   <div class="info-grid">
     <div class="info-card">
       <h3>What is this?</h3>
-      <p>A map of all ~2,100 Swiss municipalities showing which provider handles their official email — grouped by jurisdiction — based on public DNS records and other public network signals.</p>
+      <p>A map of all ~2,100 Swiss municipalities, grouped by jurisdiction. Each is colored by the provider handling its official email, based on public DNS records and other public network signals.</p>
     </div>
     <div class="info-card">
       <h3>Context</h3>
-      <p>Digital sovereignty: US-based providers are subject to the US CLOUD Act, which allows US authorities to request stored data, regardless of where it is physically hosted. This map makes the current provider landscape visible.</p>
+      <p>US-based providers are subject to the US CLOUD Act, allowing US authorities to request stored data regardless of where it is hosted. This map makes the current provider landscape visible.</p>
     </div>
     <div class="info-card">
       <h3>How does it work?</h3>
-      <p>Each municipality's official domain is checked via 11 signals from DNS records, SMTP banners, ASN lookups, and a public Microsoft API endpoint, then classified by provider type with confidence scoring.</p>
-      <p style="font-size:12px;color:#777;margin-top:6px;">Disclaimer: DNS records indicate mail routing and authorized senders, not necessarily where data is stored.</p>
+      <p>Each municipality's email domain is checked against multiple public DNS and network signals, then classified by provider type.</p>
+    </div>
+    <div class="info-card">
+      <h3>Accuracy</h3>
+      <p>Classifications may contain errors. DNS records indicate mail routing, not necessarily where data is stored. <br>If you notice an error, please <a href="https://github.com/davidhuser/mxmap/issues" target="_blank">submit an issue</a>.</p>
     </div>
     <div class="info-card">
       <h3>Open source &amp; open data</h3>
-      <p>The code and data are on <a href="https://github.com/davidhuser/mxmap" target="_blank">GitHub</a>.<br>
-      If you have noticed an error, please <a href="https://github.com/davidhuser/mxmap/issues" target="_blank">submit an issue</a>.</p>
+      <p>The code and data are on <a href="https://github.com/davidhuser/mxmap" target="_blank">GitHub</a>.</p>
       <p id="generated"></p>
     </div>
   </div>
@@ -85,9 +86,9 @@
 document.addEventListener('DOMContentLoaded', function () {
 const COLOR_SCHEMES = {
   default: {
-    'us-cloud':    { high: '#ffa199', medium: '#ffccb6', low: '#cccccc' },
+    'us-cloud':    { high: '#ff9e91', medium: '#ffccaa', low: '#cccccc' },
     'swiss-based': { high: '#88faaa', medium: '#daffc2', low: '#cccccc' },
-    lake: '#89B3D6',
+    lake: '#a3cef1',
   },
   colorblind: {
     'us-cloud':    { high: '#f1be61', medium: '#fde7c4', low: '#cccccc' },
@@ -346,7 +347,6 @@ function condenseDetail(kind, detail) {
   }
 }
 
-
 const map = initMap('map');
 setupInfoBar(map);
 const isMobile = window.innerWidth <= 600;
@@ -377,7 +377,11 @@ function toggleColorScheme() {
   }
 
   document.querySelectorAll('.legend-swatch').forEach(function (el) {
-    el.style.background = CATEGORY_COLORS[el.dataset.cat][el.dataset.level];
+    if (el.dataset.lake) {
+      el.style.background = CATEGORY_COLORS.lake;
+    } else {
+      el.style.background = CATEGORY_COLORS[el.dataset.cat][el.dataset.level];
+    }
   });
 
   var btn = document.querySelector('.color-toggle');
@@ -399,7 +403,7 @@ async function loadData() {
   showGenerated(dnsData);
 
   // Count by jurisdiction and confidence level
-  const catCounts = { 'us-cloud': 0, 'swiss-based': 0, 'insufficient': 0 };
+  const catCounts = { 'us-cloud': 0, 'swiss-based': 0 };
   const levelCounts = {
     'us-cloud': { high: 0, medium: 0, low: 0 },
     'swiss-based': { high: 0, medium: 0, low: 0 }
@@ -411,13 +415,8 @@ async function loadData() {
       catCounts[cat]++;
       const level = confidenceLevel(m ? (m.classification_confidence || 0) : 0);
       if (level !== 'insufficient') levelCounts[cat][level]++;
-    } else {
-      catCounts['insufficient']++;
     }
   }
-
-  const hatchSvg = 'data:image/svg+xml,' +
-    encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect width="8" height="8" fill="#BFBFBF"/><path d="M-1,1 l2,-2 M0,8 l8,-8 M7,9 l2,-2" stroke="#000" stroke-width="1"/></svg>');
 
   // Legend with counts
   const isMobile = window.innerWidth <= 600;
@@ -428,10 +427,11 @@ async function loadData() {
     div.innerHTML =
       '<button class="legend-toggle" aria-label="Toggle legend" aria-expanded="' + (!isMobile) + '">' + (isMobile ? 'Legend \u25B8' : '') + '</button>' +
       '<div class="legend-content">' +
-      '<strong>Email Jurisdiction</strong>' +
       legendCategoryHtml('US Cloud', CATEGORY_COLORS['us-cloud'], catCounts['us-cloud'], 'us-cloud', levelCounts['us-cloud']) +
       legendCategoryHtml('Swiss Based', CATEGORY_COLORS['swiss-based'], catCounts['swiss-based'], 'swiss-based', levelCounts['swiss-based']) +
-      '<div class="legend-group"><i style="background-image:url(\'' + hatchSvg + '\')"></i>Insufficient data (' + catCounts['insufficient'] + ')</div>' +
+      '<div class="legend-group legend-other">' +
+      '<i class="legend-swatch" data-lake="1" style="background:' + CATEGORY_COLORS.lake + '"></i>Lake (not a municipality)' +
+      '</div>' +
       '<button class="color-toggle" aria-label="Switch to colorblind-safe colors">\u25D0 Colorblind mode</button>' +
       '</div>';
     L.DomEvent.disableClickPropagation(div);
