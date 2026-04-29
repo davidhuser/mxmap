@@ -1,4 +1,4 @@
-/* map-shared.js — shared utilities for map pages */
+/* map-shared.js - shared utilities for map pages */
 
 function escapeHtml(str) {
   var el = document.createElement('span');
