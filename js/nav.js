@@ -2,6 +2,7 @@
 (function () {
   var path = window.location.pathname;
   var links = [
+    { href: 'https://secassure2026.mxmap-project.org/', label: 'DACH maps ↗' },
     { href: '/impressum.html', label: 'Impressum' },
     { href: '/datenschutz.html', label: 'Datenschutz' },
   ];
@@ -14,6 +15,10 @@
     a.href = link.href;
     a.className = 'header-link';
     a.textContent = link.label;
+    if (link.href.indexOf('http') === 0) {
+      a.target = '_blank';
+      a.rel = 'noopener';
+    }
     if (path === link.href) a.classList.add('active');
     return a;
   }
