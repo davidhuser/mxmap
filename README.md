@@ -1,5 +1,8 @@
 # MXmap — municipal email infrastructure maps
 
+> [!IMPORTANT]
+> **MXmap has a successor.** This project grew into a team research effort covering all municipalities in Germany, Austria and Switzerland: **[secassure2026.mxmap-project.org](https://secassure2026.mxmap-project.org/)** ([source](https://github.com/mxmap/secassure2026)). The Swiss map at [mxmap.ch](https://mxmap.ch) stays online, but its data is frozen as of April 2026 and will not be updated.
+
 [![CI](https://github.com/davidhuser/mxmap/actions/workflows/ci.yml/badge.svg)](https://github.com/davidhuser/mxmap/actions/workflows/ci.yml)
 
 Interactive maps showing where Swiss municipalities host their email and how deeply their DNS is tied to US hyperscalers (Microsoft, Google, AWS) versus Swiss providers and self-hosted solutions.
@@ -82,6 +85,7 @@ uv run ruff format src tests
 
 ## Related work
 
+* [SecAssure2026](https://secassure2026.mxmap-project.org/) — the successor to this project: email provider and email security maps for ~15,300 municipalities across Germany, Austria and Switzerland ([source](https://github.com/mxmap/secassure2026))
 * [hpr4379 :: Mapping Municipalities' Digital Dependencies](https://hackerpublicradio.org/eps/hpr4379/index.html)
 * If you know of other similar projects, please open an issue or submit a PR to add them here!
 
@@ -93,12 +97,15 @@ Country-specific forks, alphabetical by country code:
 * **DE** — https://b42labs.github.io/mxmap/ · https://mx-map.de/
 * **EU** — https://livenson.github.io/mxmap/
 * **FR** — https://mxmairies.fr/
+* **IT** — https://mxmap.it/
 * **LV** — https://securit.lv/mxmap
 * **NL** — https://mxmap.nl/
 * **NO** — https://kommune-epost-norge.netlify.app/
 * **PT** — https://mxmap.pt/
 * **SE** — https://swedish-mail-dependency.netlify.app/
 * **UK** — https://mxmap.uk/
+
+New country forks are welcome — consider starting from the [successor's pipeline](https://github.com/mxmap/secassure2026), which adds a DANE/DNSSEC/SPF/DMARC scanning stage.
 
 Related projects:
 

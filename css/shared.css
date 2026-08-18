@@ -23,6 +23,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   padding: 0 12px;
 }
+.header-disclaimer a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.disclaimer-short { display: none; }
 
 #nav { display: flex; align-items: center; gap: 8px; position: relative; margin-left: 6px; }
 
@@ -46,5 +48,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
 .nav-menu .header-link:last-child { border-bottom: none; }
 
 @media (max-width: 600px) {
-  .header-disclaimer { display: none; }
+  .header-disclaimer { font-size: 11px; padding: 0 6px; }
+  .disclaimer-long { display: none; }
+  .disclaimer-short { display: inline; }
 }
